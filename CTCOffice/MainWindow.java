@@ -14,7 +14,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	 */
 	private JMenuBar menuBar;
 	private JMenu systemMenu,logMenu,userMenu;
-	private JMenuItem systemExitItem;
+	private JMenuItem systemExitItem,logSaveItem;
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
@@ -23,7 +23,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	private JPanel logPanel;
 	
 	//Main Method to start the program
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		new MainWindow();
 	}
 
@@ -37,12 +37,16 @@ public class MainWindow extends JFrame implements ActionListener{
 		menuBar = new JMenuBar();
 		systemMenu = new JMenu("System");
 		
-		//set up exit way to exit the system
+		//setup the System
 		systemExitItem = new JMenuItem("Exit");
 		systemExitItem.addActionListener(this);
 		systemMenu.add(systemExitItem);
 		
+		//setup log menu
 		logMenu = new JMenu("Log");
+		logSaveItem = new JMenuItem("Save..");
+		logSaveItem.addActionListener(this);
+		logMenu.add(logSaveItem);
 		
 		userMenu = new JMenu("User");
 		
@@ -58,9 +62,6 @@ public class MainWindow extends JFrame implements ActionListener{
 		mainPane.setLayout(new BorderLayout());
 		
 		//setup tab pane
-		//trainPanel = new TrainPanel();
-		//greenTrackPanel = new TrackPanel("Green");
-		//redTrackPanel = new TrackPanel("Red");
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
 		tabPane.addTab("Green Track Blocks", greenTrackPanel);
@@ -76,9 +77,13 @@ public class MainWindow extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(systemExitItem)){
+			LogPanel.UpdateLog("**System Shutting Down\n");
+			//LogPanel.Save();
 			dispose();
 			System.exit(0);
 		}
+		else if(e.getSource().equals(logSaveItem)){
+			//LogPanel.Save();
+		}
 	}
-
 }
