@@ -18,6 +18,8 @@ public class MainWindow extends JFrame implements ActionListener{
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
+	private TrainMaster trainMaster;
+	private TrackMaster trackMaster;
 	private JPanel trainPanel;
 	private JPanel greenTrackPanel,redTrackPanel;
 	private JPanel logPanel;
@@ -61,6 +63,14 @@ public class MainWindow extends JFrame implements ActionListener{
 		mainContainer.add(mainPane);
 		mainPane.setLayout(new BorderLayout());
 		
+		//setup train panel
+		trainMaster = new TrainMaster();
+		trainPanel = trainMaster.CreateTrainPanel();
+		
+		//setup track panel
+		trackMaster = new TrackMaster();
+		greenTrackPanel = trackMaster.CreateTrackPanel("Green");
+		redTrackPanel = trackMaster.CreateTrackPanel("Red");
 		//setup tab pane
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
@@ -75,14 +85,14 @@ public class MainWindow extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 	
-	public void actionPerformed(ActionEvent e){
-		if(e.getSource().equals(systemExitItem)){
+	public void actionPerformed(ActionEvent event){
+		if(event.getSource().equals(systemExitItem)){
 			LogPanel.UpdateLog("**System Shutting Down\n");
 			//LogPanel.Save();
 			dispose();
 			System.exit(0);
 		}
-		else if(e.getSource().equals(logSaveItem)){
+		else if(event.getSource().equals(logSaveItem)){
 			//LogPanel.Save();
 		}
 	}
