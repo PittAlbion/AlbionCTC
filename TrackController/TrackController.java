@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 @SuppressWarnings("serial")
 
 public class TrackController extends JFrame implements Runnable, ActionListener {
@@ -20,22 +19,32 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 		private JMenu fileMenu, helpMenu;
 		private JMenuItem exit, runPLC, doc, about;
 		private JDialog f;
-		private JPanel mainPane;
+		private static JPanel mainPane;
 		private Container mainContainer;
-		private JPanel commandPanel, statisticPanel, outputPanel, selectPanel;
+		private JPanel commandPanel, outputPanel, selectPanel;
+		private JTabbedPane statisticPanel;
 		
-		public static void main(String [] args){
+		public static void main(String [] args) throws InterruptedException{
 			new TrackController();
 			
 			CommandPanel.deactivate.setEnabled(false);
 			CommandPanel.switcher.setEnabled(false);
+			for (int i = 0; i < 6; i++){
+				StatisticPanel.changeGeneralData(i, 1, "Save me, Tom Cruise.");
+				StatisticPanel.changeAdvancedData(i, 1, "Rage.");
+				Thread.sleep(1500);
+				
+				mainPane.repaint();
+			}
+				
 		}
 		
+		@SuppressWarnings("deprecation")
 		TrackController()
 		{
 			super("Albion Track Controller v1.0");
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			setSize(800,600);
+			setPreferredSize(new Dimension(800,600));
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 			
 			menuBar = new JMenuBar();
@@ -73,14 +82,15 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 			statisticPanel = StatisticPanel.CreateStatisticPanel();
 			
 			commandPanel.setSize(new Dimension(200, 500));
-			
+			//statisticPanel.setSize(new Dimension(200, 200));
+			statisticPanel.setPreferredSize(new Dimension(200,200));
 			//CommandPanel.activate.setEnabled(false);
+			//mainPane.add(selectPanel);
+			//mainPane.add(commandPanel);
+			//mainPane.add(outputPanel);
+			mainPane.add(statisticPanel, BorderLayout.LINE_START);
 			
-			mainPane.add(selectPanel);
-			mainPane.add(commandPanel);
-			mainPane.add(outputPanel);
-			mainPane.add(statisticPanel);
-			
+			pack();
 			setVisible(true);
 		}
 		
