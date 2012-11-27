@@ -1,3 +1,8 @@
+//~ CTC Office
+//~ Ben Long
+//~ 11/27/2012
+//~ Albion
+
 package CTCOffice;
 
 import java.awt.*;
@@ -18,8 +23,6 @@ public class MainWindow extends JFrame implements ActionListener{
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
-	private TrainMaster trainMaster;
-	private TrackMaster trackMaster;
 	private JPanel trainPanel;
 	private JPanel greenTrackPanel,redTrackPanel;
 	private JPanel logPanel;
@@ -64,13 +67,12 @@ public class MainWindow extends JFrame implements ActionListener{
 		mainPane.setLayout(new BorderLayout());
 		
 		//setup train panel
-		trainMaster = new TrainMaster();
-		trainPanel = trainMaster.CreateTrainPanel();
+		trainPanel = new TrainPanel();
 		
-		//setup track panel
-		trackMaster = new TrackMaster();
-		greenTrackPanel = trackMaster.CreateTrackPanel("Green");
-		redTrackPanel = trackMaster.CreateTrackPanel("Red");
+
+		//setup track panels
+		greenTrackPanel = new TrackPanel("Green");
+		redTrackPanel = new TrackPanel("Red");
 		//setup tab pane
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
@@ -79,7 +81,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		
 		mainPane.add(tabPane,BorderLayout.CENTER);
 		
-		logPanel = LogPanel.CreateLogPanel();
+		logPanel = new LogPanel();
 		mainPane.add(logPanel,BorderLayout.PAGE_END);
 		
 		setVisible(true);

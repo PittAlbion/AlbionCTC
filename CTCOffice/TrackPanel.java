@@ -1,15 +1,23 @@
+//~ CTC Office
+//~ Ben Long
+//~ 11/27/2012
+//~ Albion
 package CTCOffice;
 
 import java.awt.FlowLayout;
 
 import javax.swing.*;
 
-public class TrackPanel {
-	
-	public static JPanel CreateTrackPanel(String route){
-		JPanel pane = new JPanel();
-		pane.setLayout(new FlowLayout());
-		return pane;
+@SuppressWarnings("serial")
+public class TrackPanel extends JPanel{
+	//panel for holding track info panels
+	String route;
+	TrackPanel(String name){
+		super();
+		route = name;
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		this.add(new TrackStatPanel(route,0));
 	}
 
 }

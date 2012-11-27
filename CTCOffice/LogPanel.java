@@ -1,3 +1,7 @@
+//~ CTC Office
+//~ Ben Long
+//~ 11/27/2012
+//~ Albion
 package CTCOffice;
 
 import java.awt.*;
@@ -10,25 +14,26 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 
-public class LogPanel {
+@SuppressWarnings("serial")
+// panel for the log file to be written to
+public class LogPanel extends JPanel{
 
 	private static JTextPane textPane;
 	private static Timestamp time;
-	public static JPanel CreateLogPanel(){
-		JPanel pane = new JPanel();
-		pane.setLayout(new BorderLayout());
+	// constructor
+	LogPanel(){
+		super();
+		this.setLayout(new BorderLayout());
 		JLabel labelText = new JLabel("System Log:");
-		pane.add(labelText, BorderLayout.PAGE_START);
+		this.add(labelText, BorderLayout.PAGE_START);
 		textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setPreferredSize(new Dimension(100,150));
 		textPane.setContentType("text/html");
 		
-		pane.add(textPane,BorderLayout.CENTER);
+		this.add(textPane,BorderLayout.CENTER);
 		time = new Timestamp(System.currentTimeMillis());
-		
-		
-		return pane;
+
 	}
 	
 	//add new messages to the system log
