@@ -1,13 +1,18 @@
+//~ Track Controller
+//~ Calvin Souders
+//~ 11/27/2012
+//~ Albion
+
 package TrackController;
 
 import java.awt.*;
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
 import javax.swing.*;
 
 public class CommandPanel {
 
 	public static JButton activate, deactivate, switcher;
-	private static Timestamp time;
+	//private static Timestamp time;
 	
 		public static JPanel CreateCommandPanel(){
 			
@@ -26,7 +31,7 @@ public class CommandPanel {
 			pane.add(deactivate);
 			pane.add(switcher);
 			
-			time = new Timestamp(System.currentTimeMillis());
+			//time = new Timestamp(System.currentTimeMillis());
 			
 			pane.setSize(200, 400);
 			return pane;

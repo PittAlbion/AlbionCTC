@@ -1,3 +1,8 @@
+//~ Track Controller
+//~ Calvin Souders
+//~ 11/27/2012
+//~ Albion
+
 package TrackController;
 
 import java.awt.*;
@@ -110,11 +115,20 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 		
 	    private static void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
+	    		boolean safe = false;
 	            //Track trackBlock = tracks.get(line, trackSelect);
-	            if (type.equals("Authority"))
-	                ; //Do something safe involving the authority suggestion
-	            else if(type.equals("Speed"))
-	                ; //Do something safe involving the speed suggestion
+	            if (type.equals("Authority")){
+	                safe = checkStatus(); //Do something safe involving the authority suggestion
+	                if(safe){ //change Authority
+	                	//trackBlock.setAuthority(value);
+	                }
+	            }
+	            else if(type.equals("Speed")){
+	                safe = checkStatus(); //Do something safe involving the speed suggestion
+	                if (safe){ //change speed
+	                	//trackBlock.setSpeed(value);
+	                }
+	            }
 	            else //Invalid suggestion
 	                return; //do nothing
 					
@@ -161,7 +175,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    
 	    private static boolean checkStatus(){
 	    	
-	    	return true;
+	    	return false;
 	    }
 	    
 	    public void actionPerformed(ActionEvent e){
@@ -169,7 +183,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    		System.exit(0);
 	    	}
 	    	else if (e.getSource().equals(doc)){
-	    		
+	    		//do some crap with documentation
 	    	}
 	    	else if (e.getSource().equals(about)){
 	    		
