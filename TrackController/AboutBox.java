@@ -1,4 +1,4 @@
-package track_controller;
+package TrackController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
