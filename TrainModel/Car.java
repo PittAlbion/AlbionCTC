@@ -1,4 +1,4 @@
-package trainModel;
+package TrainModel;
 
 public class Car {
 		private int carID;

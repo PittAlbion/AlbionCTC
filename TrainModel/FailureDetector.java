@@ -1,4 +1,4 @@
-package trainModel;
+package TrainModel;
 
 public class FailureDetector {
 	private boolean engineWorking, brakesWorking, signalsWorking;

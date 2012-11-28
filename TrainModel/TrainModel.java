@@ -2,8 +2,7 @@
 //Shane Lester, STL24@pitt.edu, maddacheeb5@gmail.com
 //Initial construction 11/27/2012
 
-package trainModel;
-
+package TrainModel;
 public class TrainModel implements Runnable {
 	private int trainID;
 	
