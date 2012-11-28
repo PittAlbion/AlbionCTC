@@ -7,6 +7,7 @@ package TrackController;
 
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -21,30 +22,23 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 		private JDialog f;
 		private static JPanel mainPane;
 		private Container mainContainer;
-		private JPanel commandPanel, outputPanel, selectPanel;
-		private JTabbedPane statisticPanel;
+		CommandPanel commandPanel;
+		OutputPanel outputPanel;
+		SelectPanel selectPanel;
+		StatisticPanel statisticPanel;
 		
 		public static void main(String [] args) throws InterruptedException{
-			new TrackController();
 			
-			CommandPanel.deactivate.setEnabled(false);
-			CommandPanel.switcher.setEnabled(false);
-			for (int i = 0; i < 6; i++){
-				StatisticPanel.changeGeneralData(i, 1, "Save me, Tom Cruise.");
-				StatisticPanel.changeAdvancedData(i, 1, "Rage.");
-				Thread.sleep(1500);
-				
-				mainPane.repaint();
-			}
+			new TrackController(new ArrayList<trackBlock>(), new ArrayList<trackBlock>());
+			
 				
 		}
 		
-		@SuppressWarnings("deprecation")
-		TrackController()
+		public TrackController(ArrayList<trackBlock> green, ArrayList<trackBlock> red)
 		{
 			super("Albion Track Controller v1.0");
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			setPreferredSize(new Dimension(800,600));
+			setPreferredSize(new Dimension(600,600));
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 			
 			menuBar = new JMenuBar();
@@ -74,23 +68,31 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 			mainContainer = this.getContentPane();
 			mainPane = new JPanel();
 			mainContainer.add(mainPane);
-			mainPane.setLayout(new GridLayout(2,2));
-			
-			commandPanel = CommandPanel.CreateCommandPanel();
-			selectPanel = SelectPanel.CreateSelectPanel();
-			outputPanel = OutputPanel.CreateOutputPanel();
-			statisticPanel = StatisticPanel.CreateStatisticPanel();
-			
-			commandPanel.setSize(new Dimension(200, 500));
+			mainPane.setLayout(new GridLayout(1,0));
+			commandPanel = new CommandPanel();
+			selectPanel = new SelectPanel();
+			outputPanel = new OutputPanel();
+			statisticPanel = new StatisticPanel();
 			//statisticPanel.setSize(new Dimension(200, 200));
-			statisticPanel.setPreferredSize(new Dimension(200,200));
 			//CommandPanel.activate.setEnabled(false);
 			//mainPane.add(selectPanel);
 			//mainPane.add(commandPanel);
 			//mainPane.add(outputPanel);
-			mainPane.add(statisticPanel, BorderLayout.LINE_START);
+			JPanel p = new JPanel();
+			p.setLayout(new BorderLayout());
+			//p.setPreferredSize(new Dimension(600,300));
+			p.add(commandPanel, BorderLayout.NORTH);
+			p.add(statisticPanel, BorderLayout.SOUTH);
+			
+			JPanel q = new JPanel();
+			q.setLayout(new BorderLayout());
+			q.add(outputPanel, BorderLayout.SOUTH);
+			q.add(selectPanel, BorderLayout.NORTH);
+			mainPane.add(q);
+			mainPane.add(p);
 			
 			pack();
+			
 			setVisible(true);
 		}
 		
@@ -98,7 +100,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 			
 		}
 		
-		public static void GetSuggestion(Object [] s){
+		public void GetSuggestion(Object [] s){
 
 	        int i;
 			String [] parsedString = new String[2];
@@ -123,7 +125,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 
 		
 		
-	    private static void useSuggestion(String lineSelect, int trackSelect, String type, String value){
+	    private void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
 	    		boolean safe = false;
 	            //Track trackBlock = tracks.get(line, trackSelect);
@@ -145,7 +147,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    }
 	    
 	    
-	    private static boolean activateCrossing(String lineSelect, int trackSelect){
+	    private boolean activateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is inactive:
 	    	//Check to make sure it is safe to activate crossing
 	    	//Activate Appropriately
@@ -153,7 +155,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	return false;
 	    }
 	    
-	    private static boolean deactivateCrossing(String lineSelect, int trackSelect){
+	    private boolean deactivateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is activated:
 	    	//Check to make sure all trains are out of the area and that
 	    	//it is safe to deactivate the crossing
@@ -162,28 +164,28 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	return false;
 	    }
 	    
-	    private static boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
+	    private boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
 	    	//Determine if the switch can safely be activated
 	    	//Based on the arguments given, switch the track segment into the appropriate position.
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
 	    
-	    private static boolean trainDetection(){
+	    private boolean trainDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for trains
 	    	//currently present on the system. If the circuit is broken (i.e. a train is present)
 	    	//the function shall return true, otherwise false.
 	    	return false;
 	    }
 	    
-	    private static boolean brokenRailDetection(){
+	    private boolean brokenRailDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for rails that
 	    	//are currently broken. If the circuit is non functional, the function shall return true,
 	    	//otherwise false;
 	    	return false;
 	    }
 	    
-	    private static boolean checkStatus(){
+	    private boolean checkStatus(){
 	    	
 	    	return false;
 	    }
@@ -213,7 +215,11 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    		if (returnVal == JFileChooser.APPROVE_OPTION){
 	    			File file = fc.getSelectedFile();
 	    			
-	    			PLCImport.ParsePLCFile(file);
+	    			try {
+						PLCImport.ParsePLCFile(file);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 	    		}
 	    	}
 	    	else{
