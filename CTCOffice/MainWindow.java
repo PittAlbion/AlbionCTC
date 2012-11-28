@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import TrackController.AboutBox;
+import TrackController.TrackController;
+
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener{
 	
@@ -18,14 +21,15 @@ public class MainWindow extends JFrame implements ActionListener{
 	 * variable definitions
 	 */
 	private JMenuBar menuBar;
-	private JMenu systemMenu,logMenu;
-	private JMenuItem systemExitItem,systemAddTrain,logSaveItem;
+	private JMenu systemMenu,logMenu,helpMenu;
+	private JMenuItem systemExitItem,systemAddTrain,logSaveItem,helpAboutItem;
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
 	private TrainPanel trainPanel;
 	private TrackPanel greenTrackPanel,redTrackPanel;
 	public LogPanel logPanel;
+	public TrackController trackController;
 	
 	//Main Method to start the program
 	public static void main(String[] args){
@@ -37,6 +41,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
+		//trackController = new TrackController();
 		
 		/* set up menu bars*/
 		menuBar = new JMenuBar();
@@ -47,8 +52,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		systemExitItem.addActionListener(this);
 		systemAddTrain = new JMenuItem("Add Train");
 		systemAddTrain.addActionListener(this);
-		systemMenu.add(systemExitItem);
+		
 		systemMenu.add(systemAddTrain);
+		systemMenu.add(systemExitItem);
 		
 		//setup log menu
 		logMenu = new JMenu("Log");
@@ -56,9 +62,17 @@ public class MainWindow extends JFrame implements ActionListener{
 		logSaveItem.addActionListener(this);
 		logMenu.add(logSaveItem);
 		
+		//setup help menu
+		helpMenu = new JMenu("Help");
+		helpAboutItem = new JMenuItem("About");
+		helpAboutItem.addActionListener(this);
+		helpMenu.add(helpAboutItem);
+		
+		
 		
 		menuBar.add(systemMenu);
 		menuBar.add(logMenu);
+		menuBar.add(helpMenu);
 		this.setJMenuBar(menuBar);
 		
 		//set up container for tabs and log window
@@ -102,6 +116,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		else if(event.getSource().equals(systemAddTrain)){
 			logPanel.UpdateLog("Adding Train");
 			//create train and add it to the system
+		}else if(event.getSource().equals(helpAboutItem)){
+			AboutBox about = new AboutBox(this);
+			about.setVisible(true);
 		}
 	}
 }
