@@ -11,13 +11,15 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class TrackPanel extends JPanel{
 	//panel for holding track info panels
-	String route;
-	TrackPanel(String name){
+	private LogPanel log;
+	private String route;
+	TrackPanel(String name, LogPanel logPanel){
 		super();
 		route = name;
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		log = logPanel;
 		
-		this.add(new TrackStatPanel(route,0));
+		this.add(new TrackStatPanel(route,0,log));
 	}
 
 }

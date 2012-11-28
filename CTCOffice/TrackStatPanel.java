@@ -19,12 +19,14 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 	int blockNumber;
 	String route;
 	JButton maintenanceButton;
+	private LogPanel log;
 	
 	//class to represent the Track Info panel
-	TrackStatPanel(String routeName, int block){
+	TrackStatPanel(String routeName, int block, LogPanel logPanel){
 		super();
 		blockNumber = block;
 		route = routeName;
+		log = logPanel;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
 		this.setMaximumSize(this.getPreferredSize());
@@ -43,7 +45,8 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		//put block on maintenance and send suggestion to Track Controller
 		if(event.getSource().equals(maintenanceButton)){
-			System.out.println("Maintenance on block: "+route+" "+blockNumber);
+			log.UpdateLog("Maintenance on block: "+route+" "+blockNumber);
+			
 		}
 		
 	}

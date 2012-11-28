@@ -20,11 +20,13 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 	private JButton editButton;
 	private JButton removeButton;
 	private String title;
+	private LogPanel log;
 	
 	// panels to be created display train info and allow editing
-	public TrainStatPanel(String name){
+	public TrainStatPanel(String name,LogPanel logPanel){
 		super();
 		title = name;
+		log = logPanel;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
 		this.setMaximumSize(this.getPreferredSize());
@@ -50,7 +52,10 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 		
 		//call edit method and pass suggestion to track controller
 		if(event.getSource().equals(editButton)){
-			System.out.println(title);
+			log.UpdateLog("Editing "+title);
+		}
+		else if(event.getSource().equals(removeButton)){
+			log.UpdateLog("Routing "+title+"back to station");
 		}
 		
 	}

@@ -18,14 +18,14 @@ public class MainWindow extends JFrame implements ActionListener{
 	 * variable definitions
 	 */
 	private JMenuBar menuBar;
-	private JMenu systemMenu,logMenu,userMenu;
-	private JMenuItem systemExitItem,logSaveItem;
+	private JMenu systemMenu,logMenu;
+	private JMenuItem systemExitItem,systemAddTrain,logSaveItem;
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
-	private JPanel trainPanel;
-	private JPanel greenTrackPanel,redTrackPanel;
-	private JPanel logPanel;
+	private TrainPanel trainPanel;
+	private TrackPanel greenTrackPanel,redTrackPanel;
+	public LogPanel logPanel;
 	
 	//Main Method to start the program
 	public static void main(String[] args){
@@ -45,7 +45,10 @@ public class MainWindow extends JFrame implements ActionListener{
 		//setup the System
 		systemExitItem = new JMenuItem("Exit");
 		systemExitItem.addActionListener(this);
+		systemAddTrain = new JMenuItem("Add Train");
+		systemAddTrain.addActionListener(this);
 		systemMenu.add(systemExitItem);
+		systemMenu.add(systemAddTrain);
 		
 		//setup log menu
 		logMenu = new JMenu("Log");
@@ -53,11 +56,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		logSaveItem.addActionListener(this);
 		logMenu.add(logSaveItem);
 		
-		userMenu = new JMenu("User");
 		
 		menuBar.add(systemMenu);
 		menuBar.add(logMenu);
-		menuBar.add(userMenu);
 		this.setJMenuBar(menuBar);
 		
 		//set up container for tabs and log window
@@ -66,13 +67,16 @@ public class MainWindow extends JFrame implements ActionListener{
 		mainContainer.add(mainPane);
 		mainPane.setLayout(new BorderLayout());
 		
+		//setup log panel
+		logPanel = new LogPanel();
+		
 		//setup train panel
-		trainPanel = new TrainPanel();
+		trainPanel = new TrainPanel(logPanel);
 		
 
 		//setup track panels
-		greenTrackPanel = new TrackPanel("Green");
-		redTrackPanel = new TrackPanel("Red");
+		greenTrackPanel = new TrackPanel("Green",logPanel);
+		redTrackPanel = new TrackPanel("Red",logPanel);
 		//setup tab pane
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
@@ -81,21 +85,23 @@ public class MainWindow extends JFrame implements ActionListener{
 		
 		mainPane.add(tabPane,BorderLayout.CENTER);
 		
-		logPanel = new LogPanel();
 		mainPane.add(logPanel,BorderLayout.PAGE_END);
-		
 		setVisible(true);
 	}
 	
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource().equals(systemExitItem)){
-			LogPanel.UpdateLog("**System Shutting Down\n");
-			//LogPanel.Save();
+			logPanel.UpdateLog("**System Shutting Down\n");
+			logPanel.Save();
 			dispose();
 			System.exit(0);
 		}
 		else if(event.getSource().equals(logSaveItem)){
-			//LogPanel.Save();
+			logPanel.Save();
+		}
+		else if(event.getSource().equals(systemAddTrain)){
+			logPanel.UpdateLog("Adding Train");
+			//create train and add it to the system
 		}
 	}
 }

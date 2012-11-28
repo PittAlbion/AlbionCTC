@@ -10,11 +10,13 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class TrainPanel extends JPanel {
 	
+	private LogPanel log;
 	//setup panel for holding train info panels
-	TrainPanel(){
+	TrainPanel(LogPanel logPanel){
 		super();
+		log = logPanel;
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(new TrainStatPanel("Train 1"));
+		this.add(new TrainStatPanel("Train 1",log));
 	}
 
 }
