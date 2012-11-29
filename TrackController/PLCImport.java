@@ -11,13 +11,16 @@ public class PLCImport {
 
 	private static ArrayList<String> myStrArrayList = new ArrayList<String>();
 	
-		public static ArrayList<String> ParsePLCFile(File PLCFile){
+		public static ArrayList<String> ParsePLCFile(File PLCFile) throws IOException{
 			
-			//System.out.println(PLCFile.getName());
+			BufferedReader b = new BufferedReader(new FileReader(PLCFile));
+			String line = null;
+			while ((line = b.readLine()) != null){
+				myStrArrayList.add(line);
+				System.out.println(line);
+			}
 			
-			myStrArrayList.add(new String("HELP ME GOD"));
-			myStrArrayList.add(new String("I NEED AN ADULT"));
-			myStrArrayList.add(new String("Please"));
+			b.close();
 			
 			return myStrArrayList;
 		}

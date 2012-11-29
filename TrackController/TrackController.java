@@ -5,100 +5,56 @@
 
 package TrackController;
 
-import java.awt.*;
-import java.io.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import TrackModel.*;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.border.Border;
 @SuppressWarnings("serial")
 
-public class TrackController extends JFrame implements Runnable, ActionListener {
-
-		private JMenuBar menuBar;
-		private JMenu fileMenu, helpMenu;
-		private JMenuItem exit, runPLC, doc, about;
-		private JDialog f;
-		private static JPanel mainPane;
-		private Container mainContainer;
-		private JPanel commandPanel, outputPanel, selectPanel;
-		private JTabbedPane statisticPanel;
+public class TrackController extends JFrame implements Runnable {
+	
+		private static boolean indDemo = false;
+		CommandPanel commandPanel;
+		OutputPanel outputPanel;
+		SelectPanel selectPanel;
+		StatisticPanel statisticPanel;
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
+		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
+		static ArrayList<TrackController> tr = new ArrayList<TrackController>();
 		
-		public static void main(String [] args) throws InterruptedException{
+		public static void main(String [] args) throws InterruptedException, IOException{
+			
 			new TrackController();
 			
-			CommandPanel.deactivate.setEnabled(false);
-			CommandPanel.switcher.setEnabled(false);
-			for (int i = 0; i < 6; i++){
-				StatisticPanel.changeGeneralData(i, 1, "Save me, Tom Cruise.");
-				StatisticPanel.changeAdvancedData(i, 1, "Rage.");
-				Thread.sleep(1500);
-				
-				mainPane.repaint();
-			}
+			if (indDemo){	GUI myGUI = new GUI(); }
+			
+			System.out.println(greenList.size());
+			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
-		@SuppressWarnings("deprecation")
-		TrackController()
+		public TrackController() throws IOException
 		{
-			super("Albion Track Controller v1.0");
-			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			setPreferredSize(new Dimension(800,600));
-			setExtendedState(Frame.MAXIMIZED_BOTH);
+			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
+			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
 			
-			menuBar = new JMenuBar();
-			fileMenu = new JMenu("File");
-			helpMenu = new JMenu("Help");
+			//Debug purposes
+			System.out.println("Green Track List Length: " + greenList.size());
+			System.out.println("Red Track List Length: " + redList.size());
 			
-			runPLC = new JMenuItem("Run PLC...");
-			runPLC.addActionListener(this);
-			fileMenu.add(runPLC);
-			
-			exit = new JMenuItem("Exit");
-			exit.addActionListener(this);
-			fileMenu.add(exit);
-			
-			doc = new JMenuItem("Documentation");
-			doc.addActionListener(this);
-			helpMenu.add(doc);
-			
-			about = new JMenuItem("About");
-			about.addActionListener(this);
-			helpMenu.add(about);
-			
-			menuBar.add(fileMenu);
-			menuBar.add(helpMenu);
-			this.setJMenuBar(menuBar);
-			
-			mainContainer = this.getContentPane();
-			mainPane = new JPanel();
-			mainContainer.add(mainPane);
-			mainPane.setLayout(new GridLayout(2,2));
-			
-			commandPanel = CommandPanel.CreateCommandPanel();
-			selectPanel = SelectPanel.CreateSelectPanel();
-			outputPanel = OutputPanel.CreateOutputPanel();
-			statisticPanel = StatisticPanel.CreateStatisticPanel();
-			
-			commandPanel.setSize(new Dimension(200, 500));
-			//statisticPanel.setSize(new Dimension(200, 200));
-			statisticPanel.setPreferredSize(new Dimension(200,200));
-			//CommandPanel.activate.setEnabled(false);
-			//mainPane.add(selectPanel);
-			//mainPane.add(commandPanel);
-			//mainPane.add(outputPanel);
-			mainPane.add(statisticPanel, BorderLayout.LINE_START);
-			
-			pack();
-			setVisible(true);
 		}
 		
 		public void run(){
 			
 		}
 		
-		public static void GetSuggestion(Object [] s){
+		public void GetSuggestion(Object [] s){
 
 	        int i;
 			String [] parsedString = new String[2];
@@ -109,7 +65,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 			String line = parsedString[0];
 			int block = Integer.parseInt(parsedString[1]);
 			
-	        for (i=2; i<(s.length); i++){
+	        for (i=2; i<(s.length - 1); i++){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
 	                ;   // PassSuggestion. Some code to send the suggestion to the Train Controller
 	            }else if (suggestionDest.equals("Track")){ //Track Controller Suggestion
@@ -123,18 +79,18 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 
 		
 		
-	    private static void useSuggestion(String lineSelect, int trackSelect, String type, String value){
+	    private void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
-	    		boolean safe = false;
+	    		boolean safe = true;
 	            //Track trackBlock = tracks.get(line, trackSelect);
 	            if (type.equals("Authority")){
-	                safe = checkStatus(); //Do something safe involving the authority suggestion
+	                //safe = checkStatus(); //Do something safe involving the authority suggestion
 	                if(safe){ //change Authority
 	                	//trackBlock.setAuthority(value);
 	                }
 	            }
 	            else if(type.equals("Speed")){
-	                safe = checkStatus(); //Do something safe involving the speed suggestion
+	                //safe = checkStatus(); //Do something safe involving the speed suggestion
 	                if (safe){ //change speed
 	                	//trackBlock.setSpeed(value);
 	                }
@@ -145,7 +101,8 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    }
 	    
 	    
-	    private static boolean activateCrossing(String lineSelect, int trackSelect){
+	    @SuppressWarnings("unused")
+		private boolean activateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is inactive:
 	    	//Check to make sure it is safe to activate crossing
 	    	//Activate Appropriately
@@ -153,7 +110,8 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	return false;
 	    }
 	    
-	    private static boolean deactivateCrossing(String lineSelect, int trackSelect){
+	    @SuppressWarnings("unused")
+		private boolean deactivateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is activated:
 	    	//Check to make sure all trains are out of the area and that
 	    	//it is safe to deactivate the crossing
@@ -161,63 +119,32 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
-	    
-	    private static boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
+	    @SuppressWarnings("unused")
+		private boolean switchTrackSegment(String lineSelect, int trackSegment, int position){
 	    	//Determine if the switch can safely be activated
 	    	//Based on the arguments given, switch the track segment into the appropriate position.
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
 	    
-	    private static boolean trainDetection(){
+	    @SuppressWarnings("unused")
+		private boolean trainDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for trains
 	    	//currently present on the system. If the circuit is broken (i.e. a train is present)
 	    	//the function shall return true, otherwise false.
 	    	return false;
 	    }
 	    
-	    private static boolean brokenRailDetection(){
+	    @SuppressWarnings("unused")
+		private boolean brokenRailDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for rails that
 	    	//are currently broken. If the circuit is non functional, the function shall return true,
 	    	//otherwise false;
 	    	return false;
 	    }
 	    
-	    private static boolean checkStatus(){
+	    private boolean checkStatus(){
 	    	
 	    	return false;
-	    }
-	    
-	    public void actionPerformed(ActionEvent e){
-	    	if(e.getSource().equals(exit)){
-	    		System.exit(0);
-	    	}
-	    	else if (e.getSource().equals(doc)){
-	    		//do some crap with documentation
-	    	}
-	    	else if (e.getSource().equals(about)){
-	    		
-	    		f = new AboutBox(new JFrame());
-	    		f.setVisible(true);
-	    	}
-	    	else if (e.getSource().equals(runPLC)){
-	    		final JFileChooser fc = new JFileChooser();
-	    		fc.setMultiSelectionEnabled(false);
-	    		fc.setAcceptAllFileFilterUsed(false);
-	    		
-	    		FileNameExtensionFilter filter = new FileNameExtensionFilter("PLC Files", "plc");
-	    		fc.setFileFilter(filter);
-	    		
-	    		int returnVal = fc.showOpenDialog(TrackController.this);
-	    		
-	    		if (returnVal == JFileChooser.APPROVE_OPTION){
-	    			File file = fc.getSelectedFile();
-	    			
-	    			PLCImport.ParsePLCFile(file);
-	    		}
-	    	}
-	    	else{
-	    		
-	    	}
 	    }
 }

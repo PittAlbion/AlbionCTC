@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import TrackController.TrackController;
+
 @SuppressWarnings("serial")
 public class TrainStatPanel extends JPanel implements ActionListener{
 	
@@ -21,12 +23,14 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 	private JButton removeButton;
 	private String title;
 	private LogPanel log;
+	private TrackController trackController;
 	
 	// panels to be created display train info and allow editing
-	public TrainStatPanel(String name,LogPanel logPanel){
+	public TrainStatPanel(String name,LogPanel logPanel, TrackController controller){
 		super();
 		title = name;
 		log = logPanel;
+		trackController = controller;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
 		this.setMaximumSize(this.getPreferredSize());

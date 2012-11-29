@@ -8,8 +8,14 @@ package CTCOffice;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
+
+import TrackController.AboutBox;
+import TrackController.TrackController;
+import TrackModel.trackBlock;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener{
@@ -18,25 +24,32 @@ public class MainWindow extends JFrame implements ActionListener{
 	 * variable definitions
 	 */
 	private JMenuBar menuBar;
-	private JMenu systemMenu,logMenu;
-	private JMenuItem systemExitItem,systemAddTrain,logSaveItem;
+	private JMenu systemMenu,logMenu,helpMenu;
+	private JMenuItem systemExitItem,systemAddTrain,logSaveItem,helpAboutItem;
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
 	private TrainPanel trainPanel;
 	private TrackPanel greenTrackPanel,redTrackPanel;
 	public LogPanel logPanel;
+	public TrackController trackController;
+	public ArrayList<trackBlock> greenBlocks;
+	public ArrayList<trackBlock> redBlocks;
 	
 	//Main Method to start the program
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		new MainWindow();
 	}
 
-	MainWindow(){
+	MainWindow() throws IOException{
 		super("Albion Train Control v1.0");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
+		trackController = new TrackController();
+		greenBlocks = trackController.greenList;
+		redBlocks = trackController.redList;
+		new Thread(trackController).start();
 		
 		/* set up menu bars*/
 		menuBar = new JMenuBar();
@@ -47,8 +60,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		systemExitItem.addActionListener(this);
 		systemAddTrain = new JMenuItem("Add Train");
 		systemAddTrain.addActionListener(this);
-		systemMenu.add(systemExitItem);
+		
 		systemMenu.add(systemAddTrain);
+		systemMenu.add(systemExitItem);
 		
 		//setup log menu
 		logMenu = new JMenu("Log");
@@ -56,9 +70,17 @@ public class MainWindow extends JFrame implements ActionListener{
 		logSaveItem.addActionListener(this);
 		logMenu.add(logSaveItem);
 		
+		//setup help menu
+		helpMenu = new JMenu("Help");
+		helpAboutItem = new JMenuItem("About");
+		helpAboutItem.addActionListener(this);
+		helpMenu.add(helpAboutItem);
+		
+		
 		
 		menuBar.add(systemMenu);
 		menuBar.add(logMenu);
+		menuBar.add(helpMenu);
 		this.setJMenuBar(menuBar);
 		
 		//set up container for tabs and log window
@@ -71,12 +93,12 @@ public class MainWindow extends JFrame implements ActionListener{
 		logPanel = new LogPanel();
 		
 		//setup train panel
-		trainPanel = new TrainPanel(logPanel);
+		trainPanel = new TrainPanel(logPanel,trackController);
 		
 
 		//setup track panels
-		greenTrackPanel = new TrackPanel("Green",logPanel);
-		redTrackPanel = new TrackPanel("Red",logPanel);
+		greenTrackPanel = new TrackPanel("Green",logPanel,greenBlocks,trackController);
+		redTrackPanel = new TrackPanel("Red",logPanel,redBlocks,trackController);
 		//setup tab pane
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
@@ -102,6 +124,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		else if(event.getSource().equals(systemAddTrain)){
 			logPanel.UpdateLog("Adding Train");
 			//create train and add it to the system
+		}else if(event.getSource().equals(helpAboutItem)){
+			AboutBox about = new AboutBox(this);
+			about.setVisible(true);
 		}
 	}
 }

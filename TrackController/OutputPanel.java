@@ -5,17 +5,29 @@
 
 package TrackController;
 
-import java.awt.FlowLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
-public class OutputPanel {
+@SuppressWarnings("serial")
+public class OutputPanel extends JPanel{
 
-		public static JPanel CreateOutputPanel(){
+		OutputPanel(){
 			
-			JPanel pane = new JPanel();
-			pane.setLayout(new FlowLayout());
-			return pane;
+			super();
+			this.setLayout(new BorderLayout());
+			//this.setPreferredSize(new Dimension(300,300));
+			JPanel p = new JPanel();
+			p.setLayout(new GridLayout(4,1));
+			JButton a = new JButton("NO WAY!");
+			JButton b = new JButton("NO WAY!");
+			JButton c = new JButton("I THINK YOU NEED A NEW ONE!");
+			
+			p.add(a);
+			p.add(b);
+			p.add(c);
+			
+			this.add(p);
 			
 		}
 		

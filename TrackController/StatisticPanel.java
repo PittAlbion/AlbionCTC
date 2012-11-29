@@ -8,13 +8,15 @@ package TrackController;
 //import java.awt.FlowLayout;
 
 
+import java.awt.*;
+
 import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class StatisticPanel extends JPanel{
 
-	private static String[] genCols = {"Property", "Data"};
-	private static Object[][] genData = {
+	private String[] genCols = {"Property", "Data"};
+	private Object[][] genData = {
 		{"Train Line", null},
 		{"Track Block", null},
 		{"Authority", null},
@@ -23,8 +25,8 @@ public class StatisticPanel extends JPanel{
 		{"Elevation", null}
 	};
 	
-	private static String[] advCols = {"Property", "Data"};
-	private static Object[][] advData = {
+	private String[] advCols = {"Property", "Data"};
+	private Object[][] advData = {
 		{"Train Line", null},
 		{"Track Block", null},
 		{"Authority", null},
@@ -33,8 +35,12 @@ public class StatisticPanel extends JPanel{
 		{"Elevation", null}
 	};
 	
-		public static JTabbedPane CreateStatisticPanel(){
+		StatisticPanel(){
+			super();
 			
+			this.setPreferredSize(new Dimension(200, 300));
+			
+			this.setLayout(new BorderLayout());
 			JTabbedPane tabPane = new JTabbedPane();
 			JTable generalTable, advancedTable;
 			
@@ -44,15 +50,14 @@ public class StatisticPanel extends JPanel{
 			tabPane.addTab("General", new JScrollPane(generalTable));
 			tabPane.addTab("Advanced", new JScrollPane(advancedTable));
 			
-			return tabPane;
-			
+			this.add(tabPane);
 		}
 		
-		public static void changeGeneralData(int row, int col, Object value){
+		public void changeGeneralData(int row, int col, Object value){
 			genData[row][col] = value;
 		}
 		
-		public static void changeAdvancedData(int row, int col, Object value){
+		public void changeAdvancedData(int row, int col, Object value){
 			advData[row][col] = value;
 		}
 		

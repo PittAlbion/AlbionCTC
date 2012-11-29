@@ -4,11 +4,13 @@ import java.io.*;
 
 public class trackModel {
 	
+	public static ArrayList<trackBlock> greenTrack, redTrack;
+	
 public static void main(String[] args) throws IOException{
 	
 //Create Array List for Green Track	and Red Track
-ArrayList greenTrack = buildGreenList("greendata.txt");
-ArrayList redTrack = buildRedList("redData.txt");
+greenTrack = buildGreenList("greendata.txt");
+redTrack = buildRedList("redData.txt");
 
 
 
@@ -21,9 +23,9 @@ System.out.println(redprintBlock.block_number);
 
 }
 
-public static ArrayList buildGreenList(String dataFile) throws IOException{
+public static ArrayList<trackBlock> buildGreenList(String dataFile) throws IOException{
 	
-	ArrayList newGreenTrack = new ArrayList();
+	ArrayList<trackBlock> newGreenTrack = new ArrayList<trackBlock>();
 	
 
 //buffered reader used to  green track data text file
@@ -48,13 +50,14 @@ for(int i= 0; i<150; i++){
 	System.out.println(green_block.block_number);
 	}
 	
+in.close();
 	return newGreenTrack;
 }
 
 
-public static ArrayList buildRedList(String redDataFile) throws IOException{
+public static ArrayList<trackBlock> buildRedList(String redDataFile) throws IOException{
 
-ArrayList newRedTrack = new ArrayList();
+ArrayList<trackBlock> newRedTrack = new ArrayList<trackBlock>();
 	
 ///////////////////////////////////////////////////
 //buffered reader used to  Red track data text file
@@ -79,7 +82,7 @@ for(int j= 0; j<76; j++){
 
 System.out.println(red_block.block_number);
 }
-	
+	inRed.close();
 	return newRedTrack;
 	
 	

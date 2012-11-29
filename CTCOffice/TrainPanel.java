@@ -7,16 +7,18 @@ import java.awt.FlowLayout;
 
 import javax.swing.*;
 
+import TrackController.TrackController;
+
 @SuppressWarnings("serial")
 public class TrainPanel extends JPanel {
 	
 	private LogPanel log;
 	//setup panel for holding train info panels
-	TrainPanel(LogPanel logPanel){
+	TrainPanel(LogPanel logPanel,TrackController controller){
 		super();
 		log = logPanel;
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(new TrainStatPanel("Train 1",log));
+		this.add(new TrainStatPanel("Train 1",log, controller));
 	}
 
 }
