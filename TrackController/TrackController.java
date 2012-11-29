@@ -18,16 +18,24 @@ import javax.swing.border.Border;
 
 public class TrackController extends JFrame implements Runnable {
 	
+		private static boolean indDemo = false;
 		CommandPanel commandPanel;
 		OutputPanel outputPanel;
 		SelectPanel selectPanel;
 		StatisticPanel statisticPanel;
 		Border blackline = BorderFactory.createLineBorder(Color.black);
+		static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
+		static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
+		static ArrayList<TrackController> tr = new ArrayList<TrackController>();
 		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			new TrackController(new ArrayList<trackBlock>(), new ArrayList<trackBlock>());
-			//new GUI();
+			new TrackController(greenList, redList);
+			
+			if (indDemo){	GUI myGUI = new GUI(); }
+			
+			System.out.println(TrackController.greenList.size());
+			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
@@ -35,11 +43,13 @@ public class TrackController extends JFrame implements Runnable {
 		{
 			
 			green = trackModel.buildGreenList("help");
+			greenList = green;
 			red = trackModel.buildRedList("help");
+			redList = red;
 			
 			//Debug purposes
-			//System.out.println("Green Track: Block 0 Elevation: " + green.get(0).elevation);
-			//System.out.println("Red Track: Block 35 Block Number: " + red.get(35).block_number);
+			System.out.println("Green Track List Length: " + green.size());
+			System.out.println("Red Track List Length: " + red.size());
 			
 		}
 		
@@ -58,7 +68,7 @@ public class TrackController extends JFrame implements Runnable {
 			String line = parsedString[0];
 			int block = Integer.parseInt(parsedString[1]);
 			
-	        for (i=2; i<(s.length); i++){
+	        for (i=2; i<(s.length - 1); i++){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
 	                ;   // PassSuggestion. Some code to send the suggestion to the Train Controller
 	            }else if (suggestionDest.equals("Track")){ //Track Controller Suggestion
@@ -74,16 +84,16 @@ public class TrackController extends JFrame implements Runnable {
 		
 	    private void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
-	    		boolean safe = false;
+	    		boolean safe = true;
 	            //Track trackBlock = tracks.get(line, trackSelect);
 	            if (type.equals("Authority")){
-	                safe = checkStatus(); //Do something safe involving the authority suggestion
+	                //safe = checkStatus(); //Do something safe involving the authority suggestion
 	                if(safe){ //change Authority
 	                	//trackBlock.setAuthority(value);
 	                }
 	            }
 	            else if(type.equals("Speed")){
-	                safe = checkStatus(); //Do something safe involving the speed suggestion
+	                //safe = checkStatus(); //Do something safe involving the speed suggestion
 	                if (safe){ //change speed
 	                	//trackBlock.setSpeed(value);
 	                }
@@ -112,9 +122,8 @@ public class TrackController extends JFrame implements Runnable {
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
-	    
 	    @SuppressWarnings("unused")
-		private boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
+		private boolean switchTrackSegment(String lineSelect, int trackSegment, int position){
 	    	//Determine if the switch can safely be activated
 	    	//Based on the arguments given, switch the track segment into the appropriate position.
 	    	//Send back a confirmation or failure signal
