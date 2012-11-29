@@ -13,8 +13,8 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class AboutBox extends JDialog {
 
-	JLabel desc = new JLabel("Albion Track Controller");
-	JLabel create = new JLabel("Created By: Calvin Souders");
+	JLabel desc = new JLabel("Albion Train System");
+	JLabel create = new JLabel("Created By: Albion Group");
 	JLabel version = new JLabel("Version: 1.0.0");
 		public AboutBox(JFrame parent) {
 			super(parent, "About", true);
