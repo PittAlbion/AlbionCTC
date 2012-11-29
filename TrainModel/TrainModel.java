@@ -3,31 +3,42 @@
 //Initial construction 11/27/2012
 
 package TrainModel;
+
+import java.awt.*;
+import java.io.IOException;
+
+
+@SuppressWarnings("serial")
+
 public class TrainModel implements Runnable {
-	private int trainID;
+	public int trainID;
 	
-	private Car[] cars;
-	private int nCars;
+	public Car[] cars;
+	public int nCars;
 	
-	private FailureDetector detector;
+	public FailureDetector detector;
 	
-	private double kgPerPerson,kgPerSquareMeter;
-	private double passengerTotal, crewTotal;
-	private boolean doorsClosed;
-	private double temperature, massTotal, lengthTotal,lengthOfCar,width,height, trackGrade;
-	private double speedLimit, accLimit, decLimit;
-	private double DT;
-	private double currGrade, currAuthority, currSpeed, currAcc, currPower;
+	public double kgPerPerson,kgPerSquareMeter;
+	public double passengerTotal, crewTotal;
+	public boolean doorsClosed;
+	public double temperature, massTotal, lengthTotal,lengthOfCar,width,height, trackGrade;
+	public double speedLimit, accLimit, decLimit;
+	public double DT;
+	public double currGrade, currAuthority, currSpeed, currAcc, currPower;
 	
 	//transponder input, track circuit input, routeinfo system,  
 	
-	public static void main(String[] args) {
-		//this will be done by track controller, 
-		//potentially add some kind of tag telling which train controller is controlling it?
+	public static void main(String[] args) throws IOException{
+
 		TrainModel theModel = new TrainModel(1, 3, 30, 10, 12);
-		//here should set the connection and get all the inputs that are needed
+		//System.out.println("");
+		
+		
+		new TrainGUI(theModel);
+	
 		
 	}
+	
 
 	
 	TrainModel(int trainIDP, int carsP, double lengthCar,double heightP, double widthP){

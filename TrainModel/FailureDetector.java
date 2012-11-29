@@ -1,8 +1,8 @@
 package TrainModel;
 
 public class FailureDetector {
-	private boolean engineWorking, brakesWorking, signalsWorking;
-	private boolean eBreakThrown;
+	public boolean engineWorking, brakesWorking, signalsWorking;
+	public boolean eBreakThrown;
 	
 	
 	FailureDetector(){

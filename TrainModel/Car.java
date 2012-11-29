@@ -1,8 +1,8 @@
 package TrainModel;
 
 public class Car {
-		private int carID;
-		private double nPassengers, nCrew;
+		public int carID;
+		public double nPassengers, nCrew;
 	
 	
 	Car(){
