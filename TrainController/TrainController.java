@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class TrainController extends JFrame implements Runnable, ActionListener{
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, helpMenu, trainMenu;
+    private JMenu fileMenu, helpMenu;//, trainMenu;
     private JMenuItem exit, doc, about;
     private JDialog f;
     private Container container;
@@ -76,10 +76,10 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     /*private void UpdateTrainMenu(int p_trainID){
-		JRadioButtonMenuItem trainButton = new JRadioButtonMenuItem(""+p_trainID);
-		trainButton.addActionListener(this);
-		trainMenu.add(trainButton);
-		trainMenu.repaint();
+        JRadioButtonMenuItem trainButton = new JRadioButtonMenuItem(""+p_trainID);
+        trainButton.addActionListener(this);
+        trainMenu.add(trainButton);
+        trainMenu.repaint();
     }*/
     
     private static Train FindTrain(int p_trainID){
@@ -102,23 +102,21 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         }
     }
     
-    public boolean IncreaseSpeed(){
+    IncreaseSpeed(int p_trainID){
         /*if (this.CheckSpeedLimit(int _speed = (this._trainInfo.GetTrainSpeed()+.1)){
             this._trainInfo.SetTrainSpeed(this._speed);
             return true;
         }*/
-        return false;
     }
     
-    public boolean DecreaseSpeed(){
-        /*if ((int _speed = this._trainInfo.GetTrainSpeed()) != 0.0){
+    DecreaseSpeed(int p_trainID){
+        /*if ((int speed = this._trainInfo.GetTrainSpeed()) != 0.0){
             this._trainInfo.SetTrainSpeed(this._speed-.1);
             return true;
         }*/
-        return false;
     }
     
-    public void EmergencyStop(int p_trainID){
+    EmergencyStop(int p_trainID){
         FindTrain(p_trainID).Stop();
     }
     

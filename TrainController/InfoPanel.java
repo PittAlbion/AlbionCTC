@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class InfoPanel{
 
-    public JPanel CreateInfoPanel(){
+    JPanel CreateInfoPanel(){
         JPanel pane = new JPanel();
         pane.setLayout(new FlowLayout());
         

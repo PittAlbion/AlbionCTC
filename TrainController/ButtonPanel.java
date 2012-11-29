@@ -6,9 +6,9 @@ import javax.swing.*;
 
 public class ButtonPanel implements ActionListener{
 
-    public JButton faster, slower, stop, call;
+    static JButton faster, slower, stop, call;
     
-    public JPanel CreateButtonPanel(){
+    JPanel CreateButtonPanel(){
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(1,4));
         
@@ -31,13 +31,13 @@ public class ButtonPanel implements ActionListener{
     
     public void actionPerformed(ActionEvent e){
         if (e.getSource().equals(faster)){
-            //call increasespeed
+            IncreaseSpeed(currentTrain);
         }
         else if (e.getSource().equals(slower)){
-            //call decreasespeed
+            DecreaseSpeed(currentTrain);
         }
         else if (e.getSource().equals(stop)){
-            //call emergencystop
+            EmergencyStop(currentTrain);
         }
         else if (e.getSource().equals(call)){
             //call call?

@@ -5,9 +5,9 @@ import javax.swing.*;
 
 public class NonLogPanel{
 
-    private JPanel infoPanel, buttonPanel;
+    private static JPanel infoPanel, buttonPanel;
     
-    public JPanel CreateNonLogPanel(){
+    JPanel CreateNonLogPanel(){
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(2,1));
         
