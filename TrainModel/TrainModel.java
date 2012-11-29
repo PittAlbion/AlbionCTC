@@ -6,7 +6,8 @@ package TrainModel;
 
 import java.awt.*;
 import java.io.IOException;
-
+import java.util.Random;
+import java.math.*;
 
 @SuppressWarnings("serial")
 
@@ -18,9 +19,11 @@ public class TrainModel implements Runnable {
 	
 	public FailureDetector detector;
 	
+	public Random randomGen;
+	public double maxPass;
 	public double kgPerPerson,kgPerSquareMeter;
 	public double passengerTotal, crewTotal;
-	public boolean doorsClosed;
+	public boolean doorsClosed, lightsOn;
 	public double temperature, massTotal, lengthTotal,lengthOfCar,width,height, trackGrade;
 	public double speedLimit, accLimit, decLimit;
 	public double DT;
@@ -30,23 +33,25 @@ public class TrainModel implements Runnable {
 	
 	public static void main(String[] args) throws IOException{
 
-		TrainModel theModel = new TrainModel(1, 3, 30, 10, 12);
+		TrainModel theModel = new TrainModel(1, 1, 30, 10, 12);
 		//System.out.println("");
 		
-		
+//System.nanoTime()
 		new TrainGUI(theModel);
-	
-		
-	}
-	
 
-	
-	TrainModel(int trainIDP, int carsP, double lengthCar,double heightP, double widthP){
+
+	}
+
+
+
+	public TrainModel(int trainIDP, int carsP, double lengthCar,double heightP, double widthP){
 		InitialVars();
-			
+		
+		randomGen = new Random(System.nanoTime());
 		detector = new FailureDetector();
 		cars = new Car[carsP];
 		
+		maxPass=70;
 		trainID=trainIDP;
 		nCars=carsP;
 		lengthOfCar=lengthCar;
@@ -61,7 +66,7 @@ public class TrainModel implements Runnable {
 		
 	}
 	
-	public void setLimits(double speedLimP, double accLimP, double decLimP){
+	public void SetLimits(double speedLimP, double accLimP, double decLimP){
 		speedLimit=speedLimP;
 		accLimit=accLimP;
 		decLimit=decLimP;	
@@ -69,19 +74,19 @@ public class TrainModel implements Runnable {
 	
 	// not sure if I should just set it, or increment power.  
 	//Probably just set power, increment speed acc dec etc.
-	public void givePower(double powerP){
+	public void GivePower(double powerP){
 		currPower=powerP;		
 	}
 	
-	public void setAuthority(double authP){
+	public void SetAuthority(double authP){
 		currAuthority=authP;
 	}
 
 
 	
-	public void SetPointSpeed(){
+	public void SetPointSpeed(double set){
 		// takes input that sets certain speed I suppose
-		
+		currSpeed=set;
 	}
 	
 	public void BrakeCommand(){
@@ -120,6 +125,7 @@ public class TrainModel implements Runnable {
 		
 	}
 	
+    // potentially unnecessary
 	public void UpdatePassengerData(){
 		if(nCars==0)System.out.println("Must have a car before you try to update the train's data from cars");
 	
@@ -127,18 +133,35 @@ public class TrainModel implements Runnable {
 		for(int i=0;i<nCars;i++){
 			passengerTotal+= cars[i].GetPassengers();
 			crewTotal+= cars[i].GetCrew();
+			
 		}
+	
+		
+		
+		
 	}
 	
 	public void SimulateStop(){
-		//random number gen to decide how many get off / on each car
-		//without going over max, then calc new mass and such.
+		//random number generator to decide how many get off / on each car
+		//without going over max, then calculate new mass and such.
 		
+		System.out.println("Total before: " + passengerTotal);
+		// passengers getting off
+		if(passengerTotal!=0.0){
+		passengerTotal-= Math.ceil(Math.abs(randomGen.nextInt())%passengerTotal);
+		}
+		System.out.println("Total after dec: " + passengerTotal);
+		
+		
+		//passengers getting on
+		passengerTotal+= Math.ceil(Math.abs(randomGen.nextInt())%(maxPass-passengerTotal));
+		System.out.println("Total after: " + passengerTotal);
+		MassUpdate();
 		
 	}
 	
 	public void MassUpdate(){
-	UpdatePassengerData();
+	//UpdatePassengerData();
 	
 	massTotal=0;
 	// also should add the total mass of the train
@@ -149,6 +172,7 @@ public class TrainModel implements Runnable {
 	
 	public void InitialVars(){
 		// explicitly initializing as 0;
+		lightsOn=true;
 	kgPerSquareMeter=1000; //kilograms per square meter of length/width
 	kgPerPerson=200; //kilograms per person on the train
 	nCars=0;
