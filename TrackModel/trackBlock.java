@@ -12,6 +12,7 @@ public class trackBlock {
 	public String infrastructure;
 	public double elevation;
 	public double cumulative_elevation;
+	public boolean maintenance;
 /*
 public trackBlock(String a, String b, int c, int d, double e, int f, String g, double h, double i){
 	
@@ -37,6 +38,7 @@ public trackBlock(String[] properties){
 	infrastructure = properties[6];
 	elevation = Double.parseDouble(properties[7]);
 	cumulative_elevation = Double.parseDouble(properties[8]);
+	maintenance = false;
 }
 /*
 public void edit_track_line(String temptrackline){
