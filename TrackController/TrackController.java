@@ -28,7 +28,7 @@ public class TrackController extends JFrame implements Runnable {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
-		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
+		public static ArrayList<Train> trainList = new ArrayList<Train>();
 		public static TrainController tc;
 		public static TrackController tr;
 		static GUI myGUI;
@@ -42,7 +42,7 @@ public class TrackController extends JFrame implements Runnable {
 				tc = new TrainController();
 			}
 			
-			//trainList = tc.getTrainList();
+			trainList = tc.GetTrainList();
 			
 			System.out.println(greenList.size());
 			myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
