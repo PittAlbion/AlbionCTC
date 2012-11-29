@@ -42,7 +42,7 @@ public class TrackController extends JFrame implements Runnable {
 				tc = new TrainController();
 			}
 			
-			trainList = tc.getTrainList();
+			//trainList = tc.getTrainList();
 			
 			System.out.println(greenList.size());
 			myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
@@ -193,9 +193,9 @@ public class TrackController extends JFrame implements Runnable {
 	    	return false;
 	    }
 	    
-	    public void addTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width ){
+	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
-	    	TrainController.CreateNewTrain(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width);
+	    	TrainController.CreateNewTrain(p_trackLine, p_trainID, p_cars);
 	    	
 	    }
 	    

@@ -38,9 +38,9 @@ public class StatisticPanel extends JPanel{
 		StatisticPanel(){
 			super();
 			
-			this.setPreferredSize(new Dimension(200, 300));
+			//this.setPreferredSize(new Dimension(200, 300));
 			
-			this.setLayout(new BorderLayout());
+			//this.setLayout(new BorderLayout());
 			JTabbedPane tabPane = new JTabbedPane();
 			JTable generalTable, advancedTable;
 			
