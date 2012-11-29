@@ -6,6 +6,7 @@
 package TrackController;
 
 import TrackModel.*;
+import CTCOffice.*;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -24,29 +25,36 @@ public class TrackController extends JFrame implements Runnable {
 		SelectPanel selectPanel;
 		StatisticPanel statisticPanel;
 		Border blackline = BorderFactory.createLineBorder(Color.black);
-		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
-		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
-		static ArrayList<TrackController> tr = new ArrayList<TrackController>();
+		public static ArrayList<trackBlock> greenList;
+		public static ArrayList<trackBlock> redList;
+		public static TrackController trackController;
+		public static MainWindow ctc;
 		
+		@SuppressWarnings("static-access")
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			new TrackController();
+			ctc = new MainWindow();
 			
+			trackController = new TrackController(greenList, redList);
+			new Thread(trackController).start();
 			if (indDemo){	GUI myGUI = new GUI(); }
 			
-			System.out.println(greenList.size());
+			System.out.println(trackController.greenList.size());
 			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
-		public TrackController() throws IOException
+		public TrackController(ArrayList<trackBlock> green, ArrayList<trackBlock> red) throws IOException
 		{
-			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
-			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
+			
+			green = trackModel.buildGreenList("help");
+			//greenList = green;
+			red = trackModel.buildRedList("help");
+			//redList = red;
 			
 			//Debug purposes
-			System.out.println("Green Track List Length: " + greenList.size());
-			System.out.println("Red Track List Length: " + redList.size());
+			System.out.println("Green Track List Length: " + green.size());
+			System.out.println("Red Track List Length: " + red.size());
 			
 		}
 		
@@ -103,11 +111,37 @@ public class TrackController extends JFrame implements Runnable {
 	    
 	    @SuppressWarnings("unused")
 		private boolean activateCrossing(String lineSelect, int trackSelect){
-	    	//If the crossing is inactive:
-	    	//Check to make sure it is safe to activate crossing
-	    	//Activate Appropriately
-	    	//Send back a confirmation or failure signal
-	    	return false;
+	    	
+	    	boolean near = false;
+	    	trackBlock t;
+	    	if (lineSelect.equals("Green")){
+	    		//if (near = TrainController.isNearCrossing()){
+	    		
+	    			t = greenList.get(trackSelect);
+	    			if (t.infrastructure.equals("CROSSING")){
+	    				
+	    				//t.activateCrossing();
+	    				
+	    			}
+	    		//}
+	    		return true;
+	    	}
+	    	else if (lineSelect.equals("Red")){
+	    		//if (near = TrainController.isNearCrossing()){
+	    		
+    			t = greenList.get(trackSelect);
+    			if (t.infrastructure.equals("CROSSING")){
+    				
+    				//t.activateCrossing();
+    				
+    			}
+    		//}
+    			return true;
+	    	}
+	    	else{
+	    		System.out.println("Invalid Track Line");
+	    		return false;
+	    	}
 	    }
 	    
 	    @SuppressWarnings("unused")
