@@ -8,6 +8,7 @@ package CTCOffice;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -36,16 +37,18 @@ public class MainWindow extends JFrame implements ActionListener{
 	public ArrayList<trackBlock> redBlocks;
 	
 	//Main Method to start the program
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		new MainWindow();
 	}
 
-	MainWindow(){
+	MainWindow() throws IOException{
 		super("Albion Train Control v1.0");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-		trackController = new TrackController(greenBlocks,redBlocks);
+		trackController = new TrackController();
+		greenBlocks = trackController.greenList;
+		redBlocks = trackController.redList;
 		new Thread(trackController).start();
 		
 		/* set up menu bars*/

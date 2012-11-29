@@ -24,32 +24,29 @@ public class TrackController extends JFrame implements Runnable {
 		SelectPanel selectPanel;
 		StatisticPanel statisticPanel;
 		Border blackline = BorderFactory.createLineBorder(Color.black);
-		static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
-		static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
+		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
+		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
 		static ArrayList<TrackController> tr = new ArrayList<TrackController>();
 		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			new TrackController(greenList, redList);
+			new TrackController();
 			
 			if (indDemo){	GUI myGUI = new GUI(); }
 			
-			System.out.println(TrackController.greenList.size());
+			System.out.println(greenList.size());
 			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
-		public TrackController(ArrayList<trackBlock> green, ArrayList<trackBlock> red) throws IOException
+		public TrackController() throws IOException
 		{
-			
-			green = trackModel.buildGreenList("help");
-			greenList = green;
-			red = trackModel.buildRedList("help");
-			redList = red;
+			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
+			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
 			
 			//Debug purposes
-			System.out.println("Green Track List Length: " + green.size());
-			System.out.println("Red Track List Length: " + red.size());
+			System.out.println("Green Track List Length: " + greenList.size());
+			System.out.println("Red Track List Length: " + redList.size());
 			
 		}
 		

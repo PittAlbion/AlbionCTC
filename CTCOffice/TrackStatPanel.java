@@ -15,30 +15,26 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import TrackController.TrackController;
+import TrackModel.trackBlock;
 
 @SuppressWarnings("serial")
 public class TrackStatPanel extends JPanel implements ActionListener{
-	int blockNumber;
-	String route;
 	JButton maintenanceButton;
 	private JButton editButton;
 	private LogPanel log;
 	private TrackController trackController;
-	
-	//class to represent the Track Info panel
-	TrackStatPanel(String routeName,
-			       int block, 
+	private trackBlock block;
+	TrackStatPanel(trackBlock newBlock, 
 			       LogPanel logPanel,
 			       TrackController controller){
 		super();
-		blockNumber = block;
-		route = routeName;
 		log = logPanel;
 		trackController = controller;
+		block = newBlock;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
 		this.setMaximumSize(this.getPreferredSize());
-		this.setBorder(new TitledBorder(routeName +" " + blockNumber));
+		this.setBorder(new TitledBorder(block.track_line +" " + block.block_number));
 		
 		maintenanceButton = new JButton("Maintenance");
 		maintenanceButton.addActionListener(this);
@@ -57,17 +53,17 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		//put block on maintenance and send suggestion to Track Controller
 		if(event.getSource().equals(maintenanceButton)){
-			log.UpdateLog("Maintenance on block: "+route+" "+blockNumber);
+			log.UpdateLog("Maintenance on block: "+block.track_line+" "+block.block_number);
 			Object[] suggestion = new Object[4];
 			suggestion[0] = "Track";
-			suggestion[1] = route.charAt(0)+blockNumber;
+			suggestion[1] = block.track_line.charAt(0)+block.block_number;
 			suggestion[2] = "maintenance";
 			suggestion[3] = true;
 			
 			trackController.GetSuggestion(suggestion);
 		}
 		else if(event.getSource().equals(editButton)){
-			log.UpdateLog("Editing "+route+" "+blockNumber);
+			log.UpdateLog("Editing "+block.track_line+" "+block.block_number);
 		}
 		
 	}
