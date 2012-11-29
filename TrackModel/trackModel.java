@@ -27,8 +27,8 @@ ArrayList<trackCrossing> trackCrossingList = new ArrayList<trackCrossing>();
 trackBlock printBlock = (trackBlock) greenTrack.get(0);
 trackBlock redprintBlock = (trackBlock) redTrack.get(4);
 
-System.out.println(printBlock.block_number);
-System.out.println(redprintBlock.block_number);
+//System.out.println(printBlock.block_number);
+//System.out.println(redprintBlock.block_number);
 
 }
 
@@ -56,7 +56,7 @@ for(int i= 0; i<150; i++){
 	//add new block to list
 	newGreenTrack.add(green_block);
 
-	System.out.println(green_block.block_number);
+	//System.out.println(green_block.block_number);
 	}
 	
 in.close();
@@ -89,7 +89,7 @@ for(int j= 0; j<76; j++){
 	//add new block to list
     newRedTrack.add(red_block);
 
-System.out.println(red_block.block_number);
+//System.out.println(red_block.block_number);
 }
 	inRed.close();
 	return newRedTrack;
