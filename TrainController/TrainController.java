@@ -6,7 +6,7 @@ import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
-
+import TrackModel.*;
 import TrainModel.*;
 
 @SuppressWarnings({ "serial", "unchecked", "rawtypes", "unused" })
@@ -22,6 +22,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     private static LogPanel logPanel;
     private static NonLogPanel nonLogPanel;
     private JDialog dialog;
+    ArrayList<trackBlock> gTrackList, rTrackList;
     static ArrayList<TrainModel> trainList;
     private static int trainCount = 0;
     static String[] trainIDArray;
@@ -76,6 +77,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         pack();
         setVisible(true);
         
+        gTrackList = new ArrayList();
+        rTrackList = new ArrayList();
         trainList = new ArrayList();
     }
     
@@ -87,13 +90,18 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainCount++;
     }
     
-    private static TrainModel FindTrain(int p_trainID){
+    static TrainModel FindTrain(int p_trainID){
         for (int i = 0; i < trainList.size(); i++){
             if (trainList.get(i).trainID == p_trainID){
                 return trainList.get(i);
             }
         }
         return null;
+    }
+    
+    public void SendTrackLists(ArrayList<trackBlock> p_gTrackList, ArrayList<trackBlock> p_rTrackList){
+    	gTrackList = p_gTrackList;
+    	rTrackList = p_rTrackList;
     }
     
     int FindTrainIndex(int p_trainID){
@@ -123,19 +131,18 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     void IncreaseSpeed(int p_trainID){
-        //if (this.CheckSpeedLimit(int _speed = (this._trainInfo.GetTrainSpeed()+.1)){
-        //    this._trainInfo.SetTrainSpeed(this._speed);
-        //}*/
+        FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed+.1);
+        logPanel.WriteMessage("Train " + p_trainID + " speed increased to " + FindTrain(p_trainID).currSpeed + ".\n");
     }
     
     void DecreaseSpeed(int p_trainID){
-        /*if ((int speed = this._trainInfo.GetTrainSpeed()) != 0.0){
-            this._trainInfo.SetTrainSpeed(this._speed-.1);
-        }*/
+    	FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed-.1);
+    	logPanel.WriteMessage("Train " + p_trainID + " speed decreased to " + FindTrain(p_trainID).currSpeed + ".\n");
     }
     
     void EmergencyStop(int p_trainID){
         FindTrain(p_trainID).SetPointSpeed(0.0);
+        logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
     }
     
     public boolean IsNearCrossing(int p_trainID){

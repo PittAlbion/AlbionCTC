@@ -35,7 +35,7 @@ public class InfoPanel extends JPanel{
     }
     
     void UpdateTrainInfo(){
-    	currentModel = controller.trainList.get(controller.FindTrainIndex(controller.currentTrain));
+    	currentModel = controller.FindTrain(controller.currentTrain);
     	
 		speedLimit.setText("Speed Limit: " + currentModel.speedLimit);
 		currentSpeed.setText("Train Speed: " + currentModel.currSpeed);
@@ -43,6 +43,6 @@ public class InfoPanel extends JPanel{
 		distanceTraveled.setText("Distance Traveled: 0 mi"); //fix
 		doorStatus.setText("Doors Closed: " + currentModel.doorsClosed);
 		lightStatus.setText("Lights On: True"); //fix
-		nextStop.setText("Next Stop: Nowhere fucker"); //fix
+		nextStop.setText("Next Stop: Nowhere"); //fix
     }
 }

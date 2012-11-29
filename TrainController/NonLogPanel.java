@@ -17,7 +17,7 @@ public class NonLogPanel extends JPanel{
         
         infoPanel = new InfoPanel(p_controller);
         trainPanel = new TrainPanel(p_controller, infoPanel, p_logPanel);
-        buttonPanel = new ButtonPanel(p_controller);
+        buttonPanel = new ButtonPanel(p_controller, infoPanel);
         
         this.add(trainPanel, BorderLayout.NORTH);
         this.add(infoPanel, BorderLayout.CENTER);
