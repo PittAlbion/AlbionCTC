@@ -23,15 +23,15 @@ public class Train{
     }
     
     public void SetSpeed(double p_speed){
-        trainModel.SetPointSpeed(p_speed);
+        this.trainModel.SetPointSpeed(p_speed);
     }
     
     public void SetAuthority(double p_authority){
-        trainModel.SetAuthority(p_authority);
+        this.trainModel.SetAuthority(p_authority);
     }
     
     public void Stop(){
-        trainModel.SetPointSpeed(0.0);
+        this.trainModel.SetPointSpeed(0.0);
     }
     
     public boolean NearCrossing(){

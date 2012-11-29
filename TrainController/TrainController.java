@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class TrainController extends JFrame implements Runnable, ActionListener{
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, helpMenu;
+    private JMenu fileMenu, helpMenu, trainMenu;
     private JMenuItem exit, doc, about;
     private JDialog f;
     private Container container;
@@ -18,6 +18,9 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     private JPanel logPanel, nonLogPanel;
     private JDialog dialog;
     private static ArrayList<Train> trainList;
+    private String[] trainIDArray;
+    private int trainCount = 0;
+    int currentTrain;
     
     /*public static void main(String[] args){
         new TrainController();
@@ -31,6 +34,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
+        trainMenu = new JMenu("Trains");
         helpMenu = new JMenu("Help");
         
         exit = new JMenuItem("Exit");
@@ -45,6 +49,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         helpMenu.add(about);
         
         menuBar.add(fileMenu);
+        menuBar.add(trainMenu);
         menuBar.add(helpMenu);
         this.setJMenuBar(menuBar);
         
@@ -65,7 +70,17 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     
     public void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
         trainList.add(new Train(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width));
+        trainIDArray[trainCount] = trainList.get(trainCount);
+        UpdateTrainMenu(p_trainID)
+        trainCount++;
     }
+    
+    /*private void UpdateTrainMenu(int p_trainID){
+		JRadioButtonMenuItem trainButton = new JRadioButtonMenuItem(""+p_trainID);
+		trainButton.addActionListener(this);
+		trainMenu.add(trainButton);
+		trainMenu.repaint();
+    }*/
     
     private Train FindTrain(int p_trainID){
         for (int i = 0; i < trainList.size(); i++){
@@ -79,10 +94,10 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     public static void SendCommand(int p_trainID, String p_type, double p_value){
         Train train = FindTrain(p_trainID);
         if (train != null){
-            if (type.equals("Speed")){
-                train.SetSpeed(value);
-            }else if (type.equals("Authority")){
-                train.SetAuthority(value);
+            if (p_type.equals("Speed")){
+                train.SetSpeed(p_value);
+            }else if (p_type.equals("Authority")){
+                train.SetAuthority(p_value);
             }
         }
     }
