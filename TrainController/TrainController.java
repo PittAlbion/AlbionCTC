@@ -70,8 +70,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     
     public void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
         trainList.add(new Train(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width));
-        trainIDArray[trainCount] = trainList.get(trainCount);
-        UpdateTrainMenu(p_trainID)
+        trainIDArray[trainCount] = ""+trainList.get(trainCount);
+        //UpdateTrainMenu(p_trainID);
         trainCount++;
     }
     
@@ -82,9 +82,9 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 		trainMenu.repaint();
     }*/
     
-    private Train FindTrain(int p_trainID){
+    private static Train FindTrain(int p_trainID){
         for (int i = 0; i < trainList.size(); i++){
-            if (trainList.get(i).getID() == p_trainID){
+            if (trainList.get(i).GetID() == p_trainID){
                 return trainList.get(i);
             }
         }

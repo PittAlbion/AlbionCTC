@@ -1,13 +1,14 @@
 package TrainController;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class ButtonPanel implements ActionListener{
 
-    public static JButton faster, slower, stop, call;
+    public JButton faster, slower, stop, call;
     
-    public static JPanel CreateButtonPanel(){
+    public JPanel CreateButtonPanel(){
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(1,4));
         

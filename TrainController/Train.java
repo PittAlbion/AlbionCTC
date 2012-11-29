@@ -1,6 +1,7 @@
 package TrainController;
 
 import java.util.Random;
+import TrainModel.*;
 
 public class Train{
 
