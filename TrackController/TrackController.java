@@ -6,6 +6,7 @@
 package TrackController;
 
 import TrackModel.*;
+import TrainController.*;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import javax.swing.border.Border;
 
 public class TrackController extends JFrame implements Runnable {
 	
-		private static boolean indDemo = false;
+		private static boolean indDemo = true;
 		CommandPanel commandPanel;
 		OutputPanel outputPanel;
 		SelectPanel selectPanel;
@@ -26,16 +27,21 @@ public class TrackController extends JFrame implements Runnable {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
-		static ArrayList<TrackController> tr = new ArrayList<TrackController>();
+		public static TrainController tc;
+		public static TrackController tr;
+		static GUI myGUI;
 		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			new TrackController();
+			tr = new TrackController();
 			
-			if (indDemo){	GUI myGUI = new GUI(); }
+			if (indDemo){	
+				myGUI = new GUI(); 
+				tc = new TrainController();
+			}
 			
 			System.out.println(greenList.size());
-			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
+			myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
@@ -100,14 +106,39 @@ public class TrackController extends JFrame implements Runnable {
 					
 	    }
 	    
-	    
-	    @SuppressWarnings("unused")
-		private boolean activateCrossing(String lineSelect, int trackSelect){
-	    	//If the crossing is inactive:
-	    	//Check to make sure it is safe to activate crossing
-	    	//Activate Appropriately
-	    	//Send back a confirmation or failure signal
-	    	return false;
+
+		public boolean activateCrossing(String lineSelect, int trackSelect){
+	    	
+	    	boolean near = false;
+	    	trackBlock t;
+	    	if (lineSelect.equals("Green")){
+	    		if (near = tc.IsNearCrossing(0)){
+	    		
+	    			t = greenList.get(trackSelect);
+	    			if (t.infrastructure.equals("CROSSING")){
+	    				
+	    				//t.activateCrossing();
+	    				
+	    			}
+	    		}
+	    		return true;
+	    	}
+	    	else if (lineSelect.equals("Red")){
+	    		if (near = tc.IsNearCrossing(0)){
+	    		
+    			t = greenList.get(trackSelect);
+    			if (t.infrastructure.equals("CROSSING")){
+    				
+    				//t.activateCrossing();
+    				
+    			}
+    		}
+    			return true;
+	    	}
+	    	else{
+	    		System.out.println("Invalid Track Line");
+	    		return false;
+	    	}
 	    }
 	    
 	    @SuppressWarnings("unused")
@@ -143,7 +174,8 @@ public class TrackController extends JFrame implements Runnable {
 	    	return false;
 	    }
 	    
-	    private boolean checkStatus(){
+	    @SuppressWarnings("unused")
+		private boolean checkStatus(){
 	    	
 	    	return false;
 	    }

@@ -47,9 +47,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		trackController = new TrackController();
+		new Thread(trackController).start();
 		greenBlocks = trackController.greenList;
 		redBlocks = trackController.redList;
-		new Thread(trackController).start();
 		
 		/* set up menu bars*/
 		menuBar = new JMenuBar();
@@ -114,7 +114,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource().equals(systemExitItem)){
 			logPanel.UpdateLog("**System Shutting Down\n");
-			logPanel.Save();
+			//logPanel.Save();
 			dispose();
 			System.exit(0);
 		}

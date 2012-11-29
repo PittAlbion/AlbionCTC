@@ -5,6 +5,7 @@
 package CTCOffice;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -21,12 +22,17 @@ public class TrackPanel extends JPanel{
 			   ArrayList<trackBlock> blocks,
 			   TrackController controller){
 		super();
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setLayout(new GridLayout(1,1));
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		log = logPanel;
 		
 		for(trackBlock block : blocks){
-			this.add(new TrackStatPanel(block,log,controller));			
+			panel.add(new TrackStatPanel(block,log,controller));			
 		}
+		
+		this.add(new JScrollPane(panel));
+		
 	}
 
 }

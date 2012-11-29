@@ -26,7 +26,7 @@ public class LogPanel extends JPanel{
 		this.add(labelText, BorderLayout.PAGE_START);
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
-		textPane.setPreferredSize(new Dimension(100,150));
+		textPane.setPreferredSize(new Dimension(100,250));
 		textPane.setContentType("text");
 		
 		this.add(textPane,BorderLayout.CENTER);

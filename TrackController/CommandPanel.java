@@ -6,12 +6,14 @@
 package TrackController;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 //import java.sql.Timestamp;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
-public class CommandPanel extends JPanel{
+public class CommandPanel extends JPanel implements ActionListener{
 
 	public static JButton activate, deactivate, switcher;
 	//private static Timestamp time;
@@ -32,6 +34,7 @@ public class CommandPanel extends JPanel{
 			
 			c.insets = new Insets(25, 25, 25, 25);
 			activate = new JButton("Activate Crossing");
+			activate.addActionListener(this);
 			c.gridx = 0;
 			c.gridy = 0;
 			p.add(activate, c);
@@ -61,5 +64,17 @@ public class CommandPanel extends JPanel{
 		
 		public void deactivateButton(JButton button){
 			button.setEnabled(false);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(activate)){
+				boolean worked;
+				
+				worked = TrackController.tr.activateCrossing("Green", 1);
+				
+				System.out.println("Activation Worked: " + worked);
+			}
+			
 		}
 }

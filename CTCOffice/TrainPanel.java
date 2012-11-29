@@ -18,7 +18,7 @@ public class TrainPanel extends JPanel {
 		super();
 		log = logPanel;
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(new TrainStatPanel("Train 1",log, controller));
+		//this.add(new TrainStatPanel("Train 1",log, controller));
 	}
 
 }
