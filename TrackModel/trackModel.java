@@ -7,10 +7,19 @@ public class trackModel {
 	public static ArrayList<trackBlock> greenTrack, redTrack;
 	
 public static void main(String[] args) throws IOException{
+
 	
+
 //Create Array List for Green Track	and Red Track
 greenTrack = buildGreenList("greendata.txt");
 redTrack = buildRedList("redData.txt");
+
+//Create ArrayList for track Crossings	
+ArrayList<trackCrossing> trackCrossingList = new ArrayList<trackCrossing>();
+ trackCrossing firstOne = new trackCrossing(false,false, 47,"red");
+ trackCrossing secondOne = new trackCrossing(false,false,19, "green");
+ trackCrossingList.add(firstOne);
+ trackCrossingList.add(secondOne);
 
 
 
