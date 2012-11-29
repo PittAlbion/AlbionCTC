@@ -15,7 +15,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 	private JDialog f;
     private Container container;
     private static JPanel mainPane;
-    private LogPanel logPanel;
+    private static LogPanel logPanel;
     private static NonLogPanel nonLogPanel;
     private JDialog dialog;
     static ArrayList<Train> trainList;
@@ -23,13 +23,14 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     static String[] trainIDArray;
     int currentTrain;
     
+    
     public static void main(String[] args) throws InterruptedException{
         new TrainController();
         
         Thread.sleep(5000);
-        CreateNewTrain('g', 1, 3, 10.0, 50.0, 50.0);
+        CreateNewTrain('g', 1, 3);
         Thread.sleep(2000);
-        CreateNewTrain('g', 4, 3, 10.0, 50.0, 50.0);
+        CreateNewTrain('g', 4, 3);
     }
     
 	public TrainController(){
@@ -63,8 +64,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         mainPane = new JPanel();
         container.add(mainPane);
         mainPane.setLayout(new GridLayout(1,2));
-        logPanel = new LogPanel();
-        nonLogPanel = new NonLogPanel(this);
+        logPanel = new LogPanel(this);
+        nonLogPanel = new NonLogPanel(this, logPanel);
         mainPane.add(nonLogPanel);
         mainPane.add(logPanel);
         
@@ -74,11 +75,11 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainList = new ArrayList();
     }
     
-    public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
-        trainList.add(new Train(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width));
+    public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
+        trainList.add(new Train(p_trackLine, p_trainID, p_cars));
         trainIDArray[trainCount] = ""+trainList.get(trainCount).GetID();
         nonLogPanel.trainPanel.UpdateTrainBox();
-        nonLogPanel.infoPanel.UpdateTrainInfo();
+        logPanel.CreateLog();
         trainCount++;
     }
     
@@ -102,10 +103,14 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         }
     }
     
+    public ArrayList<Train> GetTrainList(){
+		return trainList;
+    }
+    
     void IncreaseSpeed(int p_trainID){
-        /*if (this.CheckSpeedLimit(int _speed = (this._trainInfo.GetTrainSpeed()+.1)){
-            this._trainInfo.SetTrainSpeed(this._speed);
-        }*/
+        //if (this.CheckSpeedLimit(int _speed = (this._trainInfo.GetTrainSpeed()+.1)){
+        //    this._trainInfo.SetTrainSpeed(this._speed);
+        //}*/
     }
     
     void DecreaseSpeed(int p_trainID){

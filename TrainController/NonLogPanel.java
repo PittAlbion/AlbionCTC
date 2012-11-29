@@ -11,12 +11,12 @@ public class NonLogPanel extends JPanel{
 	private static ButtonPanel buttonPanel;
 	TrainPanel trainPanel;
     
-    NonLogPanel(TrainController p_controller){
+    NonLogPanel(TrainController p_controller, LogPanel p_logPanel){
         super();
         this.setLayout(new BorderLayout());
         
-        trainPanel = new TrainPanel(p_controller);
         infoPanel = new InfoPanel(p_controller);
+        trainPanel = new TrainPanel(p_controller, infoPanel, p_logPanel);
         buttonPanel = new ButtonPanel(p_controller);
         
         this.add(trainPanel, BorderLayout.NORTH);

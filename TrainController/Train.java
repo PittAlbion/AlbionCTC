@@ -9,10 +9,10 @@ public class Train{
     private int trainID;
     TrainModel trainModel;
     
-    public Train(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
+    public Train(char p_trackLine, int p_trainID, int p_cars){
         this.trackLine = p_trackLine;
         this.trainID = p_trainID;
-        this.trainModel = new TrainModel(p_trainID, p_cars, p_length, p_height, p_width);
+        this.trainModel = new TrainModel(p_trackLine, p_trainID, p_cars);
     }
     
     public int GetID(){

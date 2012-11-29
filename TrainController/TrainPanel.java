@@ -5,18 +5,21 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-@SuppressWarnings({ "serial", "static-access" })
+@SuppressWarnings({ "serial", "static-access", "rawtypes" })
 public class TrainPanel extends JPanel implements ActionListener{
 	
 		private TrainController controller;
 		private JComboBox<String> trainBox;
+		private InfoPanel infoPanel;
+		private LogPanel logPanel;
 		
-		TrainPanel(TrainController p_controller){
+		TrainPanel(TrainController p_controller, InfoPanel p_infoPanel, LogPanel p_logPanel){
 			super();
 			this.setLayout(new GridLayout(1,1));
 			this.setPreferredSize(new Dimension(400, 50));
 			
 			this.controller = p_controller;
+			this.infoPanel = p_infoPanel;
 			this.trainBox = new JComboBox<String>(controller.trainIDArray);
 			trainBox.addActionListener(this);
 			
@@ -32,7 +35,11 @@ public class TrainPanel extends JPanel implements ActionListener{
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			
+			JComboBox selection = (JComboBox)e.getSource();
+			int trainNumber = Integer.parseInt((String)selection.getSelectedItem());
+			controller.currentTrain = trainNumber;
+			infoPanel.UpdateTrainInfo();
+			logPanel.UpdateLog();
 		}
 		
 }
