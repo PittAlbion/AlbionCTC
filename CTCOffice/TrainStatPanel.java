@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import TrackController.TrackController;
+import TrainModel.TrainModel;
 
 @SuppressWarnings("serial")
 public class TrainStatPanel extends JPanel implements ActionListener{
@@ -26,9 +27,9 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 	private TrackController trackController;
 	
 	// panels to be created display train info and allow editing
-	public TrainStatPanel(String name,LogPanel logPanel, TrackController controller){
+	public TrainStatPanel(TrainModel train,LogPanel logPanel, TrackController controller){
 		super();
-		title = name;
+		title = "Train ";
 		log = logPanel;
 		trackController = controller;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

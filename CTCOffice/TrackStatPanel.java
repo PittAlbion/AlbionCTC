@@ -95,6 +95,7 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 		}
 		else if(event.getSource().equals(editButton)){
 			log.UpdateLog("Editing "+block.track_line+" "+block.block_number);
+			new TrackEditDialog(block,trackController);
 		}
 		
 	}
