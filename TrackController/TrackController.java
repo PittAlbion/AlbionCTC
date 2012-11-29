@@ -28,7 +28,7 @@ public class TrackController extends JFrame implements Runnable {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
-		public static ArrayList<Train> trainList = new ArrayList<Train>();
+		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
 		public static TrainController tc;
 		public static TrackController tr;
 		static GUI myGUI;
