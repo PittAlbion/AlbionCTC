@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import TrackModel.trackModel;
+
 @SuppressWarnings("serial")
 public class CommandPanel extends JPanel implements ActionListener{
 
@@ -71,9 +73,20 @@ public class CommandPanel extends JPanel implements ActionListener{
 			if (e.getSource().equals(activate)){
 				boolean worked;
 				
-				worked = TrackController.tr.activateCrossing("Green", 1);
+				worked = TrackController.tr.activateCrossing("Green", 18);
 				
-				System.out.println("Activation Worked: " + worked);
+				if (worked){
+					
+				TrackController.myGUI.statisticPanel.changeAdvancedData(0, 1, "Active!");
+				TrackController.myGUI.statisticPanel.changeAdvancedData(1, 1, "Active!");
+//					
+//					//trackModel.trackCrossingList.get(0).active = true;
+//					//trackModel.trackCrossingList.get(0).lights = true;
+					
+					repaint();
+				}
+				System.out.println("Crossing Activation Worked: " + worked);
+				
 			}
 			
 		}

@@ -19,9 +19,9 @@ public class OutputPanel extends JPanel{
 			//this.setPreferredSize(new Dimension(300,300));
 			JPanel p = new JPanel();
 			p.setLayout(new GridLayout(4,1));
-			JButton a = new JButton("NO WAY!");
-			JButton b = new JButton("NO WAY!");
-			JButton c = new JButton("I THINK YOU NEED A NEW ONE!");
+			JButton a = new JButton("Not");
+			JButton b = new JButton("Done");
+			JButton c = new JButton("Yet");
 			
 			p.add(a);
 			p.add(b);

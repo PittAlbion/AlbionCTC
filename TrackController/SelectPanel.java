@@ -19,10 +19,10 @@ public class SelectPanel extends JPanel {
 			
 			JPanel p = new JPanel();
 			p.setLayout(new GridLayout(4,1));
-			JButton a = new JButton("HEY!");
-			JButton b = new JButton("HEY!");
-			JButton c = new JButton("YOU! YOU!");
-			JButton d = new JButton("I DON'T LIKE YOUR GIRLFRIEND!");
+			JButton a = new JButton("This");
+			JButton b = new JButton("isn't");
+			JButton c = new JButton("Done");
+			JButton d = new JButton("Yet");
 			
 			p.add(a);
 			p.add(b);

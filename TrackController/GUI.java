@@ -41,8 +41,8 @@ public class GUI extends JFrame implements ActionListener{
 			super("Albion Track Controller v1.0");
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			setResizable(false);
-			this.setMaximumSize(new Dimension(600,600));
-			this.setPreferredSize(new Dimension(600,600));
+			this.setMaximumSize(new Dimension(800,800));
+			this.setPreferredSize(new Dimension(800,800));
 			setExtendedState(Frame.NORMAL);
 			
 			
@@ -86,7 +86,7 @@ public class GUI extends JFrame implements ActionListener{
 			//mainPane.add(selectPanel);
 			//mainPane.add(commandPanel);
 			//mainPane.add(outputPanel);
-			c.fill = GridBagConstraints.HORIZONTAL;
+			c.fill = GridBagConstraints.BOTH;
 			c.weightx = 400;
 			c.weighty = 300;
 			c.gridwidth = 1;
@@ -96,7 +96,7 @@ public class GUI extends JFrame implements ActionListener{
 			c.gridy = 0;
 			c.anchor = GridBagConstraints.FIRST_LINE_START;
 			
-			selectPanel.setPreferredSize(new Dimension(300,300));
+			//selectPanel.setPreferredSize(new Dimension(300,300));
 			mainPane.add(selectPanel, c);
 			
 			c.gridx = 1;
@@ -115,7 +115,7 @@ public class GUI extends JFrame implements ActionListener{
 			c.weighty = 200;
 			c.gridx = 1;
 			c.gridy = 1;
-			c.anchor = GridBagConstraints.LAST_LINE_END;
+			//c.anchor = GridBagConstraints.LAST_LINE_END;
 			mainPane.add(statisticPanel,c);
 			
 			pack();

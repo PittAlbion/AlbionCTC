@@ -7,9 +7,8 @@ package TrackController;
 
 //import java.awt.FlowLayout;
 
-
 import java.awt.*;
-
+import TrackModel.*;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -27,12 +26,8 @@ public class StatisticPanel extends JPanel{
 	
 	private String[] advCols = {"Property", "Data"};
 	private Object[][] advData = {
-		{"Train Line", null},
-		{"Track Block", null},
-		{"Authority", null},
-		{"Speed", null},
-		{"Grade", null},
-		{"Elevation", null}
+		{"Crossing Active", "Inactive!"},
+		{"Lights Active", "Inactive!"},
 	};
 	
 		StatisticPanel(){
@@ -56,10 +51,12 @@ public class StatisticPanel extends JPanel{
 		
 		public void changeGeneralData(int row, int col, Object value){
 			genData[row][col] = value;
+			this.repaint();
 		}
 		
 		public void changeAdvancedData(int row, int col, Object value){
 			advData[row][col] = value;
+			this.repaint();
 		}
 		
 }

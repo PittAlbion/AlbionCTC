@@ -20,7 +20,7 @@ import javax.swing.border.Border;
 
 public class TrackController extends JFrame implements Runnable {
 	
-		private static boolean indDemo = true;
+		//private static boolean indDemo = true;
 		CommandPanel commandPanel;
 		OutputPanel outputPanel;
 		SelectPanel selectPanel;
@@ -29,6 +29,7 @@ public class TrackController extends JFrame implements Runnable {
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
 		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
+		public static trackModel tm = new trackModel();
 		public static TrainController tc;
 		public static TrackController tr;
 		static GUI myGUI;
@@ -37,10 +38,8 @@ public class TrackController extends JFrame implements Runnable {
 			
 			tr = new TrackController();
 			
-			if (indDemo){	
-				myGUI = new GUI(); 
-				tc = new TrainController();
-			}
+			
+			myGUI = new GUI(); 
 			
 			trainList = tc.GetTrainList();
 			
@@ -53,6 +52,8 @@ public class TrackController extends JFrame implements Runnable {
 		{
 			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
 			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
+			tc = new TrainController();
+			tm = new trackModel();
 			
 			//Debug purposes
 			System.out.println("Green Track List Length: " + greenList.size());
@@ -73,7 +74,7 @@ public class TrackController extends JFrame implements Runnable {
 	        String suggestionDest = s[0].toString();
 	        String selector = s[1].toString();
 			
-			parsedString = selector.split("");
+			parsedString = selector.split(" ");
 			String line = parsedString[0];
 			int block = Integer.parseInt(parsedString[1]);
 			
@@ -103,6 +104,7 @@ public class TrackController extends JFrame implements Runnable {
 	    			t = redList.get(trackSelect);
 	    		}
 	    		else { ; }
+	    		
 	            if (type.equals("Authority")){
 	                //safe = checkStatus(); //Do something safe involving the authority suggestion
 	                if(safe){ //change Authority
@@ -121,15 +123,16 @@ public class TrackController extends JFrame implements Runnable {
 	    
 
 		public boolean activateCrossing(String lineSelect, int trackSelect){
-	    	
-	    	boolean near = false;
+	    	boolean near = tc.IsNearCrossing(0);
 	    	trackBlock t;
 	    	if (lineSelect.equals("Green")){
-	    		if (near = tc.IsNearCrossing(0)){
+	    		if (near){
 	    		
 	    			t = greenList.get(trackSelect);
 	    			if (t.infrastructure.equals("CROSSING")){
 	    				
+						//trackModel.trackCrossingList.get(0).active = true;
+						//trackModel.trackCrossingList.get(0).lights = true;
 	    				//t.activateCrossing();
 	    				
 	    			}
@@ -137,7 +140,7 @@ public class TrackController extends JFrame implements Runnable {
 	    		return true;
 	    	}
 	    	else if (lineSelect.equals("Red")){
-	    		if (near = tc.IsNearCrossing(0)){
+	    		if (near){
 	    		
     			t = greenList.get(trackSelect);
     			if (t.infrastructure.equals("CROSSING")){
@@ -195,7 +198,7 @@ public class TrackController extends JFrame implements Runnable {
 	    
 	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
-	    	TrainController.CreateNewTrain(p_trackLine, p_trainID, p_cars);
+	    	tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
 	    	
 	    }
 	    
