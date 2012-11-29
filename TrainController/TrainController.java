@@ -32,9 +32,9 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         new TrainController();
         
         Thread.sleep(5000);
-        CreateNewTrain('g', 1, 3);
+        CreateNewTrain('G', 1, 3);
         Thread.sleep(2000);
-        CreateNewTrain('g', 4, 3);
+        CreateNewTrain('G', 4, 3);
     }
     
 	public TrainController(){
@@ -83,7 +83,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainList.add(new TrainModel(p_trackLine, p_trainID, p_cars));
         trainIDArray[trainCount] = ""+trainList.get(trainCount).trainID;
         nonLogPanel.trainPanel.UpdateTrainBox();
-        logPanel.CreateLog();
+        logPanel.WriteMessage("Train Created: " + p_trackLine + p_trainID + "\n");
         trainCount++;
     }
     
@@ -96,6 +96,16 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         return null;
     }
     
+    int FindTrainIndex(int p_trainID){
+		for (int i=0; i <= trainList.size(); i++){
+			if (trainIDArray[i].equals(""+p_trainID)){
+				return i;
+				//System.out.println(""+i);
+			}
+		}
+		return 0;
+    }
+    
     public static void SendCommand(int p_trainID, String p_type, double p_value){
         TrainModel train = FindTrain(p_trainID);
         if (train != null){
@@ -105,6 +115,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
                 train.SetAuthority(p_value);
             }
         }
+        logPanel.WriteMessage(p_type + " suggestion recieved.\n");
     }
     
     public ArrayList<TrainModel> GetTrainList(){

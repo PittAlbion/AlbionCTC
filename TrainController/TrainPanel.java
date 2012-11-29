@@ -40,7 +40,7 @@ public class TrainPanel extends JPanel implements ActionListener{
 			selectedTrain = Integer.parseInt((String)selection.getSelectedItem());
 			controller.currentTrain = selectedTrain;
 			infoPanel.UpdateTrainInfo();
-			logPanel.UpdateLog();
+			//logPanel.UpdateLog();
 		}
 		
 }
