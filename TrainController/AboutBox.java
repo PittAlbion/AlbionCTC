@@ -1,8 +1,10 @@
 package TrainController;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class AboutBox extends JDialog{
 
     static JLabel name = new JLabel("Albion Train Controller");
@@ -21,6 +23,7 @@ public class AboutBox extends JDialog{
         box.add(version);
         box.add(me);
         box.add(Box.createGlue());
+        box.setPreferredSize(new Dimension(200, 200));
         getContentPane().add(box, "Center");
         
         JPanel pane = new JPanel();

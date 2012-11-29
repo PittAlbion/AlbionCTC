@@ -3,20 +3,24 @@ package TrainController;
 import java.awt.*;
 import javax.swing.*;
 
-public class NonLogPanel{
+@SuppressWarnings("serial")
+public class NonLogPanel extends JPanel{
 
-    private static JPanel infoPanel, buttonPanel;
+    //private static JPanel infoPanel, buttonPanel;
+	InfoPanel infoPanel;
+	private static ButtonPanel buttonPanel;
+	TrainPanel trainPanel;
     
-    JPanel CreateNonLogPanel(){
-        JPanel pane = new JPanel();
-        pane.setLayout(new GridLayout(2,1));
+    NonLogPanel(TrainController p_controller){
+        super();
+        this.setLayout(new BorderLayout());
         
-        infoPanel = InfoPanel.CreateInfoPanel();
-        buttonPanel = ButtonPanel.CreateButtonPanel();
+        trainPanel = new TrainPanel(p_controller);
+        infoPanel = new InfoPanel(p_controller);
+        buttonPanel = new ButtonPanel(p_controller);
         
-        pane.add(infoPanel);
-        pane.add(buttonPanel);
-        
-        return pane;
+        this.add(trainPanel, BorderLayout.NORTH);
+        this.add(infoPanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
     }
 }

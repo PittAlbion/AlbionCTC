@@ -5,36 +5,43 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unchecked", "rawtypes", "unused" })
 
 public class TrainController extends JFrame implements Runnable, ActionListener{
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, helpMenu;//, trainMenu;
+    private JMenu fileMenu, helpMenu;
     private JMenuItem exit, doc, about;
-    private JDialog f;
+	private JDialog f;
     private Container container;
     private static JPanel mainPane;
-    private JPanel logPanel, nonLogPanel;
+    private LogPanel logPanel;
+    private static NonLogPanel nonLogPanel;
     private JDialog dialog;
-    private static ArrayList<Train> trainList;
-    private String[] trainIDArray;
-    private int trainCount = 0;
+    static ArrayList<Train> trainList;
+    private static int trainCount = 0;
+    static String[] trainIDArray;
     int currentTrain;
     
-    /*public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException{
         new TrainController();
-    }*/
+        
+        Thread.sleep(5000);
+        CreateNewTrain('g', 1, 3, 10.0, 50.0, 50.0);
+        Thread.sleep(2000);
+        CreateNewTrain('g', 4, 3, 10.0, 50.0, 50.0);
+    }
     
-    public TrainController(){
+	public TrainController(){
         super("Albion Train Controller v1.0");
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
-        setExtendedState(Frame.MAXIMIZED_BOTH);
+        
+        trainIDArray = new String[100];
+        trainIDArray[0]="None";
         
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
-        trainMenu = new JMenu("Trains");
         helpMenu = new JMenu("Help");
         
         exit = new JMenuItem("Exit");
@@ -49,7 +56,6 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         helpMenu.add(about);
         
         menuBar.add(fileMenu);
-        menuBar.add(trainMenu);
         menuBar.add(helpMenu);
         this.setJMenuBar(menuBar);
         
@@ -57,8 +63,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         mainPane = new JPanel();
         container.add(mainPane);
         mainPane.setLayout(new GridLayout(1,2));
-        logPanel = LogPanel.CreateLogPanel();
-        nonLogPanel = NonLogPanel.CreateNonLogPanel();
+        logPanel = new LogPanel();
+        nonLogPanel = new NonLogPanel(this);
         mainPane.add(nonLogPanel);
         mainPane.add(logPanel);
         
@@ -68,19 +74,13 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainList = new ArrayList();
     }
     
-    public void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
+    public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
         trainList.add(new Train(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width));
-        trainIDArray[trainCount] = ""+trainList.get(trainCount);
-        //UpdateTrainMenu(p_trainID);
+        trainIDArray[trainCount] = ""+trainList.get(trainCount).GetID();
+        nonLogPanel.trainPanel.UpdateTrainBox();
+        nonLogPanel.infoPanel.UpdateTrainInfo();
         trainCount++;
     }
-    
-    /*private void UpdateTrainMenu(int p_trainID){
-        JRadioButtonMenuItem trainButton = new JRadioButtonMenuItem(""+p_trainID);
-        trainButton.addActionListener(this);
-        trainMenu.add(trainButton);
-        trainMenu.repaint();
-    }*/
     
     private static Train FindTrain(int p_trainID){
         for (int i = 0; i < trainList.size(); i++){
@@ -102,21 +102,19 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         }
     }
     
-    IncreaseSpeed(int p_trainID){
+    void IncreaseSpeed(int p_trainID){
         /*if (this.CheckSpeedLimit(int _speed = (this._trainInfo.GetTrainSpeed()+.1)){
             this._trainInfo.SetTrainSpeed(this._speed);
-            return true;
         }*/
     }
     
-    DecreaseSpeed(int p_trainID){
+    void DecreaseSpeed(int p_trainID){
         /*if ((int speed = this._trainInfo.GetTrainSpeed()) != 0.0){
             this._trainInfo.SetTrainSpeed(this._speed-.1);
-            return true;
         }*/
     }
     
-    EmergencyStop(int p_trainID){
+    void EmergencyStop(int p_trainID){
         FindTrain(p_trainID).Stop();
     }
     

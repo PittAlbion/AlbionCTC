@@ -3,11 +3,11 @@ package TrainController;
 import java.awt.*;
 import javax.swing.*;
 
-public class LogPanel{
+@SuppressWarnings("serial")
+public class LogPanel extends JPanel{
 
-    public JPanel CreateLogPanel(){
-        JPanel pane = new JPanel();
-        pane.setLayout(new FlowLayout()); //make grid?
-        return pane;
+    LogPanel(){
+        super();
+        this.setLayout(new FlowLayout()); //make grid?
     }
 }

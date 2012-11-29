@@ -7,7 +7,7 @@ public class Train{
 
     private char trackLine;
     private int trainID;
-    private TrainModel trainModel;
+    TrainModel trainModel;
     
     public Train(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
         this.trackLine = p_trackLine;
@@ -28,7 +28,7 @@ public class Train{
     }
     
     public void SetAuthority(double p_authority){
-        this.trainModel.SetAuthority(); //Shane add input
+        this.trainModel.SetAuthority(p_authority); //Shane add input
     }
     
     public void Stop(){
@@ -40,7 +40,7 @@ public class Train{
         int hack = number.nextInt(2);
         if (hack == 1)
             return true;
-        if (hack == 0)
-            return false;
+        
+        return false;
     }
 }
