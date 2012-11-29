@@ -3,15 +3,15 @@ package TrackModel;
 public class trackBlock {
 	
 	//all componenets of a track block that are provided in the excel sheet
-    String track_line;
-	String train_section;
-	int block_number;
-	double block_length;
-	double block_grade;
-	int speed_limit;
-	String infrastructure;
-	double elevation;
-	double cumulative_elevation;
+    public String track_line;
+	public String train_section;
+	public int block_number;
+	public double block_length;
+	public double block_grade;
+	public int speed_limit;
+	public String infrastructure;
+	public double elevation;
+	public double cumulative_elevation;
 /*
 public trackBlock(String a, String b, int c, int d, double e, int f, String g, double h, double i){
 	
