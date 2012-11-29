@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import java.util.ArrayList;
 @SuppressWarnings("serial")
 
 public class TrainController extends JFrame implements Runnable, ActionListener{
@@ -16,13 +17,13 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     private static JPanel mainPane;
     private JPanel logPanel, nonLogPanel;
     private JDialog dialog;
-    //private TrainModel trainModel;
+    private static ArrayList<Train> trainList;
     
-    public static void main(String[] args) throws InterruptedException{
+    /*public static void main(String[] args){
         new TrainController();
-    }
+    }*/
     
-    TrainController(){
+    public TrainController(){
         super("Albion Train Controller v1.0");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
@@ -59,18 +60,31 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         pack();
         setVisible(true);
         
-        //trainModel = new TrainModel();
+        trainList = new ArrayList();
     }
     
-    public static void SendCommand(char trackLine, int trainNumber, String type, double value){
-        //check to see if trackLine and trainNumber matches info from associated train model
-        if (type.equals("Speed")){
-            ChangeSpeed(value);
-        }else if (type.equals("Authority")){
-            ChangeAuthority(value);
-        }else
-            return;
-        //Shouldn't the value be a double instead of an int?
+    public void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width){
+        trainList.add(new Train(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width));
+    }
+    
+    private Train FindTrain(int p_trainID){
+        for (int i = 0; i < trainList.size(); i++){
+            if (trainList.get(i).getID() == p_trainID){
+                return trainList.get(i);
+            }
+        }
+        return null;
+    }
+    
+    public static void SendCommand(int p_trainID, String p_type, double p_value){
+        Train train = FindTrain(p_trainID);
+        if (train != null){
+            if (type.equals("Speed")){
+                train.SetSpeed(value);
+            }else if (type.equals("Authority")){
+                train.SetAuthority(value);
+            }
+        }
     }
     
     public boolean IncreaseSpeed(){
@@ -89,17 +103,12 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         return false;
     }
     
-    private static boolean ChangeSpeed(double p_newSpeed){
-        //This will call a method in the TrainModel that will change the speed
-        return false;
+    public void EmergencyStop(int p_trainID){
+        FindTrain(p_trainID).Stop();
     }
     
-    public boolean EmergencyStop(){
-        return this.ChangeSpeed(0.0);
-    }
-    
-    private static boolean ChangeAuthority(double p_authority){
-        return false;
+    public boolean IsNearCrossing(int p_trainID){
+        return FindTrain(p_trainID).NearCrossing();
     }
     
     public void actionPerformed(ActionEvent e){
