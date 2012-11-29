@@ -8,11 +8,13 @@ package CTCOffice;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 import TrackController.AboutBox;
 import TrackController.TrackController;
+import TrackModel.trackBlock;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener{
@@ -30,6 +32,8 @@ public class MainWindow extends JFrame implements ActionListener{
 	private TrackPanel greenTrackPanel,redTrackPanel;
 	public LogPanel logPanel;
 	public TrackController trackController;
+	public ArrayList<trackBlock> greenBlocks;
+	public ArrayList<trackBlock> redBlocks;
 	
 	//Main Method to start the program
 	public static void main(String[] args){
@@ -41,7 +45,8 @@ public class MainWindow extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-		//trackController = new TrackController();
+		trackController = new TrackController(greenBlocks,redBlocks);
+		new Thread(trackController).start();
 		
 		/* set up menu bars*/
 		menuBar = new JMenuBar();
@@ -85,12 +90,12 @@ public class MainWindow extends JFrame implements ActionListener{
 		logPanel = new LogPanel();
 		
 		//setup train panel
-		trainPanel = new TrainPanel(logPanel);
+		trainPanel = new TrainPanel(logPanel,trackController);
 		
 
 		//setup track panels
-		greenTrackPanel = new TrackPanel("Green",logPanel);
-		redTrackPanel = new TrackPanel("Red",logPanel);
+		greenTrackPanel = new TrackPanel("Green",logPanel,greenBlocks,trackController);
+		redTrackPanel = new TrackPanel("Red",logPanel,redBlocks,trackController);
 		//setup tab pane
 		tabPane = new JTabbedPane();
 		tabPane.addTab("Trains", trainPanel);
