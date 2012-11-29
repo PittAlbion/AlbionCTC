@@ -7,6 +7,7 @@ package TrackController;
 
 import TrackModel.*;
 import TrainController.*;
+import TrainModel.*;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class TrackController extends JFrame implements Runnable {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
+		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
 		public static TrainController tc;
 		public static TrackController tr;
 		static GUI myGUI;
@@ -39,6 +41,8 @@ public class TrackController extends JFrame implements Runnable {
 				myGUI = new GUI(); 
 				tc = new TrainController();
 			}
+			
+			trainList = tc.getTrainList();
 			
 			System.out.println(greenList.size());
 			myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
@@ -57,7 +61,9 @@ public class TrackController extends JFrame implements Runnable {
 		}
 		
 		public void run(){
-			
+			while(true){
+				
+			}
 		}
 		
 		public void GetSuggestion(Object [] s){
@@ -73,7 +79,7 @@ public class TrackController extends JFrame implements Runnable {
 			
 	        for (i=2; i<(s.length - 1); i++){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
-	                ;   // PassSuggestion. Some code to send the suggestion to the Train Controller
+	                TrainController.SendCommand(block, s[i].toString(), Double.parseDouble(s[i+1].toString()));   // PassSuggestion. Some code to send the suggestion to the Train Controller
 	            }else if (suggestionDest.equals("Track")){ //Track Controller Suggestion
 	                useSuggestion(line, block, s[i].toString(), s[i+1].toString());
 	            }
@@ -87,22 +93,29 @@ public class TrackController extends JFrame implements Runnable {
 		
 	    private void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
+	    		trackBlock t = null;
 	    		boolean safe = true;
-	            //Track trackBlock = tracks.get(line, trackSelect);
+	    		
+	    		if (lineSelect.equals("Green")){
+	    			t = greenList.get(trackSelect);
+	    		}
+	    		else if (lineSelect.equals("Red")){
+	    			t = redList.get(trackSelect);
+	    		}
+	    		else { ; }
 	            if (type.equals("Authority")){
 	                //safe = checkStatus(); //Do something safe involving the authority suggestion
 	                if(safe){ //change Authority
-	                	//trackBlock.setAuthority(value);
+	                	//
 	                }
 	            }
 	            else if(type.equals("Speed")){
 	                //safe = checkStatus(); //Do something safe involving the speed suggestion
 	                if (safe){ //change speed
-	                	//trackBlock.setSpeed(value);
+	                	t.speed_limit = Integer.parseInt(value);
 	                }
 	            }
-	            else //Invalid suggestion
-	                return; //do nothing
+	            else{;}//Invalid suggestion
 					
 	    }
 	    
@@ -178,5 +191,17 @@ public class TrackController extends JFrame implements Runnable {
 		private boolean checkStatus(){
 	    	
 	    	return false;
+	    }
+	    
+	    public void addTrain(char p_trackLine, int p_trainID, int p_cars, double p_length, double p_height, double p_width ){
+	    	
+	    	TrainController.CreateNewTrain(p_trackLine, p_trainID, p_cars, p_length, p_height, p_width);
+	    	
+	    }
+	    
+	    public ArrayList<TrainModel> getTrainList(){
+	    	
+	    	return trainList;
+	    	
 	    }
 }
