@@ -5,6 +5,10 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Random;
+
+import TrainModel.*;
+
 @SuppressWarnings({ "serial", "unchecked", "rawtypes", "unused" })
 
 public class TrainController extends JFrame implements Runnable, ActionListener{
@@ -18,7 +22,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     private static LogPanel logPanel;
     private static NonLogPanel nonLogPanel;
     private JDialog dialog;
-    static ArrayList<Train> trainList;
+    static ArrayList<TrainModel> trainList;
     private static int trainCount = 0;
     static String[] trainIDArray;
     int currentTrain;
@@ -76,16 +80,16 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
-        trainList.add(new Train(p_trackLine, p_trainID, p_cars));
-        trainIDArray[trainCount] = ""+trainList.get(trainCount).GetID();
+        trainList.add(new TrainModel(p_trackLine, p_trainID, p_cars));
+        trainIDArray[trainCount] = ""+trainList.get(trainCount).trainID;
         nonLogPanel.trainPanel.UpdateTrainBox();
         logPanel.CreateLog();
         trainCount++;
     }
     
-    private static Train FindTrain(int p_trainID){
+    private static TrainModel FindTrain(int p_trainID){
         for (int i = 0; i < trainList.size(); i++){
-            if (trainList.get(i).GetID() == p_trainID){
+            if (trainList.get(i).trainID == p_trainID){
                 return trainList.get(i);
             }
         }
@@ -93,17 +97,17 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     public static void SendCommand(int p_trainID, String p_type, double p_value){
-        Train train = FindTrain(p_trainID);
+        TrainModel train = FindTrain(p_trainID);
         if (train != null){
             if (p_type.equals("Speed")){
-                train.SetSpeed(p_value);
+                train.SetPointSpeed(p_value);
             }else if (p_type.equals("Authority")){
                 train.SetAuthority(p_value);
             }
         }
     }
     
-    public ArrayList<Train> GetTrainList(){
+    public ArrayList<TrainModel> GetTrainList(){
 		return trainList;
     }
     
@@ -120,11 +124,16 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     void EmergencyStop(int p_trainID){
-        FindTrain(p_trainID).Stop();
+        FindTrain(p_trainID).SetPointSpeed(0.0);
     }
     
     public boolean IsNearCrossing(int p_trainID){
-        return FindTrain(p_trainID).NearCrossing();
+    	Random number = new Random();
+        int hack = number.nextInt(2);
+        if (hack == 1)
+            return true;
+        
+        return false;
     }
     
     public void actionPerformed(ActionEvent e){

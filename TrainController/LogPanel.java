@@ -16,6 +16,7 @@ public class LogPanel extends JPanel{
         this.setLayout(new GridLayout(1,1));
         this.controller = p_controller;
         
+        logList = new ArrayList<JTextArea>();
         currentArea = new JTextArea();
         this.add(currentArea);
     }

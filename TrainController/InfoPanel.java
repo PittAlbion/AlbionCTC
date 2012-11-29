@@ -35,7 +35,7 @@ public class InfoPanel extends JPanel{
     }
     
     void UpdateTrainInfo(){
-    	currentModel = controller.trainList.get(controller.currentTrain).trainModel;
+    	currentModel = controller.trainList.get(controller.currentTrain);
     	
 		speedLimit.setText("Speed Limit: " + currentModel.speedLimit);
 		currentSpeed.setText("Train Speed: " + currentModel.currSpeed);

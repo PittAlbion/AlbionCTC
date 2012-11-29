@@ -12,6 +12,7 @@ public class TrainPanel extends JPanel implements ActionListener{
 		private JComboBox<String> trainBox;
 		private InfoPanel infoPanel;
 		private LogPanel logPanel;
+		int selectedTrain;
 		
 		TrainPanel(TrainController p_controller, InfoPanel p_infoPanel, LogPanel p_logPanel){
 			super();
@@ -36,8 +37,8 @@ public class TrainPanel extends JPanel implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e) {
 			JComboBox selection = (JComboBox)e.getSource();
-			int trainNumber = Integer.parseInt((String)selection.getSelectedItem());
-			controller.currentTrain = trainNumber;
+			selectedTrain = Integer.parseInt((String)selection.getSelectedItem());
+			controller.currentTrain = selectedTrain;
 			infoPanel.UpdateTrainInfo();
 			logPanel.UpdateLog();
 		}
