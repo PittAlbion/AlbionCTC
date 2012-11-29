@@ -5,9 +5,7 @@
 
 package TrackController;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -16,7 +14,9 @@ public class SelectPanel extends JPanel {
 
 		SelectPanel(){
 			super();
-			this.setLayout(new BorderLayout());
+			//this.setLayout(new BorderLayout());
+			//this.setPreferredSize(new Dimension(300,300));
+			
 			JPanel p = new JPanel();
 			p.setLayout(new GridLayout(4,1));
 			JButton a = new JButton("HEY!");

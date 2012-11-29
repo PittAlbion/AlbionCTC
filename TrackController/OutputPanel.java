@@ -5,18 +5,18 @@
 
 package TrackController;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class OutputPanel extends JPanel{
 
 		OutputPanel(){
 			
 			super();
 			this.setLayout(new BorderLayout());
+			//this.setPreferredSize(new Dimension(300,300));
 			JPanel p = new JPanel();
 			p.setLayout(new GridLayout(4,1));
 			JButton a = new JButton("NO WAY!");

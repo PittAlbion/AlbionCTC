@@ -39,6 +39,7 @@ public class StatisticPanel extends JPanel{
 			super();
 			
 			this.setPreferredSize(new Dimension(200, 300));
+			
 			this.setLayout(new BorderLayout());
 			JTabbedPane tabPane = new JTabbedPane();
 			JTable generalTable, advancedTable;
@@ -49,7 +50,6 @@ public class StatisticPanel extends JPanel{
 			tabPane.addTab("General", new JScrollPane(generalTable));
 			tabPane.addTab("Advanced", new JScrollPane(advancedTable));
 			
-			tabPane.setPreferredSize(new Dimension(300,300));
 			this.add(tabPane);
 		}
 		

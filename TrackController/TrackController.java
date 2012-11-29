@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 @SuppressWarnings("serial")
 
@@ -26,6 +27,7 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 		OutputPanel outputPanel;
 		SelectPanel selectPanel;
 		StatisticPanel statisticPanel;
+		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
 		public static void main(String [] args) throws InterruptedException{
 			
@@ -38,8 +40,11 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 		{
 			super("Albion Track Controller v1.0");
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			setPreferredSize(new Dimension(600,600));
-			setExtendedState(Frame.MAXIMIZED_BOTH);
+			setResizable(false);
+			this.setMaximumSize(new Dimension(600,600));
+			this.setPreferredSize(new Dimension(600,600));
+			setExtendedState(Frame.NORMAL);
+			
 			
 			menuBar = new JMenuBar();
 			fileMenu = new JMenu("File");
@@ -68,32 +73,55 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 			mainContainer = this.getContentPane();
 			mainPane = new JPanel();
 			mainContainer.add(mainPane);
-			mainPane.setLayout(new GridLayout(1,0));
+			mainPane.setLayout(new GridBagLayout());
+			GridBagConstraints c= new GridBagConstraints();
+			
 			commandPanel = new CommandPanel();
 			selectPanel = new SelectPanel();
 			outputPanel = new OutputPanel();
 			statisticPanel = new StatisticPanel();
+			
 			//statisticPanel.setSize(new Dimension(200, 200));
 			//CommandPanel.activate.setEnabled(false);
 			//mainPane.add(selectPanel);
 			//mainPane.add(commandPanel);
 			//mainPane.add(outputPanel);
-			JPanel p = new JPanel();
-			p.setLayout(new BorderLayout());
-			//p.setPreferredSize(new Dimension(600,300));
-			p.add(commandPanel, BorderLayout.NORTH);
-			p.add(statisticPanel, BorderLayout.SOUTH);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 400;
+			c.weighty = 300;
+			c.gridwidth = 1;
+			c.gridheight = 1;
 			
-			JPanel q = new JPanel();
-			q.setLayout(new BorderLayout());
-			q.add(outputPanel, BorderLayout.SOUTH);
-			q.add(selectPanel, BorderLayout.NORTH);
-			mainPane.add(q);
-			mainPane.add(p);
+			c.gridx = 0;
+			c.gridy = 0;
+			c.anchor = GridBagConstraints.FIRST_LINE_START;
+			
+			selectPanel.setPreferredSize(new Dimension(300,300));
+			mainPane.add(selectPanel, c);
+			
+			c.gridx = 1;
+			c.gridy = 0;
+			c.anchor = GridBagConstraints.FIRST_LINE_END;
+			mainPane.add(commandPanel, c);
+			
+			c.weightx = 200;
+			c.weighty = 400;
+			
+			c.gridx = 0;
+			c.gridy = 1;
+			c.anchor = GridBagConstraints.LAST_LINE_START;
+			mainPane.add(outputPanel,c);
+			
+			c.weighty = 200;
+			c.gridx = 1;
+			c.gridy = 1;
+			c.anchor = GridBagConstraints.LAST_LINE_END;
+			mainPane.add(statisticPanel,c);
 			
 			pack();
 			
 			setVisible(true);
+		
 		}
 		
 		public void run(){
@@ -147,7 +175,8 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    }
 	    
 	    
-	    private boolean activateCrossing(String lineSelect, int trackSelect){
+	    @SuppressWarnings("unused")
+		private boolean activateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is inactive:
 	    	//Check to make sure it is safe to activate crossing
 	    	//Activate Appropriately
@@ -155,7 +184,8 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	return false;
 	    }
 	    
-	    private boolean deactivateCrossing(String lineSelect, int trackSelect){
+	    @SuppressWarnings("unused")
+		private boolean deactivateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is activated:
 	    	//Check to make sure all trains are out of the area and that
 	    	//it is safe to deactivate the crossing
@@ -164,21 +194,24 @@ public class TrackController extends JFrame implements Runnable, ActionListener 
 	    	return false;
 	    }
 	    
-	    private boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
+	    @SuppressWarnings("unused")
+		private boolean switchTrackSegment(String lineSelect, int trackSegement, int position){
 	    	//Determine if the switch can safely be activated
 	    	//Based on the arguments given, switch the track segment into the appropriate position.
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
 	    
-	    private boolean trainDetection(){
+	    @SuppressWarnings("unused")
+		private boolean trainDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for trains
 	    	//currently present on the system. If the circuit is broken (i.e. a train is present)
 	    	//the function shall return true, otherwise false.
 	    	return false;
 	    }
 	    
-	    private boolean brokenRailDetection(){
+	    @SuppressWarnings("unused")
+		private boolean brokenRailDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for rails that
 	    	//are currently broken. If the circuit is non functional, the function shall return true,
 	    	//otherwise false;
