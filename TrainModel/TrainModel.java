@@ -20,6 +20,7 @@ public class TrainModel implements Runnable {
 	public FailureDetector detector;
 	
 	public Random randomGen;
+	public char trackLine;
 	public double maxPass;
 	public double kgPerPerson,kgPerSquareMeter;
 	public double passengerTotal, crewTotal;
@@ -33,7 +34,7 @@ public class TrainModel implements Runnable {
 	
 	public static void main(String[] args) throws IOException{
 
-		TrainModel theModel = new TrainModel(1, 1, 30, 10, 12);
+		TrainModel theModel = new TrainModel('r',1, 1);
 		//System.out.println("");
 		
 //System.nanoTime()
@@ -44,20 +45,22 @@ public class TrainModel implements Runnable {
 
 
 
-	public TrainModel(int trainIDP, int carsP, double lengthCar,double heightP, double widthP){
+	public TrainModel(char trackLineP ,int trainIDP, int carsP){
+		
 		InitialVars();
 		
 		randomGen = new Random(System.nanoTime());
 		detector = new FailureDetector();
 		cars = new Car[carsP];
+		trackLine=trackLineP;
 		
-		maxPass=70;
+		maxPass=222;
 		trainID=trainIDP;
 		nCars=carsP;
-		lengthOfCar=lengthCar;
+		lengthOfCar=32.2;
 		lengthTotal= lengthOfCar*nCars;
-		width=widthP;
-		height=heightP;
+		width=2.65;
+		height=3.42;
 		
 		for(int i=0;i<nCars;i++){
 			cars[i]= new Car();
@@ -163,9 +166,9 @@ public class TrainModel implements Runnable {
 	public void MassUpdate(){
 	//UpdatePassengerData();
 	
-	massTotal=0;
+	massTotal=37103.86;
 	// also should add the total mass of the train
-	massTotal= ((passengerTotal+crewTotal)*kgPerPerson);
+	massTotal+= ((passengerTotal+crewTotal)*kgPerPerson);
 		
 		
 	}
