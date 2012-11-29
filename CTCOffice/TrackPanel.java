@@ -34,5 +34,4 @@ public class TrackPanel extends JPanel{
 		this.add(new JScrollPane(panel));
 		
 	}
-
 }
