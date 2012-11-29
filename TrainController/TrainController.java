@@ -26,16 +26,16 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     static ArrayList<TrainModel> trainList;
     private static int trainCount = 0;
     static String[] trainIDArray;
-    int currentTrain;
+    int currentTrain = -1;
     
     
     public static void main(String[] args) throws InterruptedException{
         new TrainController();
         
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         CreateNewTrain('G', 1, 3);
         Thread.sleep(2000);
-        CreateNewTrain('G', 4, 3);
+        CreateNewTrain('R', 4, 3);
     }
     
 	public TrainController(){
@@ -87,6 +87,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainIDArray[trainCount] = ""+trainList.get(trainCount).trainID;
         nonLogPanel.trainPanel.UpdateTrainBox();
         logPanel.WriteMessage("Train Created: " + p_trackLine + p_trainID + "\n");
+        trainList.get(trainCount).SetLimits(50.0, 3.0, 2.5);
         trainCount++;
     }
     
@@ -130,19 +131,49 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 		return trainList;
     }
     
+    void CallOffice(int p_trainID){
+		//Do something
+    	logPanel.WriteMessage("Calling CTC Office...\n");
+    }
+    
     void IncreaseSpeed(int p_trainID){
-        FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed+.1);
-        logPanel.WriteMessage("Train " + p_trainID + " speed increased to " + FindTrain(p_trainID).currSpeed + ".\n");
+    	if (p_trainID == -1){
+			logPanel.WriteMessage("No train is selected.\n");
+    	}
+    	else{
+    		FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed+.1);
+    		logPanel.WriteMessage("Train " + p_trainID + " speed increased to " + FindTrain(p_trainID).currSpeed + ".\n");
+    	}
     }
     
     void DecreaseSpeed(int p_trainID){
-    	FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed-.1);
-    	logPanel.WriteMessage("Train " + p_trainID + " speed decreased to " + FindTrain(p_trainID).currSpeed + ".\n");
+    	if (p_trainID == -1){
+    		logPanel.WriteMessage("No train is selected.\n");
+    	}
+    	else{
+    		if (FindTrain(p_trainID).currSpeed > 0.0){
+    			if (FindTrain(p_trainID).currSpeed-.1 < 0.0){
+    				FindTrain(p_trainID).SetPointSpeed(0.0);
+    			}
+    			else{
+    				FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed-.1);
+    				logPanel.WriteMessage("Train " + p_trainID + " speed decreased to " + FindTrain(p_trainID).currSpeed + ".\n");
+    			}
+    		}
+    		else{
+    			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
+    		}
+    	}
     }
     
     void EmergencyStop(int p_trainID){
-        FindTrain(p_trainID).SetPointSpeed(0.0);
-        logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
+    	if (p_trainID == -1){
+    		logPanel.WriteMessage("No train is selected.\n");
+    	}
+    	else{
+    		FindTrain(p_trainID).SetPointSpeed(0.0);
+    		logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
+    	}
     }
     
     public boolean IsNearCrossing(int p_trainID){

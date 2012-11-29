@@ -47,7 +47,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
             infoPanel.UpdateTrainInfo();
         }
         else if (e.getSource().equals(call)){
-            //call call?
+            controller.CallOffice(controller.currentTrain);
         }
         else{
         }

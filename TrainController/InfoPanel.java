@@ -13,36 +13,38 @@ public class InfoPanel extends JPanel{
 	
     InfoPanel(TrainController p_controller){
     	super();
-    	this.setLayout(new GridLayout(7, 1));
+    	this.setLayout(new GridLayout(5, 1));
     	this.setPreferredSize(new Dimension(400, 450));
     	this.controller = p_controller;
     	
     	speedLimit = new JLabel("Speed Limit: No train selected");
     	currentSpeed = new JLabel("Train Speed: No train selected");
     	currentAuthority = new JLabel("Authority: No train selected");
-    	distanceTraveled = new JLabel("Distance Traveled: No train selected"); //fix
+    	//distanceTraveled = new JLabel("Distance Traveled: No train selected"); //fix
     	doorStatus = new JLabel("Doors Closed: No train selected");
     	lightStatus = new JLabel("Lights On: No train selected");// + currentModel.lightOn);
-    	nextStop = new JLabel("Next Stop: No train selected"); //fix
+    	//nextStop = new JLabel("Next Stop: No train selected"); //fix
         
     	this.add(speedLimit);
     	this.add(currentSpeed);
     	this.add(currentAuthority);
-    	this.add(distanceTraveled);
+    	//this.add(distanceTraveled);
     	this.add(doorStatus);
     	this.add(lightStatus);
-    	this.add(nextStop);
+    	//this.add(nextStop);
     }
     
     void UpdateTrainInfo(){
-    	currentModel = controller.FindTrain(controller.currentTrain);
+    	if (controller.currentTrain != -1){
+    		currentModel = controller.FindTrain(controller.currentTrain);
     	
-		speedLimit.setText("Speed Limit: " + currentModel.speedLimit);
-		currentSpeed.setText("Train Speed: " + currentModel.currSpeed);
-		currentAuthority.setText("Authority: " + currentModel.currAuthority);
-		distanceTraveled.setText("Distance Traveled: 0 mi"); //fix
-		doorStatus.setText("Doors Closed: " + currentModel.doorsClosed);
-		lightStatus.setText("Lights On: True"); //fix
-		nextStop.setText("Next Stop: Nowhere"); //fix
+    		speedLimit.setText("Speed Limit: " + currentModel.speedLimit);
+    		currentSpeed.setText("Train Speed: " + currentModel.currSpeed);
+    		currentAuthority.setText("Authority: " + currentModel.currAuthority);
+    		//distanceTraveled.setText("Distance Traveled: 0 mi"); //fix
+    		doorStatus.setText("Doors Closed: " + currentModel.doorsClosed);
+    		lightStatus.setText("Lights On: " + currentModel.lightsOn);
+    		//nextStop.setText("Next Stop: Nowhere"); //fix
+    	}
     }
 }
