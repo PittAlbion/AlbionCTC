@@ -11,7 +11,6 @@ public class TrainPanel extends JPanel implements ActionListener{
 		private TrainController controller;
 		private JComboBox<String> trainBox;
 		private InfoPanel infoPanel;
-		private LogPanel logPanel;
 		int selectedTrain;
 		
 		TrainPanel(TrainController p_controller, InfoPanel p_infoPanel, LogPanel p_logPanel){

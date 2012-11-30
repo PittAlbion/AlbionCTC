@@ -171,8 +171,13 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     		logPanel.WriteMessage("No train is selected.\n");
     	}
     	else{
-    		FindTrain(p_trainID).SetPointSpeed(0.0);
-    		logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
+    		if (FindTrain(p_trainID).currSpeed == 0.0){
+    			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
+    		}
+    		else{
+    			FindTrain(p_trainID).SetPointSpeed(0.0);
+    			logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
+    		}
     	}
     }
     
