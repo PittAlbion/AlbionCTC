@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import TrackController.AboutBox;
+import TrackController.AboutDialog;
 import TrackController.TrackController;
 import TrackModel.trackBlock;
 
@@ -125,7 +125,7 @@ public class MainWindow extends JFrame implements ActionListener{
 			logPanel.UpdateLog("Adding Train");
 			//create train and add it to the system
 		}else if(event.getSource().equals(helpAboutItem)){
-			AboutBox about = new AboutBox(this);
+			AboutDialog about = new AboutDialog();
 			about.setVisible(true);
 		}
 	}
