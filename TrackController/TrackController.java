@@ -21,10 +21,6 @@ import javax.swing.border.Border;
 public class TrackController extends JFrame implements Runnable {
 	
 		//private static boolean indDemo = true;
-		CommandPanel commandPanel;
-		OutputPanel outputPanel;
-		SelectPanel selectPanel;
-		StatisticPanel statisticPanel;
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
@@ -41,10 +37,10 @@ public class TrackController extends JFrame implements Runnable {
 			
 			myGUI = new GUI(); 
 			
-			trainList = tc.GetTrainList();
+			//trainList = tc.GetTrainList();
 			
-			System.out.println(greenList.size());
-			myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
+			//System.out.println(greenList.size());
+			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
@@ -52,7 +48,7 @@ public class TrackController extends JFrame implements Runnable {
 		{
 			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
 			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
-			tc = new TrainController();
+			//tc = new TrainController();
 			tm = new trackModel();
 			
 			//Debug purposes
@@ -198,7 +194,7 @@ public class TrackController extends JFrame implements Runnable {
 	    
 	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
-	    	tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
+	    	//tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
 	    	
 	    }
 	    
