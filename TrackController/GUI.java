@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener {
@@ -37,14 +38,14 @@ public class GUI extends JFrame implements ActionListener {
 	private JMenuItem mntmExit;
 	private JMenuItem mntmAbout;
 	private final JLabel lblNewLabel_1 = new JLabel("");
-	private final JPanel panel = new JPanel();
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField;
+	private final JPanel outputPanel = new JPanel();
+	private JTextField occupancy;
+	private JTextField direction;
+	private JTextField speedLimit;
+	private JTextField heater;
+	private JTextField trackTemp;
+	private JTextField thermostat;
+	private JTextField state;
 
 	/**
 	 * Launch the application.
@@ -72,34 +73,35 @@ public class GUI extends JFrame implements ActionListener {
 		initGUI();
 	}
 	private void initGUI() {
+		setResizable(false);
 		setForeground(Color.BLACK);
 		setTitle("Track Controller");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 802, 425);
 		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		JMenuBar menu = new JMenuBar();
+		setJMenuBar(menu);
 		
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
+		JMenu fileMenu = new JMenu("File");
+		menu.add(fileMenu);
 		
 		JMenuItem mntmRunPlc = new JMenuItem("Run PLC...");
-		mnFile.add(mntmRunPlc);
+		fileMenu.add(mntmRunPlc);
 		
 		mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(this);
 		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		mnFile.add(mntmExit);
+		fileMenu.add(mntmExit);
 		
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
+		JMenu helpMenu = new JMenu("Help");
+		menu.add(helpMenu);
 		
 		JMenuItem mntmDocumentation = new JMenuItem("Documentation");
-		mnHelp.add(mntmDocumentation);
+		helpMenu.add(mntmDocumentation);
 		
 		mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(this);
-		mnHelp.add(mntmAbout);
+		helpMenu.add(mntmAbout);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -107,11 +109,11 @@ public class GUI extends JFrame implements ActionListener {
 		JTabbedPane statsPanel = new JTabbedPane(JTabbedPane.TOP);
 		statsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		JPanel selectionPanel = new JPanel();
+		selectionPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		JPanel commandPanel = new JPanel();
+		commandPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -122,14 +124,14 @@ public class GUI extends JFrame implements ActionListener {
 							.addComponent(lblNewLabel_1)
 							.addGap(373))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(outputPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(statsPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+							.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+							.addComponent(commandPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 					.addGap(59))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -139,94 +141,100 @@ public class GUI extends JFrame implements ActionListener {
 					.addComponent(lblNewLabel_1)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(panel_2, 0, 0, Short.MAX_VALUE)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 101, Short.MAX_VALUE))
+						.addComponent(commandPanel, 0, 0, Short.MAX_VALUE)
+						.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, 101, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(statsPanel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE))
+						.addComponent(outputPanel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE))
 					.addGap(190))
 		);
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		outputPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JButton btnNewButton = new JButton("Activate Crossing");
+		JButton activate = new JButton("Activate Crossing");
 		
-		JButton btnNewButton_1 = new JButton("Deactivate Crossing");
+		JButton deactivate = new JButton("Deactivate Crossing");
 		
-		JButton btnActivateSwitch = new JButton("Activate Switch");
-		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
+		JButton switcher = new JButton("Activate Switch");
+		GroupLayout gl_commandPanel = new GroupLayout(commandPanel);
+		gl_commandPanel.setHorizontalGroup(
+			gl_commandPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_commandPanel.createSequentialGroup()
 					.addGap(50)
-					.addComponent(btnNewButton)
+					.addComponent(activate)
 					.addGap(18)
-					.addComponent(btnNewButton_1)
+					.addComponent(deactivate)
 					.addGap(18)
-					.addComponent(btnActivateSwitch)
+					.addComponent(switcher)
 					.addContainerGap(60, Short.MAX_VALUE))
 		);
-		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
+		gl_commandPanel.setVerticalGroup(
+			gl_commandPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_commandPanel.createSequentialGroup()
 					.addGap(38)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton)
-						.addComponent(btnNewButton_1)
-						.addComponent(btnActivateSwitch))
+					.addGroup(gl_commandPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(activate)
+						.addComponent(deactivate)
+						.addComponent(switcher))
 					.addContainerGap(38, Short.MAX_VALUE))
 		);
-		panel_2.setLayout(gl_panel_2);
+		commandPanel.setLayout(gl_commandPanel);
 		
 		JLabel label_5 = new JLabel("Current Track Controller");
 		
-		JComboBox<TrackController> comboBox = new JComboBox<TrackController>();
-		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+		JComboBox<TrackController> controllerList = new JComboBox<TrackController>();
+		GroupLayout gl_selectionPanel = new GroupLayout(selectionPanel);
+		gl_selectionPanel.setHorizontalGroup(
+			gl_selectionPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_selectionPanel.createSequentialGroup()
 					.addContainerGap(46, Short.MAX_VALUE)
 					.addComponent(label_5)
 					.addGap(38))
-				.addGroup(gl_panel_1.createSequentialGroup()
+				.addGroup(gl_selectionPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+					.addComponent(controllerList, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+		gl_selectionPanel.setVerticalGroup(
+			gl_selectionPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_selectionPanel.createSequentialGroup()
 					.addContainerGap(71, Short.MAX_VALUE)
 					.addComponent(label_5)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(controllerList, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(62))
 		);
-		panel_1.setLayout(gl_panel_1);
+		selectionPanel.setLayout(gl_selectionPanel);
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
+		occupancy = new JTextField();
+		occupancy.setHorizontalAlignment(SwingConstants.CENTER);
+		occupancy.setEditable(false);
+		occupancy.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
+		direction = new JTextField();
+		direction.setHorizontalAlignment(SwingConstants.CENTER);
+		direction.setEditable(false);
+		direction.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
+		speedLimit = new JTextField();
+		speedLimit.setHorizontalAlignment(SwingConstants.CENTER);
+		speedLimit.setEditable(false);
+		speedLimit.setColumns(10);
 		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
+		heater = new JTextField();
+		heater.setHorizontalAlignment(SwingConstants.CENTER);
+		heater.setEditable(false);
+		heater.setColumns(10);
 		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setColumns(10);
+		trackTemp = new JTextField();
+		trackTemp.setHorizontalAlignment(SwingConstants.CENTER);
+		trackTemp.setEditable(false);
+		trackTemp.setColumns(10);
 		
-		textField_6 = new JTextField();
-		textField_6.setEditable(false);
-		textField_6.setColumns(10);
+		thermostat = new JTextField();
+		thermostat.setHorizontalAlignment(SwingConstants.CENTER);
+		thermostat.setEditable(false);
+		thermostat.setColumns(10);
 		
 		JLabel lblState = new JLabel("State");
 		
@@ -242,92 +250,93 @@ public class GUI extends JFrame implements ActionListener {
 		
 		JLabel lblThermostat = new JLabel("Thermostat");
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setColumns(10);
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
+		state = new JTextField();
+		state.setHorizontalAlignment(SwingConstants.CENTER);
+		state.setEditable(false);
+		state.setColumns(10);
+		GroupLayout gl_outputPanel = new GroupLayout(outputPanel);
+		gl_outputPanel.setHorizontalGroup(
+			gl_outputPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_outputPanel.createSequentialGroup()
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addGap(38)
 							.addComponent(lblState))
-						.addGroup(gl_panel.createSequentialGroup()
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(state, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addGap(18)
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(occupancy, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addGap(27)
 							.addComponent(lblOccupied)))
 					.addGap(29)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
+							.addComponent(direction, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 							.addGap(10))
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+						.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
 							.addComponent(lblDirection)
 							.addGap(31)))
 					.addGap(26))
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(gl_outputPanel.createSequentialGroup()
 					.addContainerGap(76, Short.MAX_VALUE)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addComponent(lblTrackTemperature)
 							.addPreferredGap(ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
 							.addComponent(lblThermostat)
 							.addGap(19))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_outputPanel.createSequentialGroup()
+							.addComponent(trackTemp, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addGap(32)
-							.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+							.addComponent(thermostat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_outputPanel.createSequentialGroup()
+							.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING)
 								.addComponent(lblTrackSpeedLimit)
-								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField_4, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(heater, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
 									.addComponent(lblHeaterStatus)
 									.addGap(11)))))
 					.addGap(80))
 		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
+		gl_outputPanel.setVerticalGroup(
+			gl_outputPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_outputPanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDirection)
 						.addComponent(lblState)
 						.addComponent(lblOccupied))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(direction, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(state, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(occupancy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(26)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblHeaterStatus)
 						.addComponent(lblTrackSpeedLimit))
 					.addGap(7)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(heater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTrackTemperature)
 						.addComponent(lblThermostat))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(thermostat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(trackTemp, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(47, Short.MAX_VALUE))
 		);
-		panel.setLayout(gl_panel);
+		outputPanel.setLayout(gl_outputPanel);
 		
 		JScrollPane genTableHolder = new JScrollPane();
 		statsPanel.addTab("General", null, genTableHolder, null);
@@ -382,4 +391,47 @@ public class GUI extends JFrame implements ActionListener {
 			
 		}
 	}
+	
+	public void setOccupancy(boolean b){
+		if (b)
+			occupancy.setText("Yes");
+		else
+			occupancy.setText("No");
+	}
+	
+	public void setSpeedLimit(double x){
+		speedLimit.setText(Double.toString(x) + "Km/h");
+	}
+	
+	public void setHeater(boolean b){
+		if (b)
+			heater.setText("On");
+		else
+			heater.setText("Off");
+	}
+	
+	public void setState(int i){
+		if (i == 0)
+			state.setText("Normal");
+		else if(i == 1)
+			state.setText("Switching");
+		else
+			state.setText("Broken");
+	}
+	
+	public void setDirection(boolean b){
+		if (b)
+			direction.setText("A-Z");
+		else
+			direction.setText("Z-A");
+	}
+	
+	public void setTrackTemp(double x){
+		trackTemp.setText(Double.toString(x) + "°C");
+	}
+	
+	public void setThermostat(double x){
+		thermostat.setText(Double.toString(x) + "°C");
+	}
+	
 }

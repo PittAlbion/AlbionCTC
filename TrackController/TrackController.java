@@ -30,6 +30,14 @@ public class TrackController extends JFrame implements Runnable {
 		public static TrackController tr;
 		static GUI myGUI;
 		
+		private double speedLimit;
+		private double trackTemp;
+		private double thermostatTemp;
+		private boolean direction;
+		private boolean heater;
+		private boolean occupied;
+		private int state;
+		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
 			tr = new TrackController();
@@ -37,6 +45,13 @@ public class TrackController extends JFrame implements Runnable {
 			
 			myGUI = new GUI(); 
 			
+			myGUI.setState(0);
+			myGUI.setOccupancy(false);
+			myGUI.setTrackTemp(25);
+			myGUI.setThermostat(15);
+			myGUI.setDirection(true);
+			myGUI.setSpeedLimit(55);
+			myGUI.setHeater(false);
 			//trainList = tc.GetTrainList();
 			
 			//System.out.println(greenList.size());
