@@ -35,13 +35,29 @@ public class FailPanel extends JPanel {
 		if(theModel.detector.signalsWorking) signalsStat.setText("Signals Working");
 		else signalsStat.setText("Signals Broken!");
 
-		if(theModel.detector.eBreakThrown) eBrakeStat.setText("Emergency Brake has ben thrown!");
+		if(theModel.detector.eBrakeThrown) eBrakeStat.setText("Emergency Brake has been thrown!");
 		else eBrakeStat.setText("Emergency brake idle.");
 		
 		this.add(engineStat);
 		this.add(brakesStat);
 		this.add(signalsStat);
 		this.add(eBrakeStat);
+		
+	}
+	
+	void update(TrainModel theModel){
+		if(theModel.detector.engineWorking) engineStat.setText("Engine Working");
+		else engineStat.setText("Engine Broken!");
+		
+		if(theModel.detector.brakesWorking) brakesStat.setText("Brakes Working");
+		else brakesStat.setText("Brakes Broken!");
+		
+		if(theModel.detector.signalsWorking) signalsStat.setText("Signals Working");
+		else signalsStat.setText("Signals Broken!");
+
+		if(theModel.detector.eBrakeThrown) eBrakeStat.setText("Emergency Brake has ben thrown!");
+		else eBrakeStat.setText("Emergency brake idle.");
+		
 		
 	}
 	

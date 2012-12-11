@@ -15,10 +15,13 @@ import javax.swing.*;
 public class TrainGUI extends JFrame implements ActionListener{
 	
 	private TrainModel theModel;
-	
+	private double tempDouble;
+	private String tempString;
 	private JPanel mainPane, buttonPane, topPane;
 	private Container mainContainer;
-	private JButton openButton, closeButton, stopButton, exitButton;
+	private JButton setPointButton, openButton, closeButton, stopButton, exitButton, moveButton;
+	private JButton simBrakeFail, simEngineFail, simSignalFail, simEBrake;
+	private JTextField setPointText;
 	
 	private AttributesPanel attPanel;
 	private MiscPanel miscPanel;
@@ -67,7 +70,26 @@ public class TrainGUI extends JFrame implements ActionListener{
 		topPane.add(miscPanel);
 		
 		
-		buttonPane.setLayout(new GridLayout(1,0));
+		
+		buttonPane.setLayout(new GridLayout(2,0));
+		
+		simBrakeFail = new JButton("Sim Brake Failure");
+		simBrakeFail.addActionListener(this);
+		
+		simEngineFail = new JButton("Sim Engine Failure");
+		simEngineFail.addActionListener(this);
+		
+		simSignalFail = new JButton("Sim Signal Failure");
+		simSignalFail.addActionListener(this);
+		
+		simEBrake = new JButton("Throw Emergency Brake");
+		simEBrake.addActionListener(this);
+		
+		setPointText = new JTextField(5);
+		
+		setPointButton = new JButton("Set Point Speed (input to right)");
+		setPointButton.addActionListener(this);
+		
 		closeButton = new JButton("Close Doors");
 		closeButton.addActionListener(this);
 		
@@ -80,9 +102,20 @@ public class TrainGUI extends JFrame implements ActionListener{
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(this);
 		
+		moveButton = new JButton("Move");
+		moveButton.addActionListener(this);
+		
 		buttonPane.add(stopButton);
+		buttonPane.add(moveButton);
+		buttonPane.add(setPointButton);
+		buttonPane.add(setPointText);
 		buttonPane.add(openButton);
 		buttonPane.add(closeButton);
+		
+		buttonPane.add(simBrakeFail);
+		buttonPane.add(simSignalFail);
+		buttonPane.add(simEngineFail);
+		buttonPane.add(simEBrake);
 		buttonPane.add(exitButton);
 		
 		mainPane.add(buttonPane,BorderLayout.SOUTH);
@@ -112,6 +145,44 @@ public class TrainGUI extends JFrame implements ActionListener{
 				}
 				else if(event.getSource().equals(exitButton)){
 					System.exit(0);
+				}
+				else if(event.getSource().equals(moveButton)){
+					theModel.move();
+					attPanel.update(theModel);
+				}
+				else if(event.getSource().equals(setPointButton)){
+					tempString=setPointText.getText();
+					tempDouble = Double.parseDouble(tempString);
+					theModel.SetPointSpeed(tempDouble);
+					attPanel.update(theModel);
+				}
+				else if(event.getSource().equals(simBrakeFail)){
+					theModel.detector.brakesWorking=false;
+					theModel.FailCheck();
+					failPanel.update(theModel);
+					attPanel.update(theModel);
+					
+				}
+				else if(event.getSource().equals(simEngineFail)){
+					theModel.detector.engineWorking=false;
+					theModel.FailCheck();
+					failPanel.update(theModel);
+					attPanel.update(theModel);
+					
+				}
+				else if(event.getSource().equals(simSignalFail)){
+					theModel.detector.signalsWorking=false;
+					theModel.FailCheck();
+					failPanel.update(theModel);
+					attPanel.update(theModel);
+					
+				}
+				else if(event.getSource().equals(simEBrake)){
+					theModel.detector.eBrakeThrown=true;
+					theModel.FailCheck();
+					failPanel.update(theModel);
+					attPanel.update(theModel);
+					
 				}
 		
 		

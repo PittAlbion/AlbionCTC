@@ -2,6 +2,9 @@
 //Shane Lester, STL24@pitt.edu, maddacheeb5@gmail.com
 //Initial construction 11/27/2012
 
+//bug- speed going below 0, added a check
+//bug- power going over accepted level for engine- added checks
+
 package TrainModel;
 
 import java.awt.*;
@@ -37,6 +40,8 @@ public class TrainModel implements Runnable {
 
 		TrainModel theModel = new TrainModel('r',1, 1);
 		//System.out.println("");
+		theModel.currPower=theModel.maxPower;
+		theModel.SetLimits(19,.5,-1.2);
 		
 //System.nanoTime()
 		new TrainGUI(theModel);
@@ -66,12 +71,14 @@ public class TrainModel implements Runnable {
 		width=2.65;
 		height=3.42;
 		currTime=0;
+		DT=.5;
 		
 		speedLimit=19.44444;  //70km/hr to m/s
 		for(int i=0;i<nCars;i++){
 			cars[i]= new Car();
 			cars[i].SetID(i);
 		}
+		MassUpdate();
 		
 	}
 	
@@ -87,6 +94,8 @@ public class TrainModel implements Runnable {
 		currPower=powerP;		
 	}
 	
+
+	
 	public void SetAuthority(double authP){
 		currAuthority=authP;
 	}
@@ -94,40 +103,70 @@ public class TrainModel implements Runnable {
 	//f for incline is m*g*sin(theta)
 	
 	public void SetPointSpeed(double set){
-		
-			if(currPower<maxPower){
-				// use equation on slides
-				//keep going up until its at the one we want.
-				// maybe a while loop, and using the move method below
-				// to increment the speed up until its at the right place.
+		double uk,ek,ekl,toPower;
+		uk=ek=ekl=toPower=0;
+		if(set<speedLimit){
+			
+			while(currSpeed<set){
 				
+				if(toPower<maxPower){
+				ek=set-currSpeed;
+				uk+=DT/2*(ek+ekl);
+				ekl=ek;
+				toPower=(1000*ek)+(1000*uk);
+				if(toPower<maxPower)GivePower(toPower);
+				else GivePower(120000);
+				//System.out.println(toPower);
+				}
+				move();	
+			}
+			
+			while(currSpeed>set){
+				
+					ek=currSpeed-set;
+					uk+=DT/2*(ek+ekl);
+					ekl=ek;
+					toPower=-((1000*ek)+(1000*uk));
+					GivePower(toPower);
+					
+					//System.out.println(toPower);
+					
+					move();	
 				
 			}
-		
+			if(currSpeed<0) currSpeed=0;
+		}
 	}
 	
 	// moves it by one timestep
 	// also must take into account our authority.
 	public double move(){
-		double Force, metersMoved;
+		double force, metersMoved,angle;
+		force=0;
 		
+		if(currSpeed<speedLimit){
 		//1-get power  (already have this)
 		//2- divide power by current velocity to get force
-		Force=currPower/currSpeed;
-		
-		if(currGrade!=0.0){
-			// need to have currgrade be an angle, not a %
-			Force+= massTotal*9.8*  Math.sin((Math.PI/180)*currGrade);
+		if(currSpeed!=0.0) force=currPower/currSpeed;
+		else force= 240000;  //give it an initial force, so it doesn't divide by 0, this would be the force at .5 m/s at 120 KW (full engine power)
 			
+		if(currGrade != 0.0){
+			// need to have currgrade be an angle, not a %
+			angle=Math.atan(currGrade/100.0);
+			force+= massTotal*9.8*  Math.sin((Math.PI/180)*angle);
 		}
 		//3- divide force by current mass to get acc
-		currAcc=Force/massTotal;
+		currAcc=force/massTotal;
 		
+		if(currAcc>accLimit)currAcc=accLimit;
+		if(currAcc<decLimit)currAcc=decLimit;
 		// integrate down to new position with DT
-		currSpeed=currAcc*DT;
+		
+		currSpeed+=currAcc*DT;
+		}
 		
 		metersMoved = currSpeed*DT;
-		
+		//System.out.println("Meters moved:"+metersMoved);
 		//this might want to be elsewhere
 		currTime+=DT;
 		
@@ -155,22 +194,28 @@ public class TrainModel implements Runnable {
 	}
 	
 	//check them, if any come back false call the handle method
-	public void failCheck(){
+	public void FailCheck(){
 		if(!detector.CheckBrakes())  HandleBrakeFailure();
 		if(!detector.CheckEngine())  HandleEngineFailure();
 		if(!detector.CheckSignals()) HandleSignalFailure();
+		if(detector.eBrakeThrown()) HandleEBrake();
 	}
 	
 	public void HandleBrakeFailure(){
-		
+		SetPointSpeed(0.0);
 	}
 	
 	public void HandleEngineFailure(){
-		
+		SetPointSpeed(0.0);
 	}
 	
 	public void HandleSignalFailure(){
-		
+		SetPointSpeed(0.0);
+	}
+	
+	public void HandleEBrake(){
+		SetLimits(speedLimit,accLimit,-2.73);
+		SetPointSpeed(0.0);
 	}
 	
     // potentially unnecessary. unused by me at the moment
@@ -207,7 +252,7 @@ public class TrainModel implements Runnable {
 	public void MassUpdate(){
 	//UpdatePassengerData();
 	
-	massTotal=37103.86;
+	massTotal=37103.86*nCars;
 	// also should add the total mass of the train
 	massTotal+= ((passengerTotal+crewTotal)*kgPerPerson);
 		

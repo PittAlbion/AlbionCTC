@@ -2,12 +2,12 @@ package TrainModel;
 
 public class FailureDetector {
 	public boolean engineWorking, brakesWorking, signalsWorking;
-	public boolean eBreakThrown;
+	public boolean eBrakeThrown;
 	
 	
 	FailureDetector(){
 		engineWorking=brakesWorking=signalsWorking=true;
-		eBreakThrown=false;
+		eBrakeThrown=false;
 	}
 	
 	public boolean CheckEngine(){
@@ -25,9 +25,8 @@ public class FailureDetector {
 		return signalsWorking;
 	}	
 	
-	
-	public void HandleEngineFailure(){
-		
+	public boolean eBrakeThrown(){
+		return eBrakeThrown;
 		
 	}
 	
