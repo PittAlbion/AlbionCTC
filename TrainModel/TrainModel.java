@@ -27,8 +27,9 @@ public class TrainModel implements Runnable {
 	public boolean doorsClosed, lightsOn;
 	public double temperature, massTotal, lengthTotal,lengthOfCar,width,height, trackGrade;
 	public double speedLimit, accLimit, decLimit;
-	public double DT;
+	public double DT,currTime;
 	public double currGrade, currAuthority, currSpeed, currAcc, currPower;
+	public double maxPower, brakePower;
 	
 	//transponder input, track circuit input, routeinfo system,  
 	
@@ -44,7 +45,6 @@ public class TrainModel implements Runnable {
 	}
 
 
-
 	public TrainModel(char trackLineP ,int trainIDP, int carsP){
 		
 		InitialVars();
@@ -54,6 +54,10 @@ public class TrainModel implements Runnable {
 		cars = new Car[carsP];
 		trackLine=trackLineP;
 		
+		//serviceBrake=1.2 m/s^2
+		//emergencyBrake=2.73 m/s^2
+		maxPower=120000; //120 KW
+		brakePower=6*81000;  // spec said 6*81 Kn
 		maxPass=222;
 		trainID=trainIDP;
 		nCars=carsP;
@@ -61,7 +65,9 @@ public class TrainModel implements Runnable {
 		lengthTotal= lengthOfCar*nCars;
 		width=2.65;
 		height=3.42;
+		currTime=0;
 		
+		speedLimit=19.44444;  //70km/hr to m/s
 		for(int i=0;i<nCars;i++){
 			cars[i]= new Car();
 			cars[i].SetID(i);
@@ -85,13 +91,52 @@ public class TrainModel implements Runnable {
 		currAuthority=authP;
 	}
 
-
+	//f for incline is m*g*sin(theta)
 	
 	public void SetPointSpeed(double set){
-		// takes input that sets certain speed I suppose
-		currSpeed=set;
+		
+			if(currPower<maxPower){
+				// use equation on slides
+				//keep going up until its at the one we want.
+				// maybe a while loop, and using the move method below
+				// to increment the speed up until its at the right place.
+				
+				
+			}
+		
 	}
 	
+	// moves it by one timestep
+	// also must take into account our authority.
+	public double move(){
+		double Force, metersMoved;
+		
+		//1-get power  (already have this)
+		//2- divide power by current velocity to get force
+		Force=currPower/currSpeed;
+		
+		if(currGrade!=0.0){
+			// need to have currgrade be an angle, not a %
+			Force+= massTotal*9.8*  Math.sin((Math.PI/180)*currGrade);
+			
+		}
+		//3- divide force by current mass to get acc
+		currAcc=Force/massTotal;
+		
+		// integrate down to new position with DT
+		currSpeed=currAcc*DT;
+		
+		metersMoved = currSpeed*DT;
+		
+		//this might want to be elsewhere
+		currTime+=DT;
+		
+		return metersMoved;
+		
+		
+	}
+	
+	// he claims we can also give the train negative power, so that seems to be more of what this is.
 	public void BrakeCommand(){
 		//puts on da brakes within the dec limit
 		
@@ -128,7 +173,7 @@ public class TrainModel implements Runnable {
 		
 	}
 	
-    // potentially unnecessary
+    // potentially unnecessary. unused by me at the moment
 	public void UpdatePassengerData(){
 		if(nCars==0)System.out.println("Must have a car before you try to update the train's data from cars");
 	
@@ -138,10 +183,6 @@ public class TrainModel implements Runnable {
 			crewTotal+= cars[i].GetCrew();
 			
 		}
-	
-		
-		
-		
 	}
 	
 	public void SimulateStop(){
@@ -170,12 +211,11 @@ public class TrainModel implements Runnable {
 	// also should add the total mass of the train
 	massTotal+= ((passengerTotal+crewTotal)*kgPerPerson);
 		
-		
 	}
 	
 	public void InitialVars(){
-		// explicitly initializing as 0;
-		lightsOn=true;
+	// explicitly initializing as 0;
+	lightsOn=true;
 	kgPerSquareMeter=1000; //kilograms per square meter of length/width
 	kgPerPerson=200; //kilograms per person on the train
 	nCars=0;

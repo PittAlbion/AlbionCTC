@@ -13,7 +13,7 @@ import javax.swing.border.TitledBorder;
 
 public class AttributesPanel extends JPanel {
 
-	private JLabel length,width,height,crewCount, passCount, mass, speed, acc;
+	private JLabel length,width,height,crewCount, passCount, mass, speed, acc,power;
 	
 	public AttributesPanel(TrainModel theModel){
 		super();
@@ -29,6 +29,8 @@ public class AttributesPanel extends JPanel {
 		mass = new JLabel("Mass: " + theModel.massTotal);
 		speed = new JLabel("Speed: " + theModel.currSpeed);
 		acc = new JLabel("Acceleration: " + theModel.currAcc);
+		power = new JLabel("Power: " + theModel.currPower);
+		
 		
 		this.add(length);
 		this.add(width);
@@ -38,6 +40,7 @@ public class AttributesPanel extends JPanel {
 		this.add(mass);
 		this.add(speed);
 		this.add(acc);
+		this.add(power);
 		
 	}
 	
@@ -47,6 +50,7 @@ public class AttributesPanel extends JPanel {
 		mass.setText("Mass: " + theModel.massTotal);
 		speed.setText("Speed: " + theModel.currSpeed);
 		acc.setText("Acceleration: " + theModel.currAcc);
+		power.setText("Power: " + theModel.currPower);
 		
 	}
 	
