@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 @SuppressWarnings("serial")
@@ -24,6 +23,7 @@ public class TrackController extends JFrame implements Runnable {
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
 		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
 		public static ArrayList<TrackController> controlList = new ArrayList<TrackController>();
+		public static ArrayList<TrackModel.trackCrossing> crossingList = new ArrayList<TrackModel.trackCrossing>();
 		public static trackModel tm = new trackModel();
 		public static TrainController tc;
 		public static TrackController tr;
@@ -42,29 +42,17 @@ public class TrackController extends JFrame implements Runnable {
 		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			
-			myGUI = new GUI(); 
 			tr = new TrackController();
-			//myGUI.setState(0);
-		//	myGUI.setOccupancy(false);
-	//		myGUI.setTrackTemp(25);
-//			myGUI.setThermostat(15);
-			//myGUI.setDirection(true);
-			//myGUI.setSpeedLimit(55);
-			//myGUI.setHeater(false);
-			//trainList = tc.GetTrainList();
-			
-			//System.out.println(greenList.size());
-			//myGUI.statisticPanel.changeGeneralData(1, 1, greenList.get(0).block_number);
 				
 		}
 		
 		public TrackController() throws IOException
 		{
 			TrackController t;
+			myGUI = new GUI(); 
 			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
 			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
-			
+			//crossingList = trackModel.trackCrossingList;
 			for (int i = 0; i < greenList.size(); i++){
 				if (greenList.get(i).infrastructure.contains("SWITCH")){
 					t = new TrackController(count, 0);
@@ -95,7 +83,7 @@ public class TrackController extends JFrame implements Runnable {
 				}
 			}
 			
-			//tc = new TrainController();
+			tc = new TrainController();
 			tm = new trackModel();
 			
 			//Debug purposes
@@ -127,13 +115,12 @@ public class TrackController extends JFrame implements Runnable {
 		public void GetSuggestion(Object [] s){
 
 	        int i;
-			String [] parsedString = new String[2];
 	        String suggestionDest = s[0].toString();
 	        String selector = s[1].toString();
-			
-			parsedString = selector.split(" ");
-			String line = parsedString[0];
-			int block = Integer.parseInt(parsedString[1]);
+			System.out.println(selector);
+			String line = selector.substring(0, 1);
+			System.out.println(line);
+			int block = Integer.parseInt(selector.substring(1, selector.length()));
 			
 	        for (i=2; i<(s.length - 1); i++){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
@@ -154,26 +141,28 @@ public class TrackController extends JFrame implements Runnable {
 	    		trackBlock t = null;
 	    		boolean safe = true;
 	    		
-	    		if (lineSelect.equals("Green")){
+	    		System.out.println(lineSelect);
+	    		if (lineSelect.equals("G")){
 	    			t = greenList.get(trackSelect);
 	    		}
-	    		else if (lineSelect.equals("Red")){
+	    		else if (lineSelect.equals("R")){
 	    			t = redList.get(trackSelect);
 	    		}
 	    		else { ; }
-	    		
-	            if (type.equals("Authority")){
-	                //safe = checkStatus(); //Do something safe involving the authority suggestion
-	                if(safe){ //change Authority
-	                	//
-	                }
-	            }
-	            else if(type.equals("Speed")){
+	            
+	    		if(type.equals("Speed")){
 	                //safe = checkStatus(); //Do something safe involving the speed suggestion
 	                if (safe){ //change speed
 	                	t.speed_limit = Integer.parseInt(value);
+	                	//System.out.println("Made it here");
 	                }
 	            }
+	    		else if (type.equals("maintenance")){
+	    			if (safe){
+	    				t.maintenance = Boolean.parseBoolean(value);
+	    				//System.out.println(t.maintenance);
+	    			}
+	    		}
 	            else{;}//Invalid suggestion
 					
 	    }
@@ -253,9 +242,21 @@ public class TrackController extends JFrame implements Runnable {
 	    	return false;
 	    }
 	    
+	    public static ArrayList<trackBlock> updateGreen(){
+
+    		return greenList;
+
+	    }
+	    
+	    public static ArrayList<trackBlock> updateRed(){
+
+	    		return redList;
+
+	    }
+	    
 	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
-	    	//tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
+	    	tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
 	    	
 	    }
 	    

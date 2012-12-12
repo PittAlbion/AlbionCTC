@@ -351,9 +351,9 @@ public class GUI extends JFrame implements ActionListener {
 		genTable.setEnabled(false);
 		genTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Block Size", null},
-				{"Grade", null},
-				{"Elevation", null},
+				{"Block Size", 0},
+				{"Grade", 0},
+				{"Elevation", 0},
 				{null, null},
 				{null, null},
 			},
@@ -371,8 +371,8 @@ public class GUI extends JFrame implements ActionListener {
 		advTable.setEnabled(false);
 		advTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Type", null},
-				{"Mode", null},
+				{"Type", 0},
+				{"Mode", 0},
 				{null, null},
 				{null, null},
 				{null, null},
@@ -395,19 +395,23 @@ public class GUI extends JFrame implements ActionListener {
 		}
 		else if(e.getSource().equals(controllerList)){
 			TrackController t = TrackController.controlList.get(controllerList.getSelectedIndex());
-			System.out.println(t.id);
 			updateOutputPanel(t);
-			System.out.println(TrackController.controlList.get(controllerList.getSelectedIndex()).type);
 		}
 	}
 	
 	public void updateOutputPanel(TrackController t){
 		if (t.type == 0){
+			genTable.setValueAt(t.greenList.get(0).block_length, 0, 1);
+			advTable.setValueAt("Switch", 0, 1);
+			advTable.setValueAt("Off", 1, 1);
 			switcher.setEnabled(true);
 			activate.setEnabled(false);
 			deactivate.setEnabled(false);
 		}
 		else if (t.type == 1){
+			genTable.setValueAt(t.greenList.get(0).block_length, 0, 1);
+			advTable.setValueAt("Crossing", 0, 1);
+			advTable.setValueAt("Off", 1, 1);
 			switcher.setEnabled(false);
 			activate.setEnabled(true);
 			deactivate.setEnabled(false);
