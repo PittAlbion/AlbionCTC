@@ -24,6 +24,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     private JDialog dialog;
     ArrayList<trackBlock> gTrackList, rTrackList;
     static ArrayList<TrainModel> trainList;
+    static ArrayList<IndividualController> controllerList;
     private static int trainCount = 0;
     static String[] trainIDArray;
     int currentTrain = -1;
@@ -84,10 +85,11 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     
     public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
         trainList.add(new TrainModel(p_trackLine, p_trainID, p_cars));
-        trainIDArray[trainCount] = ""+trainList.get(trainCount).trainID;
+        trainIDArray[trainCount] = ""+p_trainID;
         nonLogPanel.trainPanel.UpdateTrainBox();
         logPanel.WriteMessage("Train Created: " + p_trackLine + p_trainID + "\n");
         trainList.get(trainCount).SetLimits(50.0, 3.0, 2.5);
+        controllerList.add(new IndividualController(p_trackLine, p_trainID, trainList.get(trainCount)));
         trainCount++;
     }
     
@@ -105,18 +107,19 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     	rTrackList = p_rTrackList;
     }
     
-    int FindTrainIndex(int p_trainID){
+    static int FindTrainIndex(int p_trainID){
 		for (int i=0; i <= trainList.size(); i++){
 			if (trainIDArray[i].equals(""+p_trainID)){
 				return i;
-				//System.out.println(""+i);
 			}
 		}
 		return 0;
     }
     
     public static void SendCommand(int p_trainID, String p_type, double p_value){
-        TrainModel train = FindTrain(p_trainID);
+    	int index = FindTrainIndex(p_trainID);
+        TrainModel train = trainList.get(index);
+        IndividualController controller = controllerList.get(index);
         if (train != null){
             if (p_type.equals("Speed")){
                 train.SetPointSpeed(p_value);
