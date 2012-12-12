@@ -46,6 +46,10 @@ public class GUI extends JFrame implements ActionListener {
 	private JTextField trackTemp;
 	private JTextField thermostat;
 	private JTextField state;
+	private JButton activate;
+	private JButton deactivate;
+	private JButton switcher;
+	private JComboBox<String> controllerList;
 
 	/**
 	 * Launch the application.
@@ -77,7 +81,7 @@ public class GUI extends JFrame implements ActionListener {
 		setForeground(Color.BLACK);
 		setTitle("Track Controller");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 802, 425);
+		setBounds(100, 100, 790, 410);
 		
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);
@@ -151,11 +155,11 @@ public class GUI extends JFrame implements ActionListener {
 		);
 		outputPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JButton activate = new JButton("Activate Crossing");
+		activate = new JButton("Activate Crossing");
 		
-		JButton deactivate = new JButton("Deactivate Crossing");
+		deactivate = new JButton("Deactivate Crossing");
 		
-		JButton switcher = new JButton("Activate Switch");
+		switcher = new JButton("Activate Switch");
 		GroupLayout gl_commandPanel = new GroupLayout(commandPanel);
 		gl_commandPanel.setHorizontalGroup(
 			gl_commandPanel.createParallelGroup(Alignment.TRAILING)
@@ -182,7 +186,8 @@ public class GUI extends JFrame implements ActionListener {
 		
 		JLabel label_5 = new JLabel("Current Track Controller");
 		
-		JComboBox<TrackController> controllerList = new JComboBox<TrackController>();
+		controllerList = new JComboBox<String>();
+		controllerList.addActionListener(this);
 		GroupLayout gl_selectionPanel = new GroupLayout(selectionPanel);
 		gl_selectionPanel.setHorizontalGroup(
 			gl_selectionPanel.createParallelGroup(Alignment.LEADING)
@@ -346,9 +351,9 @@ public class GUI extends JFrame implements ActionListener {
 		genTable.setEnabled(false);
 		genTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null},
-				{null, null},
-				{null, null},
+				{"Block Size", null},
+				{"Grade", null},
+				{"Elevation", null},
 				{null, null},
 				{null, null},
 			},
@@ -366,8 +371,8 @@ public class GUI extends JFrame implements ActionListener {
 		advTable.setEnabled(false);
 		advTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null},
-				{null, null},
+				{"Type", null},
+				{"Mode", null},
 				{null, null},
 				{null, null},
 				{null, null},
@@ -386,10 +391,36 @@ public class GUI extends JFrame implements ActionListener {
 		if (e.getSource().equals(mntmExit))
 			System.exit(0);
 		else if (e.getSource().equals(mntmAbout)){
-			
 			new AboutDialog();
-			
 		}
+		else if(e.getSource().equals(controllerList)){
+			TrackController t = TrackController.controlList.get(controllerList.getSelectedIndex());
+			System.out.println(t.id);
+			updateOutputPanel(t);
+			System.out.println(TrackController.controlList.get(controllerList.getSelectedIndex()).type);
+		}
+	}
+	
+	public void updateOutputPanel(TrackController t){
+		if (t.type == 0){
+			switcher.setEnabled(true);
+			activate.setEnabled(false);
+			deactivate.setEnabled(false);
+		}
+		else if (t.type == 1){
+			switcher.setEnabled(false);
+			activate.setEnabled(true);
+			deactivate.setEnabled(false);
+		}
+			
+			
+		setOccupancy(t.occupied);
+		setSpeedLimit(t.speedLimit);
+		setHeater(t.heater);
+		setState(t.state);
+		setDirection(t.direction);
+		setTrackTemp(t.trackTemp);
+		setThermostat(t.thermostatTemp);
 	}
 	
 	public void setOccupancy(boolean b){
@@ -400,7 +431,7 @@ public class GUI extends JFrame implements ActionListener {
 	}
 	
 	public void setSpeedLimit(double x){
-		speedLimit.setText(Double.toString(x) + "Km/h");
+		speedLimit.setText(Double.toString(x) + "m/s");
 	}
 	
 	public void setHeater(boolean b){
@@ -434,4 +465,8 @@ public class GUI extends JFrame implements ActionListener {
 		thermostat.setText(Double.toString(x) + "°C");
 	}
 	
+	public void addToList(String t){
+		controllerList.addItem(t);
+	}
+
 }

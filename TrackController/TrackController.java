@@ -20,38 +20,38 @@ import javax.swing.border.Border;
 
 public class TrackController extends JFrame implements Runnable {
 	
-		//private static boolean indDemo = true;
-		Border blackline = BorderFactory.createLineBorder(Color.black);
 		public static ArrayList<trackBlock> greenList = new ArrayList<trackBlock>();
 		public static ArrayList<trackBlock> redList = new ArrayList<trackBlock>();
 		public static ArrayList<TrainModel> trainList = new ArrayList<TrainModel>();
+		public static ArrayList<TrackController> controlList = new ArrayList<TrackController>();
 		public static trackModel tm = new trackModel();
 		public static TrainController tc;
 		public static TrackController tr;
 		static GUI myGUI;
 		
-		private double speedLimit;
-		private double trackTemp;
-		private double thermostatTemp;
-		private boolean direction;
-		private boolean heater;
-		private boolean occupied;
-		private int state;
+		public int id = 0;
+		public int type;
+		private int count = 0;
+		public double speedLimit;
+		public double trackTemp;
+		public double thermostatTemp;
+		public boolean direction;
+		public boolean heater;
+		public boolean occupied;
+		public int state;
 		
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			tr = new TrackController();
-			
 			
 			myGUI = new GUI(); 
-			
-			myGUI.setState(0);
-			myGUI.setOccupancy(false);
-			myGUI.setTrackTemp(25);
-			myGUI.setThermostat(15);
-			myGUI.setDirection(true);
-			myGUI.setSpeedLimit(55);
-			myGUI.setHeater(false);
+			tr = new TrackController();
+			//myGUI.setState(0);
+		//	myGUI.setOccupancy(false);
+	//		myGUI.setTrackTemp(25);
+//			myGUI.setThermostat(15);
+			//myGUI.setDirection(true);
+			//myGUI.setSpeedLimit(55);
+			//myGUI.setHeater(false);
 			//trainList = tc.GetTrainList();
 			
 			//System.out.println(greenList.size());
@@ -61,14 +61,60 @@ public class TrackController extends JFrame implements Runnable {
 		
 		public TrackController() throws IOException
 		{
+			TrackController t;
 			greenList = new ArrayList<trackBlock>(trackModel.buildGreenList("help"));
 			redList = new ArrayList<trackBlock>(trackModel.buildRedList("help"));
+			
+			for (int i = 0; i < greenList.size(); i++){
+				if (greenList.get(i).infrastructure.contains("SWITCH")){
+					t = new TrackController(count, 0);
+					controlList.add(t);
+					myGUI.addToList("Green Line Switch " + Integer.toString(controlList.get(count).id));
+					count++;
+				}
+				else if (greenList.get(i).infrastructure.equals("RAILWAY CROSSING")){
+					t = new TrackController(count, 1);
+					controlList.add(t);
+					myGUI.addToList("Green Line Crossing " + Integer.toString(controlList.get(count).id));
+					count++;
+				}
+			}
+			
+			for (int i = 0; i < redList.size(); i++){
+				if (redList.get(i).infrastructure.contains("SWITCH")){
+					t = new TrackController(count, 0);
+					controlList.add(t);
+					myGUI.addToList("Red Line Switch " + Integer.toString(controlList.get(count).id));
+					count++;
+				}
+				else if (redList.get(i).infrastructure.equals("RAILWAY CROSSING")){
+					t = new TrackController(count, 1);
+					controlList.add(t);
+					myGUI.addToList("Red Line Crossing " + Integer.toString(controlList.get(count).id));
+					count++;
+				}
+			}
+			
 			//tc = new TrainController();
 			tm = new trackModel();
 			
 			//Debug purposes
-			System.out.println("Green Track List Length: " + greenList.size());
-			System.out.println("Red Track List Length: " + redList.size());
+			//System.out.println("Green Track List Length: " + greenList.size());
+			//System.out.println("Red Track List Length: " + redList.size());
+			
+		}
+		
+		public TrackController(int id, int type){
+			
+			this.id = id;
+			this.type = type;
+			this.state = 0;
+			this.occupied = true;
+			this.heater = true;
+			this.direction = true;
+			this.trackTemp = 55;
+			this.thermostatTemp = 15;
+			this.speedLimit = 55;
 			
 		}
 		
