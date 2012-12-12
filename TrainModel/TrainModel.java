@@ -306,5 +306,104 @@ public class TrainModel implements Runnable {
 	public void run(){
 	}
 	
+		public double moveNoDT(){
+		double force, metersMoved,angle;
+		force=0;
+		
+	
+		//1-get power  (already have this)
+		//2- divide power by current velocity to get force
+		if(currSpeed!=0.0) force=currPower/currSpeed;
+		else force= 240000;  //give it an initial force, so it doesn't divide by 0, this would be the force at .5 m/s at 120 KW (full engine power)
+			
+		if(currGrade != 0.0){
+			// need to have currgrade be an angle, not a %
+			angle=Math.atan(currGrade/100.0);
+			force+= massTotal*9.8*  Math.sin((Math.PI/180)*angle);
+		}
+		//3- divide force by current mass to get acc
+		currAcc=force/massTotal;
+		
+		if(currAcc>accLimit)currAcc=accLimit;
+		if(currAcc<decLimit)currAcc=decLimit;
+		if(currSpeed>speedLimit)currSpeed=speedLimit;
+		// integrate down to new position with DT
+		
+		currSpeed+=currAcc*DT;
+		
+		
+		metersMoved = currSpeed*DT;
+		//System.out.println("Meters moved:"+metersMoved);
+		//this might want to be elsewhere
+		
+		
+		return metersMoved;
+		
+		
+	}
+	public double keepMovingNoDT(){
+		double force, metersMoved,angle,accFromGrade;
+		force=accFromGrade=0;
+		
+		// integrate down to new position with DT
+		
+		if(currGrade != 0.0){
+			// need to have currgrade be an angle, not a %
+			angle=Math.atan(currGrade/100.0);
+			force+= massTotal*9.8*  Math.sin((Math.PI/180)*angle);
+		}
+		
+		accFromGrade+=force/massTotal;
+		currSpeed+=accFromGrade*DT;
+		
+		if(currSpeed>speedLimit)currSpeed=speedLimit;
+		
+		metersMoved = currSpeed*DT;
+		//System.out.println("Meters moved:"+metersMoved);
+		//this might want to be elsewhere
+		
+		
+		return metersMoved;
+	}
+	public double SetPointSpeedNoDT(double set){
+		double uk,ek,ekl,toPower,totalMoved;
+		uk=ek=ekl=toPower=totalMoved=0;
+		if(set<=speedLimit){
+			
+
+			while(currSpeed<set){
+				
+				if(toPower<maxPower){
+				ek=set-currSpeed;
+				uk+=DT/2*(ek+ekl);
+				ekl=ek;
+				toPower=(1000*ek)+(1000*uk);
+				if(toPower<maxPower)GivePower(toPower);
+				else GivePower(120000);
+				//System.out.println(toPower);
+				}
+				
+				totalMoved+= moveNoDT();	
+			}
+			
+			while(currSpeed>set){
+				
+				ek=currSpeed-set;
+				uk+=DT/2*(ek+ekl);
+				ekl=ek;
+				toPower=-((1000*ek)+(1000*uk));
+				GivePower(toPower);
+				
+				//System.out.println(toPower);
+				
+				totalMoved+=moveNoDT();	
+			
+		}
+
+			if(currSpeed<0) currSpeed=0;
+		}
+		return totalMoved;
+	}
+	
 	
 }
