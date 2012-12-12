@@ -21,9 +21,16 @@ public class CommandsPanel extends JPanel {
 		this.setPreferredSize(new Dimension(100,100));
 		//this.setMaximumSize(this.getPreferredSize());
 		
-		lastComm = new JLabel("Last Command will go here");
+		lastComm = new JLabel("Total Distance Moved from beginning: 0.0");
 		
 		this.add(lastComm);
 	}
+	
+	void update(double totalP){
+		lastComm.setText("Total Distance Moved from beginning: "+ totalP);
+		
+		
+	}
+	
 	
 }

@@ -55,7 +55,7 @@ public class FailPanel extends JPanel {
 		if(theModel.detector.signalsWorking) signalsStat.setText("Signals Working");
 		else signalsStat.setText("Signals Broken!");
 
-		if(theModel.detector.eBrakeThrown) eBrakeStat.setText("Emergency Brake has ben thrown!");
+		if(theModel.detector.eBrakeThrown) eBrakeStat.setText("Emergency Brake has been thrown!");
 		else eBrakeStat.setText("Emergency brake idle.");
 		
 		

@@ -18,7 +18,7 @@ public class TrainModel implements Runnable {
 	public int trainID;
 	
 	public Car[] cars;
-	public int nCars;
+	public int nCars,blockID;
 	
 	public FailureDetector detector;
 	
@@ -72,6 +72,7 @@ public class TrainModel implements Runnable {
 		height=3.42;
 		currTime=0;
 		DT=.5;
+		blockID=-1;
 		
 		speedLimit=19.44444;  //70km/hr to m/s
 		for(int i=0;i<nCars;i++){
@@ -102,11 +103,12 @@ public class TrainModel implements Runnable {
 
 	//f for incline is m*g*sin(theta)
 	
-	public void SetPointSpeed(double set){
-		double uk,ek,ekl,toPower;
-		uk=ek=ekl=toPower=0;
-		if(set<speedLimit){
+	public double SetPointSpeed(double set){
+		double uk,ek,ekl,toPower,totalMoved;
+		uk=ek=ekl=toPower=totalMoved=0;
+		if(set<=speedLimit){
 			
+
 			while(currSpeed<set){
 				
 				if(toPower<maxPower){
@@ -118,24 +120,27 @@ public class TrainModel implements Runnable {
 				else GivePower(120000);
 				//System.out.println(toPower);
 				}
-				move();	
+				
+				totalMoved+= move();	
 			}
 			
 			while(currSpeed>set){
 				
-					ek=currSpeed-set;
-					uk+=DT/2*(ek+ekl);
-					ekl=ek;
-					toPower=-((1000*ek)+(1000*uk));
-					GivePower(toPower);
-					
-					//System.out.println(toPower);
-					
-					move();	
+				ek=currSpeed-set;
+				uk+=DT/2*(ek+ekl);
+				ekl=ek;
+				toPower=-((1000*ek)+(1000*uk));
+				GivePower(toPower);
 				
-			}
+				//System.out.println(toPower);
+				
+				totalMoved+=move();	
+			
+		}
+
 			if(currSpeed<0) currSpeed=0;
 		}
+		return totalMoved;
 	}
 	
 	// moves it by one timestep
@@ -144,7 +149,7 @@ public class TrainModel implements Runnable {
 		double force, metersMoved,angle;
 		force=0;
 		
-		if(currSpeed<speedLimit){
+	
 		//1-get power  (already have this)
 		//2- divide power by current velocity to get force
 		if(currSpeed!=0.0) force=currPower/currSpeed;
@@ -160,10 +165,11 @@ public class TrainModel implements Runnable {
 		
 		if(currAcc>accLimit)currAcc=accLimit;
 		if(currAcc<decLimit)currAcc=decLimit;
+		if(currSpeed>speedLimit)currSpeed=speedLimit;
 		// integrate down to new position with DT
 		
 		currSpeed+=currAcc*DT;
-		}
+		
 		
 		metersMoved = currSpeed*DT;
 		//System.out.println("Meters moved:"+metersMoved);
@@ -173,6 +179,32 @@ public class TrainModel implements Runnable {
 		return metersMoved;
 		
 		
+	}
+	
+	// moves with no change to acceleration
+	public double keepMoving(){
+		double force, metersMoved,angle,accFromGrade;
+		force=accFromGrade=0;
+		
+		// integrate down to new position with DT
+		
+		if(currGrade != 0.0){
+			// need to have currgrade be an angle, not a %
+			angle=Math.atan(currGrade/100.0);
+			force+= massTotal*9.8*  Math.sin((Math.PI/180)*angle);
+		}
+		
+		accFromGrade+=force/massTotal;
+		currSpeed+=accFromGrade*DT;
+		
+		if(currSpeed>speedLimit)currSpeed=speedLimit;
+		
+		metersMoved = currSpeed*DT;
+		//System.out.println("Meters moved:"+metersMoved);
+		//this might want to be elsewhere
+		currTime+=DT;
+		
+		return metersMoved;
 	}
 	
 	// he claims we can also give the train negative power, so that seems to be more of what this is.

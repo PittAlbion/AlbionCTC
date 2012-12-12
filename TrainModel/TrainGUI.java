@@ -15,14 +15,15 @@ import javax.swing.*;
 public class TrainGUI extends JFrame implements ActionListener{
 	
 	private TrainModel theModel;
-	private double tempDouble;
+	private double tempDouble,tempDoubleB,totalMove;
 	private String tempString;
-	private JPanel mainPane, buttonPane, topPane;
+	private JPanel mainPane, buttonPane, topPane, centerPane;
 	private Container mainContainer;
 	private JButton setPointButton, openButton, closeButton, stopButton, exitButton, moveButton;
 	private JButton simBrakeFail, simEngineFail, simSignalFail, simEBrake;
 	private JTextField setPointText;
-	
+	private StringBuilder bob;
+	private LogPanel logPanel;
 	private AttributesPanel attPanel;
 	private MiscPanel miscPanel;
 	private FailPanel failPanel;
@@ -36,6 +37,7 @@ public class TrainGUI extends JFrame implements ActionListener{
 		theModel=theModelP;
 		theModel.crewTotal=2;
 		theModel.MassUpdate();
+		totalMove=0;
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
@@ -43,6 +45,10 @@ public class TrainGUI extends JFrame implements ActionListener{
 		
 		topPane = new JPanel();
 		topPane.setLayout(new GridLayout(1,3));
+		
+		centerPane = new JPanel();
+		centerPane.setLayout(new GridLayout(1,2));
+		
 		buttonPane = new JPanel();
 		
 		
@@ -51,6 +57,7 @@ public class TrainGUI extends JFrame implements ActionListener{
 		mainContainer.add(mainPane);
 		mainPane.setLayout(new BorderLayout());
 		
+		logPanel = new LogPanel(theModel);
 		attPanel = new AttributesPanel(theModel);
 		miscPanel = new MiscPanel(theModel);
 		failPanel = new FailPanel(theModel);
@@ -58,6 +65,7 @@ public class TrainGUI extends JFrame implements ActionListener{
 		commPanel = new CommandsPanel(theModel);
 		limPanel = new LimitsPanel(theModel);
 		
+		logPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		attPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		miscPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		failPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -69,7 +77,8 @@ public class TrainGUI extends JFrame implements ActionListener{
 		topPane.add(commPanel);
 		topPane.add(miscPanel);
 		
-		
+		centerPane.add(failPanel);
+		centerPane.add(logPanel);
 		
 		buttonPane.setLayout(new GridLayout(2,0));
 		
@@ -120,8 +129,8 @@ public class TrainGUI extends JFrame implements ActionListener{
 		
 		mainPane.add(buttonPane,BorderLayout.SOUTH);
 		mainPane.add(topPane,BorderLayout.NORTH);
-		mainPane.add(failPanel,BorderLayout.CENTER);
-		mainPane.add(otherPanel,BorderLayout.EAST);
+		mainPane.add(centerPane,BorderLayout.CENTER);
+	//	mainPane.add(otherPanel,BorderLayout.EAST);
 		mainPane.add(attPanel,BorderLayout.WEST);
 		
 		setVisible(true);
@@ -147,42 +156,81 @@ public class TrainGUI extends JFrame implements ActionListener{
 					System.exit(0);
 				}
 				else if(event.getSource().equals(moveButton)){
-					theModel.move();
+					tempDoubleB = theModel.currTime;
+					
+					tempDouble = theModel.keepMoving();
+					totalMove +=tempDouble;
+					tempString = Double.toString(tempDouble);
+					
+					logPanel.WriteMessage("In "+(theModel.currTime-tempDoubleB)+ " seconds, train moved total of "+ tempString+" meters\n");
+					
 					attPanel.update(theModel);
+					commPanel.update(totalMove);
 				}
 				else if(event.getSource().equals(setPointButton)){
 					tempString=setPointText.getText();
+					
+					tempDoubleB = theModel.currTime;
 					tempDouble = Double.parseDouble(tempString);
-					theModel.SetPointSpeed(tempDouble);
+					tempDouble=theModel.SetPointSpeed(tempDouble);
+					totalMove+=tempDouble;
+					tempString = Double.toString(tempDouble);
+
+					logPanel.WriteMessage("In "+(theModel.currTime-tempDoubleB)+ " seconds, train moved total of "+ tempString+" meters\n");
 					attPanel.update(theModel);
+					commPanel.update(totalMove);
 				}
 				else if(event.getSource().equals(simBrakeFail)){
 					theModel.detector.brakesWorking=false;
-					theModel.FailCheck();
+					tempDoubleB = theModel.currTime;
+					
+					tempDouble=theModel.SetPointSpeed(0.0);
+					totalMove+=tempDouble;
+					
+					logPanel.WriteMessage("It took "+(theModel.currTime-tempDoubleB)+" seconds and "+ tempDouble+ "meters  to stop\n");
 					failPanel.update(theModel);
 					attPanel.update(theModel);
+					commPanel.update(totalMove);
 					
 				}
 				else if(event.getSource().equals(simEngineFail)){
 					theModel.detector.engineWorking=false;
-					theModel.FailCheck();
+					tempDoubleB = theModel.currTime;
+					
+					tempDouble=theModel.SetPointSpeed(0.0);
+					totalMove+=tempDouble;
+					
+					logPanel.WriteMessage("It took "+(theModel.currTime-tempDoubleB)+" seconds and "+ tempDouble+ "meters  to stop\n");
 					failPanel.update(theModel);
 					attPanel.update(theModel);
+					commPanel.update(totalMove);
 					
 				}
 				else if(event.getSource().equals(simSignalFail)){
 					theModel.detector.signalsWorking=false;
-					theModel.FailCheck();
+					tempDoubleB = theModel.currTime;
+					
+					tempDouble=theModel.SetPointSpeed(0.0);
+					totalMove+=tempDouble;
+					
+					logPanel.WriteMessage("It took "+(theModel.currTime-tempDoubleB)+" seconds and "+ tempDouble+ "meters  to stop\n");
 					failPanel.update(theModel);
 					attPanel.update(theModel);
+					commPanel.update(totalMove);
 					
 				}
 				else if(event.getSource().equals(simEBrake)){
 					theModel.detector.eBrakeThrown=true;
-					theModel.FailCheck();
+					
+					tempDoubleB = theModel.currTime;
+					theModel.SetLimits(theModel.speedLimit,theModel.accLimit,-2.73);
+					tempDouble=theModel.SetPointSpeed(0.0);
+					totalMove+=tempDouble;
+					
+					logPanel.WriteMessage("It took "+(theModel.currTime-tempDoubleB)+" seconds and "+ tempDouble+ "meters  to stop with the emergency brake\n");
 					failPanel.update(theModel);
 					attPanel.update(theModel);
-					
+					commPanel.update(totalMove);
 				}
 		
 		
