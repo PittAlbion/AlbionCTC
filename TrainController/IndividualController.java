@@ -15,11 +15,29 @@ public class IndividualController {
 	}
 	
 	public int RunTrain(double p_distance){
-		double traveled=0.0;
-		int passed=0;
+		double testTravel = 0.0;
+		double traveled = 0.0;
+		int passed = 0;
 		
-		while(traveled < p_distance){
-			train.keepMoving();
+		while (traveled < p_distance){
+			testTravel += train.keepMovingNoDT();
+			if (testTravel < p_distance){
+				traveled += train.keepMoving();
+				passed++;
+			}
+		}
+		return passed;
+	}
+	
+	public int FindTime(double p_distance){
+		double traveled = 0.0;
+		int passed = 0;
+		
+		while (traveled < p_distance){
+			traveled+=train.keepMovingNoDT();
+			if (traveled < p_distance){
+				passed++;
+			}
 		}
 		return passed;
 	}
