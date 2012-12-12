@@ -28,7 +28,9 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.SwingConstants;
-
+/**
+ * @author Calvin Souders
+ */
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener {
 
@@ -66,7 +68,9 @@ public class GUI extends JFrame implements ActionListener {
 			}
 		});
 	}
-
+	/**
+	 * Function to set the Frame Visible.
+	 */
 	public void start(){
 		setVisible(true);
 	}
@@ -76,6 +80,9 @@ public class GUI extends JFrame implements ActionListener {
 	public GUI() {
 		initGUI();
 	}
+	/**
+	 * Initialize the GUI Properties
+	 */
 	private void initGUI() {
 		setResizable(false);
 		setForeground(Color.BLACK);
@@ -387,6 +394,9 @@ public class GUI extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
+	/**
+	 * GUI Action Listener
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(mntmExit))
 			System.exit(0);
@@ -399,6 +409,10 @@ public class GUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Function that updates the gui based on focusing on a new track controller.
+	 * @param t	Selected Track Controller
+	 */
 	public void updateOutputPanel(TrackController t){
 		if (t.type == 0){
 			genTable.setValueAt(t.greenList.get(0).block_length, 0, 1);
@@ -427,6 +441,10 @@ public class GUI extends JFrame implements ActionListener {
 		setThermostat(t.thermostatTemp);
 	}
 	
+	/**
+	 * Mutator, Changes the occupied text block in the GUI.
+	 * @param b boolean - True or False value
+	 */
 	public void setOccupancy(boolean b){
 		if (b)
 			occupancy.setText("Yes");
@@ -434,10 +452,18 @@ public class GUI extends JFrame implements ActionListener {
 			occupancy.setText("No");
 	}
 	
+	/**
+	 * Mutator, Changes the speed limit text block in the GUI
+	 * @param x - Double, updated speed limit value.
+	 */
 	public void setSpeedLimit(double x){
 		speedLimit.setText(Double.toString(x) + "m/s");
 	}
 	
+	/**
+	 * Mutator, Changes the heater text block in the GUI
+	 * @param b boolean - True or False value
+	 */
 	public void setHeater(boolean b){
 		if (b)
 			heater.setText("On");
@@ -445,6 +471,10 @@ public class GUI extends JFrame implements ActionListener {
 			heater.setText("Off");
 	}
 	
+	/**
+	 * Mutator, Changes the state text block in the GUI
+	 * @param i Integer - 0, 1, or 2 based on current state
+	 */
 	public void setState(int i){
 		if (i == 0)
 			state.setText("Normal");
@@ -454,6 +484,10 @@ public class GUI extends JFrame implements ActionListener {
 			state.setText("Broken");
 	}
 	
+	/**
+	 * Mutator, Changes the direction text block in the GUI
+	 * @param b boolean - True or False value determining Forward or Backward movement
+	 */
 	public void setDirection(boolean b){
 		if (b)
 			direction.setText("A-Z");
@@ -461,14 +495,26 @@ public class GUI extends JFrame implements ActionListener {
 			direction.setText("Z-A");
 	}
 	
+	/**
+	 * Mutator, Changes the track temp text block in the GUI
+	 * @param x Double - New Track Temp
+	 */
 	public void setTrackTemp(double x){
 		trackTemp.setText(Double.toString(x) + "°C");
 	}
 	
+	/**
+	 * Mutator, Changes the Thermostat text block in the GUI
+	 * @param x Double - New Thermostat Temp
+	 */
 	public void setThermostat(double x){
 		thermostat.setText(Double.toString(x) + "°C");
 	}
 	
+	/**
+	 * Function that adds a Controller to the combolist in String Format. 
+	 * @param t	String - Name of the Controller.
+	 */
 	public void addToList(String t){
 		controllerList.addItem(t);
 	}

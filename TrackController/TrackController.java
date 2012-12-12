@@ -15,6 +15,10 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.border.Border;
+/**
+ * @author Calvin Souders
+ */
+
 @SuppressWarnings("serial")
 
 public class TrackController extends JFrame implements Runnable {
@@ -40,12 +44,24 @@ public class TrackController extends JFrame implements Runnable {
 		public boolean occupied;
 		public int state;
 		
+		/**
+		 * This is the main function that will create an instance of the GUI for the user
+		 * to use in a standalone mode.
+		 * @param args	The list of arguments to import from the command line.
+		 * @throws InterruptedException
+		 * @throws IOException
+		 */
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
 			tr = new TrackController();
 				
 		}
 		
+		/**
+		 * Empty constructor for whomever would like to instance the GUI can use to do so.
+		 * Loads in the track lists and creates controllers based on that information.
+		 * @throws IOException
+		 */
 		public TrackController() throws IOException
 		{
 			TrackController t;
@@ -92,6 +108,13 @@ public class TrackController extends JFrame implements Runnable {
 			
 		}
 		
+		/**
+		 * Creates a Track Controller based on the type of infrastructure the component
+		 * has.
+		 * @param id	ID number of the Track Controller
+		 * @param type	Type of Track Controller (Switch/Crossing)
+		 * @see TrackController()
+		 */
 		public TrackController(int id, int type){
 			
 			this.id = id;
@@ -112,6 +135,12 @@ public class TrackController extends JFrame implements Runnable {
 			}
 		}
 		
+		/**
+		 * Function call for the CTC Office to send the Track Controller a message
+		 * with suggestions. This function takes the message, parses it out and decides, based
+		 * on certain arguments, where to send the suggestion.
+		 * @param s		The message array encasing the suggestion(s).
+		 */
 		public void GetSuggestion(Object [] s){
 
 	        int i;
@@ -134,8 +163,15 @@ public class TrackController extends JFrame implements Runnable {
 			
 	    }
 
-		
-		
+		/**
+		 * A function that takes a Track Controller suggestion from the CTC Office and uses it according
+		 * to the specifications.
+		 * @param lineSelect	The track line selected (Typically 'G' or 'R')
+		 * @param trackSelect	The track block selected (From the track List)
+		 * @param type			The type of suggestion (Typically speed or maintenance for a track block
+		 * @param value			The value of the suggestion (T/F for maintenance, Some number for speed)
+		 * @see GetSuggestion()
+		 */
 	    private void useSuggestion(String lineSelect, int trackSelect, String type, String value){
 		
 	    		trackBlock t = null;
@@ -167,7 +203,13 @@ public class TrackController extends JFrame implements Runnable {
 					
 	    }
 	    
-
+	    /**
+	     * Function that will activate a track Crossing based on whether or not a train
+	     * is near enough to cause such an event.
+	     * @param lineSelect	Track Line ('G' or 'R')
+	     * @param trackSelect	Track Block (Selected from the list of tracks, only crossings will actually be considered)
+	     * @return	boolean
+	     */
 		public boolean activateCrossing(String lineSelect, int trackSelect){
 	    	boolean near = tc.IsNearCrossing(0);
 	    	trackBlock t;
@@ -202,7 +244,13 @@ public class TrackController extends JFrame implements Runnable {
 	    		return false;
 	    	}
 	    }
-	    
+	    /**
+	     * Function that will deactivate a track Crossing based on whether or not a train
+	     * is far enough away to cause such an event.
+	     * @param lineSelect	Track Line ('G' or 'R')
+	     * @param trackSelect	Track Block (Selected from the list of tracks, only crossings will actually be considered)
+	     * @return	boolean
+	     */
 	    @SuppressWarnings("unused")
 		private boolean deactivateCrossing(String lineSelect, int trackSelect){
 	    	//If the crossing is activated:
@@ -212,14 +260,28 @@ public class TrackController extends JFrame implements Runnable {
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
+	    
+	    /**
+	     * Function that will move a switch to given position based on params and checks
+	     * that such an action is safe to perform.
+	     * @param lineSelect	Track Line ('G' or 'R')
+	     * @param trackSegment	Track Block (Selected from the list of tracks, only switches will be considered)
+	     * @param newConnect	Destination for the new switch connection.
+	     * @return boolean
+	     */
 	    @SuppressWarnings("unused")
-		private boolean switchTrackSegment(String lineSelect, int trackSegment, int position){
+		private boolean switchTrackSegment(String lineSelect, int trackSegment, trackBlock newConnect){
 	    	//Determine if the switch can safely be activated
 	    	//Based on the arguments given, switch the track segment into the appropriate position.
 	    	//Send back a confirmation or failure signal
 	    	return false;
 	    }
 	    
+	    /**
+	     * Function that will continuously look for a train in the system based on the status of the
+	     * Track Model's circuitry.
+	     * @return boolean
+	     */
 	    @SuppressWarnings("unused")
 		private boolean trainDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for trains
@@ -228,6 +290,11 @@ public class TrackController extends JFrame implements Runnable {
 	    	return false;
 	    }
 	    
+	    /**
+	     * Function that will continuously look for a broken rail flag in the system. Upon Detection,
+	     * the proper systems shall be notified of the issue at hand.
+	     * @return boolean
+	     */
 	    @SuppressWarnings("unused")
 		private boolean brokenRailDetection(){
 	    	//This method will scan the track circuits implemented by the Track Model for rails that
@@ -236,30 +303,55 @@ public class TrackController extends JFrame implements Runnable {
 	    	return false;
 	    }
 	    
+	    /**
+	     * Function that will check the overall health of the system.
+	     * @return boolean
+	     */
 	    @SuppressWarnings("unused")
 		private boolean checkStatus(){
 	    	
 	    	return false;
 	    }
 	    
+	    /**
+	     * Function that sends back, to whomever wants it, an updated version of the green
+	     * track block list.
+	     * @return ArrayList<trackBlock>
+	     */
 	    public static ArrayList<trackBlock> updateGreen(){
 
     		return greenList;
 
 	    }
 	    
+	    /**
+	     * Function that sends back, to whomever wants it, an updated version of the red
+	     * track block list.
+	     * @return ArrayList<trackBlock>
+	     */
 	    public static ArrayList<trackBlock> updateRed(){
 
 	    		return redList;
 
 	    }
 	    
+	    /**
+	     * Function that allows the Track Controller itself, or anyone outside of it, to
+	     * create a new train for the system.
+	     * @param p_trackLine	Track Line the train will be placed on ('G' or 'R')
+	     * @param p_trainID		ID Number for the train
+	     * @param p_cars		Length of the train
+	     */
 	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
 	    	tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
 	    	
 	    }
 	    
+	    /**
+	     * Function that sends back an up to date list of trains in the system
+	     * @return ArrayList<TrainModel>
+	     */
 	    public ArrayList<TrainModel> getTrainList(){
 	    	
 	    	return trainList;
