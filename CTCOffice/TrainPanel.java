@@ -5,6 +5,7 @@
 package CTCOffice;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -32,6 +33,20 @@ public class TrainPanel extends JPanel {
 	
 	public void AddTrain(TrainModel train){
 		this.add(new TrainStatPanel(train,log,trackController));
+	}
+	
+	void Update(ArrayList<TrainModel> trains){
+		this.removeAll();
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		for(TrainModel train : trains){
+			AddTrain(train);
+		}
+		
+		this.add(new JScrollPane(panel));
+		
+		
 		
 	}
 

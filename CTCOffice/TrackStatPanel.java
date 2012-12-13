@@ -87,7 +87,7 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 			log.UpdateLog("Maintenance on block: "+block.track_line+" "+block.block_number);
 			Object[] suggestion = new Object[4];
 			suggestion[0] = "Track";
-			suggestion[1] = block.track_line.charAt(0)+block.block_number;
+			suggestion[1] = (String)block.track_line.substring(0,1)+block.block_number;
 			suggestion[2] = "maintenance";
 			suggestion[3] = !block.maintenance;
 			

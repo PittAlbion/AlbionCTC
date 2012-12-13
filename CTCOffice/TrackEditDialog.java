@@ -76,7 +76,7 @@ public class TrackEditDialog extends JFrame implements ActionListener{
 		if(e.getSource().equals(okButton)){
 				Object[] message = new Object[6];
 				message[0] = label;
-				message[1] = block.track_line.charAt(0)+block.block_number;
+				message[1] = block.track_line.substring(0,1)+block.block_number;
 				message[2] = "Speed";
 				message[3] = entry.getText();
 				message[4] = "Maintenance";
