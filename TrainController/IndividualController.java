@@ -8,9 +8,9 @@ public class IndividualController {
 	private static int trainID;
 	private static TrainModel train;
 	private TrainController controller;
-	private boolean suggestionReceived = false;
-	private double pendingSuggestion;
-	private double traveled;
+	private boolean suggestionReceived = false, powerReceived = false, emergencyStopping = false;
+	private double pendingSuggestion, pendingPower, speedGoal;
+	private double traveled=0.0;
 	private int index;
 	
 	public IndividualController(TrainController p_controller, char p_trackLine, int p_trainID, TrainModel p_train, int p_index){
@@ -38,27 +38,70 @@ public class IndividualController {
 	
 	public void SendSpeed(double p_speed){
 		suggestionReceived = true;
-		pendingSuggestion = p_speed;
+		if (p_speed <= train.speedLimit){
+			pendingSuggestion = speedGoal = p_speed;
+		}
+		else{
+			pendingSuggestion = speedGoal = train.speedLimit;
+		}
+		if (emergencyStopping){
+			emergencyStopping = false;
+		}
+	}
+	
+	public void SendPower(double p_power){
+		powerReceived = true;
+		pendingPower = p_power;
+		if (emergencyStopping){
+			emergencyStopping = false;
+		}
+	}
+	
+	public void StopPower(){
+		pendingPower = 0;
+		powerReceived = false;
+		train.currPower = 0.0;
+	}
+	
+	public void EmergencyStop(){
+		emergencyStopping = true;
+	}
+	
+	public double GetDistance(){
+		return traveled;
 	}
 	
 	public int FindTime(double p_distance){
-		double traveled = 0.0;
+		double traveled2 = 0.0;
 		int passed = 0;
 		
-		while (traveled < p_distance){
-			traveled+=train.keepMovingNoDT();
-			if (traveled < p_distance){
+		while (traveled2 < p_distance){
+			traveled2+=train.keepMovingNoDT();
+			if (traveled2 < p_distance){
 				passed++;
 			}
 		}
 		return passed;
 	}
 	
-	public void MoveTrain(){
+	public void MoveTrain() throws InterruptedException{
 		while (true){
-			if (suggestionReceived){
+			if (emergencyStopping){
+				train.HandleEBrake();
+			}
+			else if (suggestionReceived){
 				double initialTime = train.currTime;
-				traveled += train.SetPointSpeed(pendingSuggestion);
+				train.GivePower(train.maxPower);
+				traveled += train.move();
+				controller.timeArray[index] += train.currTime - initialTime;
+				if (train.currSpeed == speedGoal){
+					suggestionReceived = false;
+				}
+			}
+			else if (powerReceived){
+				double initialTime = train.currTime;
+				train.GivePower(pendingPower);
+				traveled += train.move();
 				controller.timeArray[index] += train.currTime - initialTime;
 			}
 			else{
@@ -77,6 +120,8 @@ public class IndividualController {
 					controller.timeArray[index] += 0.5;
 				}
 			}
+			Thread.sleep(250);
+			controller.nonLogPanel.infoPanel.UpdateTrainInfo();
 		}
 	}
 

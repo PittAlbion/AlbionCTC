@@ -23,4 +23,8 @@ public class NonLogPanel extends JPanel{
         this.add(infoPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
+    
+    NonLogPanel ReturnPanel(){
+    	return this;
+    }
 }

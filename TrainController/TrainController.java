@@ -6,6 +6,8 @@ import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import CTCOffice.AddTrainDialog;
 import TrackModel.*;
 import TrainModel.*;
 
@@ -15,12 +17,12 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 
     private JMenuBar menuBar;
     private JMenu fileMenu, helpMenu;
-    private JMenuItem exit, doc, about;
+    private JMenuItem exit, doc, about, addTrain;
 	private JDialog f;
     private Container container;
     private static JPanel mainPane;
     private static LogPanel logPanel;
-    private static NonLogPanel nonLogPanel;
+    static NonLogPanel nonLogPanel;
     private JDialog dialog;
     ArrayList<trackBlock> gTrackList, rTrackList;
     static ArrayList<TrainModel> trainList;
@@ -33,11 +35,6 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     
     public static void main(String[] args) throws InterruptedException{
         new TrainController();
-        
-        Thread.sleep(2000);
-        //CreateNewTrain('G', 1, 3);
-        Thread.sleep(2000);
-        //CreateNewTrain('R', 4, 3);
     }
     
 	public TrainController(){
@@ -54,6 +51,9 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         
         exit = new JMenuItem("Exit");
         exit.addActionListener(this);
+        addTrain = new JMenuItem("Add Train");
+        addTrain.addActionListener(this);
+        fileMenu.add(addTrain);
         fileMenu.add(exit);
         
         doc = new JMenuItem("Documentation");
@@ -97,10 +97,14 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         trainCount++;
         new Thread(new Runnable(){
             public void run(){
-                 controllerList.get((trainCount-1)).MoveTrain();
+                 try {
+					controllerList.get((trainCount-1)).MoveTrain();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         }).start();
-        SendCommand(p_trainID, "Speed", 20.0);
     }
     
     static TrainModel FindTrain(int p_trainID){
@@ -189,9 +193,33 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
     		}
     		else{
-    			FindTrain(p_trainID).SetPointSpeed(0.0);
+    			int index = FindTrainIndex(p_trainID);
+    			controllerList.get(index).EmergencyStop();
     			logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
     		}
+    	}
+    }
+    
+    void GivePower(int p_trainID, double p_value){
+    	if (p_trainID == -1){
+    		logPanel.WriteMessage("No train is selected.\n");
+    	}
+    	else{
+        	logPanel.WriteMessage("Giving " + p_value + " watts of power to Train " + p_trainID + ".\n");
+    		int index = FindTrainIndex(p_trainID);
+    		controllerList.get(index).SendPower(p_value);
+    	}
+    }
+    
+    void StopPower(int p_trainID){
+    	if (p_trainID == -1){
+    		logPanel.WriteMessage("No train is selected.\n");
+    	}
+    	else
+    	{
+        	logPanel.WriteMessage("Stopping power to Train " + p_trainID + ".\n");
+        	int index = FindTrainIndex(p_trainID);
+        	controllerList.get(index).StopPower();
     	}
     }
     
@@ -207,6 +235,10 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     public void actionPerformed(ActionEvent e){
         if (e.getSource().equals(exit)){
             System.exit(0);
+        }
+        else if (e.getSource().equals(addTrain)){
+        	logPanel.WriteMessage("Adding new train...\n");
+			(new AddTrain(this)).setVisible(true);
         }
         else if (e.getSource().equals(doc)){
             //doc shit
