@@ -95,7 +95,11 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         controllerList.add(new IndividualController(this, p_trackLine, p_trainID, trainList.get(trainCount), trainCount));
         timeArray[trainCount] = 0.0;
         trainCount++;
-        controllerList.get((trainCount-1)).MoveTrain();
+        new Thread(new Runnable(){
+            public void run(){
+                 controllerList.get((trainCount-1)).MoveTrain();
+            }
+        }).start();
         SendCommand(p_trainID, "Speed", 20.0);
     }
     
