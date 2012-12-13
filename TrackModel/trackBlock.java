@@ -19,6 +19,9 @@ public class trackBlock {
 	public int swCurrentOption;
 	public boolean brokenRail;
 	public boolean trackHeater;
+	public boolean active;
+	public boolean lights;
+	public String train_line;
 /*
 public trackBlock(String a, String b, int c, int d, double e, int f, String g, double h, double i){
 	

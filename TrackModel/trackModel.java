@@ -17,12 +17,22 @@ public static void main(String[] args) throws IOException{
 greenTrack = buildGreenList("greendata.txt");
 redTrack = buildRedList("redData.txt");
 
-//Create ArrayList for track Crossings	
- trackCrossingList = new ArrayList<trackCrossing>();
- trackCrossing firstOne = new trackCrossing(false,false, 47,"red");
- trackCrossing secondOne = new trackCrossing(false,false,19, "green");
- trackCrossingList.add(firstOne);
- trackCrossingList.add(secondOne);
+//Create ArrayList for track Crossings
+//edit green crossing
+trackBlock greenCblock = greenTrack.get(19);
+greenCblock.active = false;
+greenCblock.lights = false;
+greenCblock.train_line = "green";
+ //trackCrossingList = new ArrayList<trackCrossing>();
+// trackCrossing firstOne = new trackCrossing(false,false, 47,"red");
+ //trackCrossing secondOne = new trackCrossing(false,false,19, "green");
+ //edit red crossing
+trackBlock redCblock = redTrack.get(47);
+redCblock.active = false;
+redCblock.lights = false;
+greenCblock.train_line = "red";
+ //trackCrossingList.add(firstOne);
+ //trackCrossingList.add(secondOne);
 
 
  

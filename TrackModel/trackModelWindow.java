@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -22,6 +23,7 @@ public class trackModelWindow extends JFrame {
 	private JTable table;
 	private JTextArea txtrGreenTrackDownloaded, txtrRedTrackDownloaded;
 	private JTextField textField;
+	private JLabel lblEnterBlockNumber;
 
 	/**
 	 * Launch the application.
@@ -116,33 +118,40 @@ public class trackModelWindow extends JFrame {
 		
 		
 		//create combo box for train color
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(21, 121, 28, 20);
-		contentPane.add(comboBox);
+		//JComboBox comboBox = new JComboBox();
+		//comboBox.setBounds(21, 121, 28, 20);
+		//contentPane.add(comboBox);
 		
 		//create combo box for track block
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(21, 152, 28, 20);
-		contentPane.add(comboBox_1);
+		//JComboBox comboBox_1 = new JComboBox();
+		//comboBox_1.setBounds(68, 121, 28, 20);
+		//contentPane.add(comboBox_1);
 		
 		//create table to display properties
+		
 		
 		table = new JTable();
 		table.setBounds(238, 110, 168, 141);
 		contentPane.add(table);
 		
 		textField = new JTextField();
-		textField.setBounds(10, 228, 86, 20);
+		textField.setBounds(20, 163, 86, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Turn On/Off Heater");
-		btnNewButton.setBounds(10, 194, 136, 23);
+		btnNewButton.setBounds(10, 228, 136, 23);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Update Broken Rail");
-		btnNewButton_1.setBounds(10, 160, 136, 23);
+		btnNewButton_1.setBounds(10, 194, 136, 23);
 		contentPane.add(btnNewButton_1);
+		
+		JTextArea txtrEnterBlockNumber = new JTextArea();
+		txtrEnterBlockNumber.setText("Enter Block Number");
+		txtrEnterBlockNumber.setBackground(Color.gray);
+		txtrEnterBlockNumber.setBounds(20, 130, 163, 22);
+		contentPane.add(txtrEnterBlockNumber);
 		
 	}
 }
