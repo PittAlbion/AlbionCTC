@@ -66,7 +66,7 @@ public class TrackStatPanel extends JPanel implements ActionListener{
 		
 		maintenanceButton = new JButton("Maintenance");
 		if(block.maintenance){
-			maintenanceButton.setText("Clear Maintenance");
+			maintenanceButton.setText("End Maintenance");
 		}
 		maintenanceButton.addActionListener(this);
 		JPanel buttonPanel = new JPanel();

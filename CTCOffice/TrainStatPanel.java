@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -23,26 +24,25 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 	
 	private JButton editButton;
 	private JButton removeButton;
-	private String title;
 	private LogPanel log;
 	private TrackController trackController;
+	TrainModel train;
 	
 	// panels to be created display train info and allow editing
-	public TrainStatPanel(TrainModel train,LogPanel logPanel, TrackController controller){
+	public TrainStatPanel(TrainModel trainM,LogPanel logPanel, TrackController controller){
 		super();
-		title = "Train " + train.trainID;
 		log = logPanel;
+		train = trainM;
 		trackController = controller;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
-		this.setMaximumSize(this.getPreferredSize());
-		this.setBorder(new TitledBorder(title));
-		this.add(new JTextField("Current Location: " + train.trackLine + train.blockID));
-		this.add(new JTextField("Current Speed: " + train.currSpeed));
-		this.add(new  JTextField("Passengers: " + (int)train.passengerTotal));
-		this.add(new JTextField("Current Authority: " + train.currAuthority));
+		this.setBorder(new TitledBorder("Train " + train.trainID));
+		this.add(new JLabel("Current Location: " + train.trackLine + train.blockID));
+		this.add(new JLabel("Current Speed: " + train.currSpeed));
+		this.add(new  JLabel("Passengers: " + (int)train.passengerTotal));
+		this.add(new JLabel("Current Authority: " + train.currAuthority));
 		String status = (train.doorsClosed) ? "Closed" : "Open";
-		this.add(new JTextField("Door Status: " + status));
+		this.add(new JLabel("Door Status: " + status));
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setMaximumSize(new Dimension(150,50));
@@ -56,7 +56,9 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 		buttonPanel.add(removeButton);
 		
 		//add in other properties before buttons
+		
 		this.add(buttonPanel);
+		this.setMaximumSize(this.getPreferredSize());
 	}
 
 	@Override
@@ -64,10 +66,11 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 		
 		//call edit method and pass suggestion to track controller
 		if(event.getSource().equals(editButton)){
-			log.UpdateLog("Editing "+title);
+			new TrainEditDialog(train,trackController);
+			log.UpdateLog("Editing Train " + train.trainID);
 		}
 		else if(event.getSource().equals(removeButton)){
-			log.UpdateLog("Routing "+title+"back to station");
+			log.UpdateLog("Routing Train " + train.trainID+"back to station");
 		}
 		
 	}

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,42 +17,46 @@ import javax.swing.border.TitledBorder;
 
 import TrackController.TrackController;
 import TrackModel.trackBlock;
+import TrainModel.TrainModel;
 
-@SuppressWarnings("serial")
-public class TrackEditDialog extends JFrame implements ActionListener{
-
+public class TrainEditDialog extends JFrame implements ActionListener{
 	JButton okButton,cancelButton;
 	String label;
-	JTextField entry;
-	Checkbox maintenance;
+	JTextField speed;
+	JTextField auth;
 	TrackController controller;
-	trackBlock block;
-	TrackEditDialog(trackBlock trackBlock, TrackController trackController){
-		super("Edit Track Dialog");
+	TrainModel train;
+	TrainEditDialog(TrainModel trainM, TrackController trackController){
+		super("Edit Train Dialog");
 		label = "Track";
 		setMinimumSize(new Dimension(250,200));
 		setPreferredSize(this.getMinimumSize());
 		setResizable(false);
 		controller = trackController;
-		block = trackBlock;
+		train = trainM;
 		JPanel master = new JPanel();
 		
 		master.setLayout(new BorderLayout());
-		master.setBorder(new TitledBorder(block.track_line +" " + block.block_number));
+		master.setBorder(new TitledBorder("Train " + train.trainID));
 		
 		JPanel fieldPanel = new JPanel();
 		fieldPanel.setLayout(new GridLayout(2,1));
-		JPanel speedLimit = new JPanel();
-		speedLimit.setLayout(new GridLayout(1,2));
-		JLabel label = new JLabel("Speed Limit: ");
-		speedLimit.add(label);
-		entry = new JTextField();
-		entry.setText(new Integer(block.speed_limit).toString());
-		speedLimit.add(entry);
-		maintenance = new Checkbox("Maintenance", block.maintenance);
+		JPanel speedPanel = new JPanel();
+		speedPanel.setLayout(new GridLayout(1,2));
+		JLabel label = new JLabel("Current Speed: ");
+		speed = new JTextField(new Integer((int) train.currSpeed).toString());
+		speedPanel.add(label);
+		speedPanel.add(speed);
+		JPanel authPanel = new JPanel();
+		authPanel.setLayout(new GridLayout(1,2));
+		JLabel authLabel = new JLabel("Current Authority: ");
+		auth = new JTextField(new Integer((int)train.currAuthority).toString());
+		authPanel.add(authLabel);
+		authPanel.add(auth);
 		
-		fieldPanel.add(speedLimit);
-		fieldPanel.add(maintenance);
+		
+		fieldPanel.add(speedPanel);
+		fieldPanel.add(authPanel);
 		
 		master.add(fieldPanel,BorderLayout.CENTER);
 		
@@ -75,12 +78,13 @@ public class TrackEditDialog extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(okButton)){
 				Object[] message = new Object[6];
-				message[0] = label;
-				message[1] = block.track_line.substring(0,1)+block.block_number;
-				message[2] = "Speed";
-				message[3] = entry.getText();
-				message[4] = "maintenance";
-				message[5] = maintenance.getState();
+				message[0] = "Train";
+				message[1] = train.trainID;
+				message[2] = "speed";
+				message[3] = speed.getText();
+				message[4] = "authority";
+				message[5] = auth.getText();
+
 				
 				controller.GetSuggestion(message);
 				this.dispose();
@@ -91,5 +95,4 @@ public class TrackEditDialog extends JFrame implements ActionListener{
 		}
 		
 	}
-
 }
