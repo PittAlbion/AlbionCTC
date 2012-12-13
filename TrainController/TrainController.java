@@ -27,7 +27,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     ArrayList<trackBlock> gTrackList, rTrackList;
     static ArrayList<TrainModel> trainList;
     static ArrayList<IndividualController> controllerList;
-    static double[] timeArray;
+    double[] timeArray;
     static int trainCount = 0;
     static String[] trainIDArray;
     int currentTrain = -1;
@@ -100,7 +100,6 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
                  try {
 					controllerList.get((trainCount-1)).MoveTrain();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             }
@@ -108,12 +107,21 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     static TrainModel FindTrain(int p_trainID){
-        for (int i = 0; i < trainList.size(); i++){
+        for (int i = 0; i < trainCount; i++){
             if (trainList.get(i).trainID == p_trainID){
                 return trainList.get(i);
             }
         }
         return null;
+    }
+    
+    static IndividualController FindController(int p_trainID){
+		for (int i = 0; i < trainCount; i++){
+			if (controllerList.get(i).trainID == p_trainID){
+				return controllerList.get(i);
+			}
+		}
+		return null;
     }
     
     public void SendTrackLists(ArrayList<trackBlock> p_gTrackList, ArrayList<trackBlock> p_rTrackList){
@@ -122,7 +130,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     }
     
     static int FindTrainIndex(int p_trainID){
-		for (int i=0; i <= trainList.size(); i++){
+		for (int i=0; i <= trainCount; i++){
 			if (trainIDArray[i].equals(""+p_trainID)){
 				return i;
 			}
@@ -130,19 +138,27 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 		return 0;
     }
     
-    public static void SendCommand(int p_trainID, String p_type, double p_value){
-    	int index = FindTrainIndex(p_trainID);
-        TrainModel train = trainList.get(index);
-        IndividualController controller = controllerList.get(index);
+    void CallUpdate(){
+    	nonLogPanel.ManualUpdate();
+    }
+    
+    public static boolean SendCommand(int p_trainID, String p_type, double p_value){
+    	boolean accepted = false;
+        TrainModel train = FindTrain(p_trainID);
+        IndividualController controller = FindController(p_trainID);
         if (train != null){
             if (p_type.equals("Speed")){
-            	controller.SendSpeed(p_value);
-                train.SetPointSpeed(p_value);
+            	if (p_value <= controller.train.speedLimit){
+                	controller.SendSpeed(p_value);
+                	accepted = true;
+            	}
             }else if (p_type.equals("Authority")){
                 train.SetAuthority(p_value);
+                accepted = true;
             }
         }
         logPanel.WriteMessage(p_type + " suggestion recieved.\n");
+        return accepted;
     }
     
     public ArrayList<TrainModel> GetTrainList(){
@@ -154,6 +170,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     	logPanel.WriteMessage("Calling CTC Office...\n");
     }
     
+    /*
     void IncreaseSpeed(int p_trainID){
     	if (p_trainID == -1){
 			logPanel.WriteMessage("No train is selected.\n");
@@ -182,7 +199,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
     		}
     	}
-    }
+    }*/
     
     void EmergencyStop(int p_trainID){
     	if (p_trainID == -1){
@@ -193,8 +210,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
     		}
     		else{
-    			int index = FindTrainIndex(p_trainID);
-    			controllerList.get(index).EmergencyStop();
+    			IndividualController controller = FindController(p_trainID);
+    			controller.EmergencyStop();
     			logPanel.WriteMessage("Train " + p_trainID + " has been stopped.\n");
     		}
     	}
@@ -206,8 +223,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     	}
     	else{
         	logPanel.WriteMessage("Giving " + p_value + " watts of power to Train " + p_trainID + ".\n");
-    		int index = FindTrainIndex(p_trainID);
-    		controllerList.get(index).SendPower(p_value);
+    		IndividualController controller = FindController(p_trainID);
+    		controller.SendPower(p_value);
     	}
     }
     
@@ -218,8 +235,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     	else
     	{
         	logPanel.WriteMessage("Stopping power to Train " + p_trainID + ".\n");
-        	int index = FindTrainIndex(p_trainID);
-        	controllerList.get(index).StopPower();
+        	IndividualController controller = FindController(p_trainID);
+    		controller.StopPower();
     	}
     }
     

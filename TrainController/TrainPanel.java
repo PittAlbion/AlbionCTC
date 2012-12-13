@@ -38,6 +38,7 @@ public class TrainPanel extends JPanel implements ActionListener{
 			JComboBox selection = (JComboBox)e.getSource();
 			selectedTrain = Integer.parseInt((String)selection.getSelectedItem());
 			controller.currentTrain = selectedTrain;
+			System.out.println("\n" + controller.currentTrain + "\n");
 			infoPanel.UpdateTrainInfo();
 		}
 		

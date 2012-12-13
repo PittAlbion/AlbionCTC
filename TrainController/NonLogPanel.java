@@ -7,7 +7,7 @@ import javax.swing.*;
 public class NonLogPanel extends JPanel{
 
     //private static JPanel infoPanel, buttonPanel;
-	InfoPanel infoPanel;
+	private InfoPanel infoPanel;
 	private static ButtonPanel buttonPanel;
 	TrainPanel trainPanel;
     
@@ -24,7 +24,7 @@ public class NonLogPanel extends JPanel{
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
     
-    NonLogPanel ReturnPanel(){
-    	return this;
+    void ManualUpdate(){
+    	infoPanel.UpdateTrainInfo();
     }
 }

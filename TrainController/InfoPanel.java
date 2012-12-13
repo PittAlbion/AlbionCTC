@@ -7,9 +7,9 @@ import TrainModel.*;
 @SuppressWarnings({ "serial", "static-access" })
 public class InfoPanel extends JPanel{
 
-	private JLabel speedLimit, currentSpeed, currentAuthority, distanceTraveled, doorStatus, lightStatus, nextStop, currentPower;
+	private JLabel speedLimit, currentSpeed, currentAuthority, distanceTraveled, doorStatus, lightStatus, currentPower;//nextStop, 
 	private TrainController controller;
-	private TrainModel currentModel;
+	TrainModel currentModel;
 	
     InfoPanel(TrainController p_controller){
     	super();
@@ -44,7 +44,7 @@ public class InfoPanel extends JPanel{
     		currentSpeed.setText("Train Speed: " + currentModel.currSpeed);
     		currentPower.setText("Current Power: " + currentModel.currPower);
     		currentAuthority.setText("Authority: " + currentModel.currAuthority);
-    		distanceTraveled.setText("Distance Traveled: " + controller.controllerList.get(controller.FindTrainIndex(controller.currentTrain)).GetDistance()); //fix
+    		distanceTraveled.setText("Distance Traveled: " + controller.FindController(controller.currentTrain).GetDistance()); //fix
     		doorStatus.setText("Doors Closed: " + currentModel.doorsClosed);
     		lightStatus.setText("Lights On: " + currentModel.lightsOn);
     		//nextStop.setText("Next Stop: Nowhere"); //fix
