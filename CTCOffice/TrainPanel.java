@@ -18,8 +18,12 @@ public class TrainPanel extends JPanel {
 	
 	private LogPanel log;
 	private TrackController trackController;
-	
-	//setup panel for holding train info panels
+
+	/**<NEWLINE>
+	 * Creates a Panel to display the trains in the system
+	 * @param logPanel
+	 * @param controller
+	 */
 	TrainPanel(LogPanel logPanel,TrackController controller){
 		super();
 		this.setLayout(new GridLayout(1,1));
@@ -35,7 +39,11 @@ public class TrainPanel extends JPanel {
 		this.add(new TrainStatPanel(train,log,trackController));
 	}
 	
-	void Update(ArrayList<TrainModel> trains){
+	/**<NEWLINE>
+	 * Updates the Panel to display the trains provided in the ArrayList
+	 * @param trains
+	 */
+	public void Update(ArrayList<TrainModel> trains){
 		this.removeAll();
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));

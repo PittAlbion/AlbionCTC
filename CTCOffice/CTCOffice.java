@@ -29,8 +29,8 @@ public class CTCOffice extends JFrame implements ActionListener{
 	private JPanel mainPane;
 	private Container mainContainer;
 	private JTabbedPane tabPane;
-	private TrainPanel trainPanel;
-	private TrackPanel greenTrackPanel,redTrackPanel;
+	public TrainPanel trainPanel;
+	public TrackPanel greenTrackPanel,redTrackPanel;
 	public LogPanel logPanel;
 	public TrackController trackController;
 	public ArrayList<trackBlock> greenBlocks;
@@ -41,12 +41,18 @@ public class CTCOffice extends JFrame implements ActionListener{
 		new CTCOffice();
 	}
 
+	/**<NEWLINE>
+	 * Constructor to create CTC office for the system.
+	 * Creates Track monitors for the Routes as well as
+	 * a Train monitor.
+	 * @throws IOException
+	 */
 	CTCOffice() throws IOException{
 		super("Albion Train Control v1.0");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(600, 800);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-		trackController = new TrackController();
+		trackController = new TrackController(this);
 		new Thread(trackController).start();
 		greenBlocks = trackController.greenList;
 		redBlocks = trackController.redList;
@@ -111,6 +117,9 @@ public class CTCOffice extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 	
+	/**<NEWLINE>
+	 * Action Listener for CTC OFFICE window
+	 */
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource().equals(systemExitItem)){
 			logPanel.UpdateLog("**System Shutting Down\n");

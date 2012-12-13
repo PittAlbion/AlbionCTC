@@ -5,6 +5,7 @@
 
 package TrackController;
 
+import CTCOffice.CTCOffice;
 import TrackModel.*;
 import TrainController.*;
 import TrainModel.*;
@@ -31,6 +32,7 @@ public class TrackController extends JFrame implements Runnable {
 		public static trackModel tm = new trackModel();
 		public static TrainController tc;
 		public static TrackController tr;
+		private CTCOffice office;
 		static GUI myGUI;
 		
 		public int id = 0;
@@ -53,16 +55,17 @@ public class TrackController extends JFrame implements Runnable {
 		 */
 		public static void main(String [] args) throws InterruptedException, IOException{
 			
-			tr = new TrackController();
+			tr = new TrackController(null);
 				
 		}
+		
 		
 		/**
 		 * Empty constructor for whomever would like to instance the GUI can use to do so.
 		 * Loads in the track lists and creates controllers based on that information.
 		 * @throws IOException
 		 */
-		public TrackController() throws IOException
+		public TrackController(CTCOffice tempOffice) throws IOException
 		{
 			TrackController t;
 			myGUI = new GUI(); 
@@ -102,6 +105,7 @@ public class TrackController extends JFrame implements Runnable {
 			tc = new TrainController();
 			tm = new trackModel();
 			
+			office = tempOffice;
 			//Debug purposes
 			//System.out.println("Green Track List Length: " + greenList.size());
 			//System.out.println("Red Track List Length: " + redList.size());
@@ -200,6 +204,16 @@ public class TrackController extends JFrame implements Runnable {
 	    			}
 	    		}
 	            else{;}//Invalid suggestion
+	    		
+	    		if (lineSelect.equals("G")){
+	    			if(!office.equals(null))
+	    				office.greenTrackPanel.Update(greenList);
+	    		}
+	    		else if (lineSelect.equals("R")){
+	    			if(!office.equals(null))
+	    				office.redTrackPanel.Update(redList);
+	    		}
+	    		
 					
 	    }
 	    
@@ -345,6 +359,7 @@ public class TrackController extends JFrame implements Runnable {
 	    public void addTrain(char p_trackLine, int p_trainID, int p_cars ){
 	    	
 	    	tc.CreateNewTrain(p_trackLine, p_trainID, p_cars);
+	    	getTrainList();
 	    	
 	    }
 	    
@@ -352,9 +367,11 @@ public class TrackController extends JFrame implements Runnable {
 	     * Function that sends back an up to date list of trains in the system
 	     * @return ArrayList<TrainModel>
 	     */
-	    public ArrayList<TrainModel> getTrainList(){
+	    public void getTrainList(){
 	    	
-	    	return trainList;
+	    	trainList = tc.trainList;
+	    	
+	    	office.trainPanel.Update(trainList);
 	    	
 	    }
 }

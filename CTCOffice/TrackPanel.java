@@ -18,6 +18,16 @@ public class TrackPanel extends JPanel{
 	//panel for holding track info panels
 	private LogPanel log;
 	private TrackController controller;
+	/**<NEWLINE>
+	 * Creates a TrackWatcher Panel for the provided
+	 * blocks in the ArrayList, with the provided TrackController,
+	 * Updating to the provided logPanel, The Panel will have the
+	 * provided name.
+	 * @param name
+	 * @param logPanel
+	 * @param blocks
+	 * @param trackController
+	 */
 	TrackPanel(String name,
 			   LogPanel logPanel,
 			   ArrayList<trackBlock> blocks,
@@ -28,12 +38,14 @@ public class TrackPanel extends JPanel{
 		log = logPanel;
 		controller = trackController;
 		Update(blocks);
-		
-		
-		
 	}
 	
-	void Update(ArrayList<trackBlock> blocks){
+	/**<NEWLINE>
+	 * Updates the panel to display the blocks listed in the ArrayList
+	 * @param blocks
+	 * @return 
+	 */
+	public void Update(ArrayList<trackBlock> blocks){
 		this.removeAll();
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
