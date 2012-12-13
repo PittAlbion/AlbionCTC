@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import TrackController.TrackController;
@@ -29,13 +30,19 @@ public class TrainStatPanel extends JPanel implements ActionListener{
 	// panels to be created display train info and allow editing
 	public TrainStatPanel(TrainModel train,LogPanel logPanel, TrackController controller){
 		super();
-		title = "Train ";
+		title = "Train " + train.trainID;
 		log = logPanel;
 		trackController = controller;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(150,300));
 		this.setMaximumSize(this.getPreferredSize());
 		this.setBorder(new TitledBorder(title));
+		this.add(new JTextField("Current Location: " + train.trackLine + train.blockID));
+		this.add(new JTextField("Current Speed: " + train.currSpeed));
+		this.add(new  JTextField("Passengers: " + (int)train.passengerTotal));
+		this.add(new JTextField("Current Authority: " + train.currAuthority));
+		String status = (train.doorsClosed) ? "Closed" : "Open";
+		this.add(new JTextField("Door Status: " + status));
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setMaximumSize(new Dimension(150,50));
