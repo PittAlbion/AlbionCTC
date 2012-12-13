@@ -25,7 +25,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     ArrayList<trackBlock> gTrackList, rTrackList;
     static ArrayList<TrainModel> trainList;
     static ArrayList<IndividualController> controllerList;
-    private static int trainCount = 0;
+    static double[] timeArray;
+    static int trainCount = 0;
     static String[] trainIDArray;
     int currentTrain = -1;
     
@@ -34,9 +35,9 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         new TrainController();
         
         Thread.sleep(2000);
-        CreateNewTrain('G', 1, 3);
+        //CreateNewTrain('G', 1, 3);
         Thread.sleep(2000);
-        CreateNewTrain('R', 4, 3);
+        //CreateNewTrain('R', 4, 3);
     }
     
 	public TrainController(){
@@ -82,16 +83,20 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         rTrackList = new ArrayList();
         trainList = new ArrayList();
         controllerList = new ArrayList();
+        timeArray = new double[100];
     }
     
-    public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
+    public void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
         trainList.add(new TrainModel(p_trackLine, p_trainID, p_cars));
         trainIDArray[trainCount] = ""+p_trainID;
         nonLogPanel.trainPanel.UpdateTrainBox();
         logPanel.WriteMessage("Train Created: " + p_trackLine + p_trainID + "\n");
         trainList.get(trainCount).SetLimits(50.0, 3.0, 2.5);
-        controllerList.add(new IndividualController(p_trackLine, p_trainID, trainList.get(trainCount)));
+        controllerList.add(new IndividualController(this, p_trackLine, p_trainID, trainList.get(trainCount), trainCount));
+        timeArray[trainCount] = 0.0;
         trainCount++;
+        controllerList.get((trainCount-1)).MoveTrain();
+        SendCommand(p_trainID, "Speed", 20.0);
     }
     
     static TrainModel FindTrain(int p_trainID){
@@ -123,6 +128,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         IndividualController controller = controllerList.get(index);
         if (train != null){
             if (p_type.equals("Speed")){
+            	controller.SendSpeed(p_value);
                 train.SetPointSpeed(p_value);
             }else if (p_type.equals("Authority")){
                 train.SetAuthority(p_value);
