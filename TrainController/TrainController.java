@@ -81,6 +81,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         gTrackList = new ArrayList();
         rTrackList = new ArrayList();
         trainList = new ArrayList();
+        controllerList = new ArrayList();
     }
     
     public static void CreateNewTrain(char p_trackLine, int p_trainID, int p_cars){
