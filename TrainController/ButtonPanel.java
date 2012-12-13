@@ -38,8 +38,10 @@ public class ButtonPanel extends JPanel implements ActionListener{
     
     public void actionPerformed(ActionEvent e){
     	if (e.getSource().equals(power)){
-    		controller.GivePower(controller.currentTrain, Double.parseDouble(powerValue.getText()));
-    		infoPanel.UpdateTrainInfo();
+    		if (!powerValue.getText().equals("Power (W)")){
+    			controller.GivePower(controller.currentTrain, Double.parseDouble(powerValue.getText()));
+    			infoPanel.UpdateTrainInfo();
+    		}
     	}
         else if (e.getSource().equals(stop)){
             controller.EmergencyStop(controller.currentTrain);

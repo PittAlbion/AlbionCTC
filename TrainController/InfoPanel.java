@@ -23,8 +23,7 @@ public class InfoPanel extends JPanel{
     	currentAuthority = new JLabel("Authority: No train selected");
     	distanceTraveled = new JLabel("Distance Traveled: No train selected");
     	doorStatus = new JLabel("Doors Closed: No train selected");
-    	lightStatus = new JLabel("Lights On: No train selected");// + currentModel.lightOn);
-    	//nextStop = new JLabel("Next Stop: No train selected"); //fix
+    	lightStatus = new JLabel("Lights On: No train selected");
         
     	this.add(speedLimit);
     	this.add(currentSpeed);
@@ -33,7 +32,6 @@ public class InfoPanel extends JPanel{
     	this.add(distanceTraveled);
     	this.add(doorStatus);
     	this.add(lightStatus);
-    	//this.add(nextStop);
     }
     
     void UpdateTrainInfo(){
@@ -47,7 +45,6 @@ public class InfoPanel extends JPanel{
     		distanceTraveled.setText("Distance Traveled: " + controller.FindController(controller.currentTrain).GetDistance()); //fix
     		doorStatus.setText("Doors Closed: " + currentModel.doorsClosed);
     		lightStatus.setText("Lights On: " + currentModel.lightsOn);
-    		//nextStop.setText("Next Stop: Nowhere"); //fix
     	}
     }
 }

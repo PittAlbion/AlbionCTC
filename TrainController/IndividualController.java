@@ -21,22 +21,6 @@ public class IndividualController {
 		index = p_index;
 	}
 	
-	//Unused
-	public int RunTrain(double p_distance){
-		double testTravel = 0.0;
-		double traveled2 = 0.0;
-		int passed = 0;
-		
-		while (traveled2 < p_distance){
-			testTravel += train.keepMovingNoDT();
-			if (testTravel < p_distance){
-				traveled2 += train.keepMoving();
-				passed++;
-			}
-		}
-		return passed;
-	}
-	
 	public void SendSpeed(double p_speed){
 		suggestionReceived = true;
 		if (p_speed <= train.speedLimit){
@@ -70,20 +54,6 @@ public class IndividualController {
 	
 	public double GetDistance(){
 		return traveled;
-	}
-	
-	//Unused
-	public int FindTime(double p_distance){
-		double traveled2 = 0.0;
-		int passed = 0;
-		
-		while (traveled2 < p_distance){
-			traveled2+=train.keepMovingNoDT();
-			if (traveled2 < p_distance){
-				passed++;
-			}
-		}
-		return passed;
 	}
 	
 	public void MoveTrain() throws InterruptedException{
@@ -120,18 +90,6 @@ public class IndividualController {
 				traveled += train.keepMoving();
 				controller.timeArray[index] += 0.5;
 			}
-			/*double maxTime=0;/*
-			for (int i = 0; i < controller.trainCount; i++){
-				if (maxTime < controller.timeArray[i]){
-					maxTime = controller.timeArray[i];
-				}
-			}
-			if (controller.timeArray[index] < maxTime){
-				while (controller.timeArray[index] < maxTime){
-					traveled += train.keepMoving();
-					controller.timeArray[index] += 0.5;
-				}
-			}*/
 			Thread.sleep(250);
 			if (controller.currentTrain == trainID){
 				controller.CallUpdate();

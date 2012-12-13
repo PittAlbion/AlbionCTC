@@ -6,7 +6,6 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class NonLogPanel extends JPanel{
 
-    //private static JPanel infoPanel, buttonPanel;
 	private InfoPanel infoPanel;
 	private static ButtonPanel buttonPanel;
 	TrainPanel trainPanel;

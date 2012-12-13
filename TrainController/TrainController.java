@@ -17,7 +17,7 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
 
     private JMenuBar menuBar;
     private JMenu fileMenu, helpMenu;
-    private JMenuItem exit, doc, about, addTrain;
+    private JMenuItem exit, about, addTrain;
 	private JDialog f;
     private Container container;
     private static JPanel mainPane;
@@ -56,11 +56,8 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         fileMenu.add(addTrain);
         fileMenu.add(exit);
         
-        doc = new JMenuItem("Documentation");
-        doc.addActionListener(this);
         about = new JMenuItem("About");
         about.addActionListener(this);
-        helpMenu.add(doc);
         helpMenu.add(about);
         
         menuBar.add(fileMenu);
@@ -170,37 +167,6 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
     	logPanel.WriteMessage("Calling CTC Office...\n");
     }
     
-    /*
-    void IncreaseSpeed(int p_trainID){
-    	if (p_trainID == -1){
-			logPanel.WriteMessage("No train is selected.\n");
-    	}
-    	else{
-    		FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed+.1);
-    		logPanel.WriteMessage("Train " + p_trainID + " speed increased to " + FindTrain(p_trainID).currSpeed + ".\n");
-    	}
-    }
-    
-    void DecreaseSpeed(int p_trainID){
-    	if (p_trainID == -1){
-    		logPanel.WriteMessage("No train is selected.\n");
-    	}
-    	else{
-    		if (FindTrain(p_trainID).currSpeed > 0.0){
-    			if (FindTrain(p_trainID).currSpeed-.1 < 0.0){
-    				FindTrain(p_trainID).SetPointSpeed(0.0);
-    			}
-    			else{
-    				FindTrain(p_trainID).SetPointSpeed(FindTrain(p_trainID).currSpeed-.1);
-    				logPanel.WriteMessage("Train " + p_trainID + " speed decreased to " + FindTrain(p_trainID).currSpeed + ".\n");
-    			}
-    		}
-    		else{
-    			logPanel.WriteMessage("Train " + p_trainID + " is already stopped.\n");
-    		}
-    	}
-    }*/
-    
     void EmergencyStop(int p_trainID){
     	if (p_trainID == -1){
     		logPanel.WriteMessage("No train is selected.\n");
@@ -256,9 +222,6 @@ public class TrainController extends JFrame implements Runnable, ActionListener{
         else if (e.getSource().equals(addTrain)){
         	logPanel.WriteMessage("Adding new train...\n");
 			(new AddTrain(this)).setVisible(true);
-        }
-        else if (e.getSource().equals(doc)){
-            //doc shit
         }
         else if (e.getSource().equals(about)){
             dialog = new AboutBox(new JFrame());
