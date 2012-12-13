@@ -1,0 +1,58 @@
+Repo,Title,Description,Date created,Date modified,Issue type,Milestone,State,Open/Closed,Reporter,URL
+PittAlbion/AlbionCTC,TrainController GUI is not handling multiple trains correctly,Train info is freaking out when switching between different trains.,12/13/2012 16:56,12/13/2012 17:34,Bug,None,,closed,tuckervento,https://github.com/PittAlbion/AlbionCTC/issues/14
+PittAlbion/AlbionCTC,Using the Emergency Brake causes a hang,TrainController hangs when the Emergency Brake is used.,12/13/2012 16:48,12/13/2012 16:51,Bug,None,,closed,tuckervento,https://github.com/PittAlbion/AlbionCTC/issues/13
+PittAlbion/AlbionCTC,TrainController info window shows trains covering impossible distances,Distance traveled shows values in the magnitude of 10^10.,12/13/2012 16:43,12/13/2012 16:51,Bug,None,,closed,tuckervento,https://github.com/PittAlbion/AlbionCTC/issues/12
+PittAlbion/AlbionCTC,Trains that have been stopped cannot start again,"After the emergency brake is thrown in the TrainController GUI, the train cannot start moving again.",12/13/2012 16:42,12/13/2012 16:49,Bug,None,,closed,tuckervento,https://github.com/PittAlbion/AlbionCTC/issues/11
+PittAlbion/AlbionCTC,Parsing Track Data File Error,File not properly storing elevation and cumulative elevation file. Null Pointer Exception error when trying to print out the results,12/13/2012 15:17,12/13/2012 15:20,,None,,closed,fdyska,https://github.com/PittAlbion/AlbionCTC/issues/9
+PittAlbion/AlbionCTC,Power going too high,Power was going over the accepted limit in some setpoint commands.,12/13/2012 14:47,12/13/2012 14:47,,None,,closed,ShaneLester,https://github.com/PittAlbion/AlbionCTC/issues/8
+PittAlbion/AlbionCTC,Train going in reverse when it shouldn't,"When using some setpointspeed commands, train was going with negative speed when it shouldn't.",12/13/2012 14:46,12/13/2012 14:47,,None,,closed,ShaneLester,https://github.com/PittAlbion/AlbionCTC/issues/7
+PittAlbion/AlbionCTC,Null Pointer adding train,"Exception in thread ""AWT-EventQueue-0"" java.lang.NullPointerException
+	at TrainController.TrainController.CreateNewTrain(TrainController.java:92)
+	at TrackController.TrackController.addTrain(TrackController.java:347)
+	at CTCOffice.AddTrainDialog.actionPerformed(AddTrainDialog.java:88)
+	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
+	at java.awt.Component.processMouseEvent(Unknown Source)
+	at javax.swing.JComponent.processMouseEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+	at java.awt.EventQueue.access$000(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.awt.EventQueue$3.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(Unknown Source)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.awt.EventQueue$4.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.run(Unknown Source)",12/12/2012 19:26,12/13/2012 12:43,,None,,closed,benjaminplong,https://github.com/PittAlbion/AlbionCTC/issues/6
+PittAlbion/AlbionCTC,Null Pointer Exception from TrackController When using a suggestion,use suggestions gives null pointer exception.,12/12/2012 18:26,12/12/2012 20:00,Bug,None,,closed,benjaminplong,https://github.com/PittAlbion/AlbionCTC/issues/5
+PittAlbion/AlbionCTC,Broken Code in Train Controller,"CommandPanel.java make use of a statisticPanel at lines 80,81 and is not a valid use.
+
+*** really in Track Controller.",12/12/2012 17:51,12/12/2012 18:01,,None,,closed,benjaminplong,https://github.com/PittAlbion/AlbionCTC/issues/4
+PittAlbion/AlbionCTC,Suggestion Line + Block Number being sent incorrectly,"When the CTC Office sends a request to the Track Controller to change a track block's speed limit, the Line + Block Number are being sent in ASCII format, not in a String of format ""G14"" (for example).",12/11/2012 22:57,12/13/2012 16:35,Bug,None,,closed,Calvin-Souders,https://github.com/PittAlbion/AlbionCTC/issues/2
+PittAlbion/AlbionCTC,Test,This is a test so we can all figure out how to use this system and get our points for this.,12/10/2012 2:01,12/12/2012 0:31,,None,,closed,Calvin-Souders,https://github.com/PittAlbion/AlbionCTC/issues/1
+PittAlbion/AlbionCTC,Switching of a track segment doesn't actually do anything,"These components are not currently doing anything, time has run out.",12/13/2012 17:15,12/13/2012 17:15,,None,,open,Calvin-Souders,https://github.com/PittAlbion/AlbionCTC/issues/16
+PittAlbion/AlbionCTC,Activation/Deactivation of crossings are not currently working,"These components are not currently doing anything, time has run out.",12/13/2012 17:15,12/13/2012 17:15,,None,,open,Calvin-Souders,https://github.com/PittAlbion/AlbionCTC/issues/15
+PittAlbion/AlbionCTC,Known Defect: PLC Import does nothing.,PLC Import does nothing. Will not be functional.,12/13/2012 16:36,12/13/2012 16:36,Bug,None,,open,Calvin-Souders,https://github.com/PittAlbion/AlbionCTC/issues/10
+PittAlbion/AlbionCTC,Setpoint speed seems to take too long to go short increases,"for instance, going from 0-15 takes 42 seconds, going from 15-16 takes 38 more....",12/12/2012 12:12,12/12/2012 12:12,,None,,open,ShaneLester,https://github.com/PittAlbion/AlbionCTC/issues/3
