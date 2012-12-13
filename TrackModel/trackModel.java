@@ -17,20 +17,21 @@ public static void main(String[] args) throws IOException{
 greenTrack = buildGreenList("greendata.txt");
 redTrack = buildRedList("redData.txt");
 
+
 //Create ArrayList for track Crossings
 //edit green crossing
-trackBlock greenCblock = greenTrack.get(19);
-greenCblock.active = false;
-greenCblock.lights = false;
-greenCblock.train_line = "green";
+//trackBlock greenCblock = greenTrack.get(19);
+//greenCblock.active = false;
+//greenCblock.lights = false;
+//greenCblock.train_line = "green";
  //trackCrossingList = new ArrayList<trackCrossing>();
 // trackCrossing firstOne = new trackCrossing(false,false, 47,"red");
  //trackCrossing secondOne = new trackCrossing(false,false,19, "green");
  //edit red crossing
-trackBlock redCblock = redTrack.get(47);
-redCblock.active = false;
-redCblock.lights = false;
-greenCblock.train_line = "red";
+//trackBlock redCblock = redTrack.get(47);
+//redCblock.active = false;
+//redCblock.lights = false;
+//greenCblock.train_line = "red";
  //trackCrossingList.add(firstOne);
  //trackCrossingList.add(secondOne);
 
@@ -71,6 +72,8 @@ greenCblock.train_line = "red";
  currentBlock6.edit_swRight(100);
  currentBlock6.edit_swCurrent(86);
  
+
+
 //Red Switches
  //9
  trackBlock currentBlock7 = redTrack.get(9);
@@ -107,6 +110,7 @@ greenCblock.train_line = "red";
  currentBlock13.edit_swLeft(53);
  currentBlock13.edit_swRight(64);
  currentBlock13.edit_swCurrent(53);
+ 
  
  
  //EventQueue.invokeLater(new Runnable() {
@@ -158,7 +162,12 @@ for(int i= 0; i<150; i++){
 	
 in.close();
     System.out.println("Green Track Uploaded");
-	return newGreenTrack;
+	
+    //Update Switches//////////
+    
+   
+    return newGreenTrack;
+	
 }
 
 
@@ -191,9 +200,74 @@ System.out.println(red_block.block_number);
 }
 	inRed.close();
 	System.out.println("Red Track Uploaded");
-	return newRedTrack;
+	
+	 
+	
+	 return newRedTrack;
 	
 	
+}
+public static void edit_GreenHeater(int blockNumber){
+	
+	trackBlock tempBlock1 = greenTrack.get(blockNumber);
+	if(tempBlock1.trackHeater == false){
+		
+		tempBlock1.trackHeater = true;
+		System.out.println("Heater for Block "+blockNumber+" on Green Line is now on");
+	}
+	else{
+		tempBlock1.trackHeater = false;
+		System.out.println("Heater for Block "+blockNumber+" on Green Line is now off");
+	}
+	
+	
+}
+
+public static void update_greenBrokenRail(int blockNumber){
+
+trackBlock tempBlock4 = greenTrack.get(blockNumber);
+	
+	if(tempBlock4.brokenRail == false){
+		
+		tempBlock4.brokenRail = true;
+		System.out.println("There is a broken rail on "+blockNumber);
+	}
+	else{
+		tempBlock4.brokenRail = false;
+		System.out.println("Broken Rail has been fixed on Block "+blockNumber);
+	}
+	}
+public static void edit_redHeater(int blockNumber){
+	
+	trackBlock tempBlock2 = redTrack.get(blockNumber);
+	
+	if(tempBlock2.trackHeater == false){
+		
+		tempBlock2.trackHeater = true;
+		System.out.println("Heater for Block "+blockNumber+" on Red Line is now on");
+	}
+	else{
+		tempBlock2.trackHeater = false;
+		System.out.println("Heater for Block "+blockNumber+" on Red Line is now off");
+	}
+	
+		
+	
+}
+
+public static void update_redBrokenRail(int blockNumber){
+	
+trackBlock tempBlock3 = redTrack.get(blockNumber);
+	
+	if(tempBlock3.brokenRail == false){
+		
+		tempBlock3.brokenRail = true;
+		System.out.println("There is a broken rail on "+blockNumber);
+	}
+	else{
+		tempBlock3.brokenRail = false;
+		System.out.println("Broken Rail has been fixed on Block "+blockNumber);
+	}
 }
 
 

@@ -3,6 +3,7 @@ package TrackModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -44,6 +46,9 @@ public class trackModelWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	String text;
+	int tempBlockNumber;
+	
 	public trackModelWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -65,15 +70,16 @@ public class trackModelWindow extends JFrame {
 		txtrGreenTrackDownloaded.setVisible(false);
 		
 		//create download greentrack button
-		JButton btnDownloadGreenTrack = new JButton("Upload Green Track");
+		final JButton btnDownloadGreenTrack = new JButton("Upload Green Track");
 		btnDownloadGreenTrack.setBounds(10, 11, 163, 23);
 		btnDownloadGreenTrack.addActionListener(new ActionListener() {
 	    	 
 	        public void actionPerformed(ActionEvent e)
 	        {
 	            //Execute when button is pressed
-	            System.out.println("You clicked the green button");
+	            //System.out.println("You clicked the green button");
 	            txtrGreenTrackDownloaded.setVisible(true);
+	            btnDownloadGreenTrack.setEnabled(false);
 	            try {
 					trackModel.buildGreenList("greendata.txt");
 					
@@ -93,7 +99,7 @@ public class trackModelWindow extends JFrame {
 		txtrRedTrackDownloaded.setVisible(false);
 		
 		//create download red track button
-		JButton btnDownloadRedTrack = new JButton("Upload Red Track");
+		final JButton btnDownloadRedTrack = new JButton("Upload Red Track");
 		btnDownloadRedTrack.setBounds(10, 45, 163, 23);
 		btnDownloadRedTrack.addActionListener(new ActionListener() {
 			  
@@ -102,8 +108,9 @@ public class trackModelWindow extends JFrame {
 	              //Execute when button is pressed
 	              //System.out.println("You clicked the red button");
 	             txtrRedTrackDownloaded.setVisible(true);
+	             btnDownloadRedTrack.setEnabled(false);
 	              try {
-	  				trackModel.buildGreenList("reddata.txt");
+	  				trackModel.buildRedList("reddata.txt");
 	  				
 	  				
 	  			} catch (IOException e1) {
@@ -117,41 +124,107 @@ public class trackModelWindow extends JFrame {
 		
 		
 		
-		//create combo box for train color
-		//JComboBox comboBox = new JComboBox();
-		//comboBox.setBounds(21, 121, 28, 20);
-		//contentPane.add(comboBox);
-		
-		//create combo box for track block
-		//JComboBox comboBox_1 = new JComboBox();
-		//comboBox_1.setBounds(68, 121, 28, 20);
-		//contentPane.add(comboBox_1);
-		
-		//create table to display properties
-		
-		
-		table = new JTable();
-		table.setBounds(238, 110, 168, 141);
-		contentPane.add(table);
-		
 		textField = new JTextField();
-		textField.setBounds(20, 163, 86, 20);
+		textField.setBounds(20, 137, 86, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		
-		JButton btnNewButton = new JButton("Turn On/Off Heater");
+		textField.addActionListener(new ActionListener(){	
+			public void actionPerformed(ActionEvent e)
+			{
+	        text = textField.getText();
+	        tempBlockNumber = Integer.parseInt(text);
+	        //System.out.println(text);
+	     
+	    }
+		});
+		JButton btnNewButton = new JButton("Toggle Heater");
 		btnNewButton.setBounds(10, 228, 136, 23);
+		btnNewButton.addActionListener(new ActionListener() {
+			  
+	          public void actionPerformed(ActionEvent e)
+	          {
+	              //Execute when button is pressed
+	              //System.out.println("You clicked the red button");
+	        	  //System.out.println("Heater Button");
+	        	  text = textField.getText();
+	  	          tempBlockNumber = Integer.parseInt(text);
+	        	  trackModel.edit_GreenHeater(tempBlockNumber);
+	  				
+	            
+	          }
+	      }); 
 		contentPane.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Update Broken Rail");
+		JButton btnNewButton_1 = new JButton("Toggle Broken Rail");
 		btnNewButton_1.setBounds(10, 194, 136, 23);
+		btnNewButton_1.addActionListener(new ActionListener() {
+			  
+	          public void actionPerformed(ActionEvent e)
+	          {
+	              //Execute when button is pressed
+	              //System.out.println("You clicked the red button");
+	             //txtrRedTrackDownloaded.setVisible(true);
+	        	  text = textField.getText();
+	  	          tempBlockNumber = Integer.parseInt(text);
+	        	  trackModel.update_greenBrokenRail(tempBlockNumber);
+	             
+	          }
+	      }); 
 		contentPane.add(btnNewButton_1);
 		
 		JTextArea txtrEnterBlockNumber = new JTextArea();
 		txtrEnterBlockNumber.setText("Enter Block Number");
-		txtrEnterBlockNumber.setBackground(Color.gray);
-		txtrEnterBlockNumber.setBounds(20, 130, 163, 22);
+		txtrEnterBlockNumber.setBounds(10, 110, 163, 22);
 		contentPane.add(txtrEnterBlockNumber);
+		
+		//red updates
+		JButton btnUpdateBrokenRail = new JButton("Toggle Broken Rail");
+		btnUpdateBrokenRail.setBounds(183, 194, 136, 23);
+		btnUpdateBrokenRail.addActionListener(new ActionListener() {
+			  
+	          public void actionPerformed(ActionEvent e)
+	          {
+	              //Execute when button is pressed
+	              //System.out.println("You clicked the red button");
+	        	  //System.out.println("Heater Button");
+	        	  text = textField.getText();
+	  	          tempBlockNumber = Integer.parseInt(text);
+	        	  trackModel.update_redBrokenRail(tempBlockNumber);
+	  			
+	            
+	         
+	      }
+		 }); 
+		contentPane.add(btnUpdateBrokenRail);
+		 
+	//green update heater	
+		JButton btnNewButton_2 = new JButton("Toggle Heater");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			  
+	          public void actionPerformed(ActionEvent e)
+	          {
+	              //Execute when button is pressed
+	              //System.out.println("You clicked the red button");
+	        	  //System.out.println("Heater Button");
+	        	  text = textField.getText();
+	  	          tempBlockNumber = Integer.parseInt(text);
+	        	  trackModel.edit_redHeater(tempBlockNumber);
+	  			
+	             
+	      }
+		 }); 
+		btnNewButton_2.setBounds(183, 228, 136, 23);
+		contentPane.add(btnNewButton_2);
+		
+		JLabel lblNewLabel = new JLabel("Green");
+		lblNewLabel.setBackground(Color.GREEN);
+		lblNewLabel.setBounds(42, 162, 63, 22);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblRed = new JLabel("Red");
+		lblRed.setBackground(Color.RED);
+		lblRed.setBounds(222, 169, 46, 14);
+		contentPane.add(lblRed);
 		
 	}
 }

@@ -48,6 +48,8 @@ public trackBlock(String[] properties){
 	elevation = Double.parseDouble(properties[7]);
 	cumulative_elevation = Double.parseDouble(properties[8]);
 	maintenance = false;
+	brokenRail = false;
+	trackHeater = false;
 	maxSpeed = speed_limit;
 
 }
