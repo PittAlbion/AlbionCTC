@@ -19,10 +19,9 @@ public class TrainGUI extends JFrame implements ActionListener{
 	private String tempString;
 	private JPanel mainPane, buttonPane, topPane, centerPane;
 	private Container mainContainer;
-	private JButton setPointButton, openButton, closeButton, stopButton, exitButton, moveButton;
+	private JButton setPointButton, powerMoveButton, toggleDoorsButton, stopButton, exitButton, moveButton;
 	private JButton simBrakeFail, simEngineFail, simSignalFail, simEBrake;
-	private JTextField setPointText;
-	private StringBuilder bob;
+	private JTextField setPointText, powerText;
 	private LogPanel logPanel;
 	private AttributesPanel attPanel;
 	private MiscPanel miscPanel;
@@ -82,6 +81,9 @@ public class TrainGUI extends JFrame implements ActionListener{
 		
 		buttonPane.setLayout(new GridLayout(2,0));
 		
+		powerMoveButton = new JButton("Give Power (kW)");
+		powerMoveButton.addActionListener(this);
+		
 		simBrakeFail = new JButton("Sim Brake Failure");
 		simBrakeFail.addActionListener(this);
 		
@@ -95,15 +97,14 @@ public class TrainGUI extends JFrame implements ActionListener{
 		simEBrake.addActionListener(this);
 		
 		setPointText = new JTextField(5);
+		powerText = new JTextField(5);
 		
 		setPointButton = new JButton("Set Point Speed (input to right)");
 		setPointButton.addActionListener(this);
 		
-		closeButton = new JButton("Close Doors");
-		closeButton.addActionListener(this);
+		toggleDoorsButton = new JButton("Toggle doors");
+		toggleDoorsButton.addActionListener(this);
 		
-		openButton = new JButton("Open Doors");
-		openButton.addActionListener(this);
 		
 		stopButton = new JButton("Simulate Passengers");
 		stopButton.addActionListener(this);
@@ -118,8 +119,9 @@ public class TrainGUI extends JFrame implements ActionListener{
 		buttonPane.add(moveButton);
 		buttonPane.add(setPointButton);
 		buttonPane.add(setPointText);
-		buttonPane.add(openButton);
-		buttonPane.add(closeButton);
+		buttonPane.add(powerMoveButton);
+		buttonPane.add(powerText);
+		buttonPane.add(toggleDoorsButton);
 		
 		buttonPane.add(simBrakeFail);
 		buttonPane.add(simSignalFail);
@@ -140,13 +142,11 @@ public class TrainGUI extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event){
 		
-				if(event.getSource().equals(openButton)){
-				theModel.openDoors();
+				if(event.getSource().equals(toggleDoorsButton)){
+				if(theModel.doorsClosed) theModel.openDoors();
+				else theModel.closeDoors();
+				
 				miscPanel.update(theModel);
-				}
-				else if(event.getSource().equals(closeButton)){
-					theModel.closeDoors();
-					miscPanel.update(theModel);
 				}
 				else if(event.getSource().equals(stopButton)){
 					theModel.SimulateStop();
@@ -154,6 +154,25 @@ public class TrainGUI extends JFrame implements ActionListener{
 				}
 				else if(event.getSource().equals(exitButton)){
 					System.exit(0);
+				}
+				else if(event.getSource().equals(powerMoveButton)){
+					tempString = powerText.getText();
+					tempDouble = 1000*(Double.parseDouble(tempString));
+					
+					tempDoubleB = theModel.currTime;
+					
+					if(tempDouble<=theModel.maxPower){
+					
+					theModel.GivePower(tempDouble);
+					tempDouble = theModel.move();
+					totalMove += tempDouble;
+					tempString = Double.toString(tempDouble);
+					logPanel.WriteMessage("In "+(theModel.currTime-tempDoubleB)+ " seconds, train moved total of "+ tempString+" meters\n");
+					
+					attPanel.update(theModel);
+					commPanel.update(totalMove);
+					}
+					
 				}
 				else if(event.getSource().equals(moveButton)){
 					tempDoubleB = theModel.currTime;
@@ -184,6 +203,7 @@ public class TrainGUI extends JFrame implements ActionListener{
 					theModel.detector.brakesWorking=false;
 					tempDoubleB = theModel.currTime;
 					
+					theModel.SetLimits(theModel.speedLimit,theModel.accLimit,-2.73);
 					tempDouble=theModel.SetPointSpeed(0.0);
 					totalMove+=tempDouble;
 					
@@ -221,8 +241,8 @@ public class TrainGUI extends JFrame implements ActionListener{
 				}
 				else if(event.getSource().equals(simEBrake)){
 					theModel.detector.eBrakeThrown=true;
-					
 					tempDoubleB = theModel.currTime;
+					
 					theModel.SetLimits(theModel.speedLimit,theModel.accLimit,-2.73);
 					tempDouble=theModel.SetPointSpeed(0.0);
 					totalMove+=tempDouble;

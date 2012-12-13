@@ -1,9 +1,12 @@
 //Albion Train Control System Train Model Module
 //Shane Lester, STL24@pitt.edu, maddacheeb5@gmail.com
 //Initial construction 11/27/2012
-
-//bug- speed going below 0, added a check
-//bug- power going over accepted level for engine- added checks
+//Added a GUI 11/27/2012
+//Updated functionality 11/29/2012
+//Base movement 12/9/2012
+//GUI tweaks 12/10/2012
+//Movement tweaking 12/12/2012
+// final tweaks and java documentation 12/13/2012
 
 package TrainModel;
 
@@ -34,22 +37,27 @@ public class TrainModel implements Runnable {
 	public double currGrade, currAuthority, currSpeed, currAcc, currPower;
 	public double maxPower, brakePower;
 	
-	//transponder input, track circuit input, routeinfo system,  
-	
+	/**<NEWLINE>
+	 * Main method here is just for running the individual GUI of the train Model
+	 * It won't ever be used when running the ATCS as a whole.
+	 * @author lesters
+	 *
+	 */
 	public static void main(String[] args) throws IOException{
-
+		
 		TrainModel theModel = new TrainModel('r',1, 1);
-		//System.out.println("");
-		theModel.currPower=theModel.maxPower;
 		theModel.SetLimits(19,.5,-1.2);
 		
-//System.nanoTime()
 		new TrainGUI(theModel);
-
 
 	}
 
-
+	/**<NEWLINE>
+	 * Simple Train Construction method. Initializes everything needed
+	 * @param trackLineP	Character parameter of the track line. 'r' or 'g'
+	 * @param trainIDP	ID of the train in the constructor
+	 * @param carsP Number of cars for the train
+	 */
 	public TrainModel(char trackLineP ,int trainIDP, int carsP){
 		
 		InitialVars();
@@ -59,8 +67,6 @@ public class TrainModel implements Runnable {
 		cars = new Car[carsP];
 		trackLine=trackLineP;
 		
-		//serviceBrake=1.2 m/s^2
-		//emergencyBrake=2.73 m/s^2
 		maxPower=120000; //120 KW
 		brakePower=6*81000;  // spec said 6*81 Kn
 		maxPass=222;
@@ -83,26 +89,43 @@ public class TrainModel implements Runnable {
 		
 	}
 	
+	/**<NEWLINE>
+	 * Sets the Limits of the train model for movement
+	 * @param speedLimP	double of the speed limit in m/s
+	 * @param accLimP	double of the acceleration limit in m/(s^2)
+	 * @param decLimP	double of the acceleration limit in m/(s^2)
+	 */
 	public void SetLimits(double speedLimP, double accLimP, double decLimP){
 		speedLimit=speedLimP;
 		accLimit=accLimP;
 		decLimit=decLimP;	
 	}
 	
-	// not sure if I should just set it, or increment power.  
-	//Probably just set power, increment speed acc dec etc.
+	/**<NEWLINE>
+	 * Gives power to the train model.
+	 * @param powerP	Double value of power, in watts
+	 */
 	public void GivePower(double powerP){
+		if(powerP>maxPower) powerP=maxPower;
+		
 		currPower=powerP;		
 	}
 	
 
-	
+	/**<NEWLINE>
+	 * Gives the train an authority of blocks to move.  Currently unused.
+	 * @param authP	Authority given to the train model
+	 */
 	public void SetAuthority(double authP){
 		currAuthority=authP;
 	}
 
-	//f for incline is m*g*sin(theta)
-	
+	/**<NEWLINE>
+	 * Incrementally sets the speed of the train to specific value.  Returns the total distance moved
+	 * You can see how long this took by the currTime before / after the SetPointSpeed method
+	 * @param set The speed at which you'd like to set the train to in m/s
+	 * @return Total distance moved in meters
+	 */
 	public double SetPointSpeed(double set){
 		double uk,ek,ekl,toPower,totalMoved;
 		uk=ek=ekl=toPower=totalMoved=0;
@@ -118,7 +141,6 @@ public class TrainModel implements Runnable {
 				toPower=(1000*ek)+(1000*uk);
 				if(toPower<maxPower)GivePower(toPower);
 				else GivePower(120000);
-				//System.out.println(toPower);
 				}
 				
 				totalMoved+= move();	
@@ -132,10 +154,7 @@ public class TrainModel implements Runnable {
 				toPower=-((1000*ek)+(1000*uk));
 				GivePower(toPower);
 				
-				//System.out.println(toPower);
-				
 				totalMoved+=move();	
-			
 		}
 
 			if(currSpeed<0) currSpeed=0;
@@ -143,8 +162,11 @@ public class TrainModel implements Runnable {
 		return totalMoved;
 	}
 	
-	// moves it by one timestep
-	// also must take into account our authority.
+	/**<NEWLINE>
+	 * Moves the train using whatever power is given to the train model.
+	 * Takes into account force from grade.
+	 * @return	distance moved in meters
+	 */
 	public double move(){
 		double force, metersMoved,angle;
 		force=0;
@@ -153,8 +175,10 @@ public class TrainModel implements Runnable {
 		//1-get power  (already have this)
 		//2- divide power by current velocity to get force
 		if(currSpeed!=0.0) force=currPower/currSpeed;
-		else force= 240000;  //give it an initial force, so it doesn't divide by 0, this would be the force at .5 m/s at 120 KW (full engine power)
-			
+		//if speed is 0, give it an initial force, so it doesn't divide by 0,
+		//this would be the force at .5 m/s at 120 KW (full engine power)
+		else force= 240000;  
+		
 		if(currGrade != 0.0){
 			// need to have currgrade be an angle, not a %
 			angle=Math.atan(currGrade/100.0);
@@ -172,21 +196,18 @@ public class TrainModel implements Runnable {
 		
 		
 		metersMoved = currSpeed*DT;
-		//System.out.println("Meters moved:"+metersMoved);
-		//this might want to be elsewhere
 		currTime+=DT;
 		
-		return metersMoved;
-		
-		
+		return metersMoved;	
 	}
 	
-	// moves with no change to acceleration
+	/**<NEWLINE>
+	 * This method moves the train at a constant speed, as if it was coasting.
+	 * @return 	total distance moved in the single timestep
+	 */
 	public double keepMoving(){
 		double force, metersMoved,angle,accFromGrade;
 		force=accFromGrade=0;
-		
-		// integrate down to new position with DT
 		
 		if(currGrade != 0.0){
 			// need to have currgrade be an angle, not a %
@@ -200,32 +221,40 @@ public class TrainModel implements Runnable {
 		if(currSpeed>speedLimit)currSpeed=speedLimit;
 		
 		metersMoved = currSpeed*DT;
-		//System.out.println("Meters moved:"+metersMoved);
-		//this might want to be elsewhere
+		
 		currTime+=DT;
 		
 		return metersMoved;
 	}
 	
-	// he claims we can also give the train negative power, so that seems to be more of what this is.
+	// currently not implemented
 	public void BrakeCommand(){
-		//puts on da brakes within the dec limit
-		
 	}
 	
+	/**<NEWLINE>
+	 * Opens the doors of the train
+	 */
 	public void openDoors(){
 		doorsClosed=false;
 	}
-	
+	/**<NEWLINE>
+	 * Closes the doors of the train
+	 */
 	public void closeDoors(){
 		doorsClosed=true;		
 	}
 
+	/**<NEWLINE>
+	 * Sets the temperature of the train
+	 * @param tempP	The temperature in celsius (double)
+	 */
 	public void tempControl(double tempP){
 		temperature=tempP;		
 	}
 	
-	//check them, if any come back false call the handle method
+	/**<NEWLINE>
+	 * Checks all the critical components for any failures, and if any are found it handles them accordingly.
+	 */
 	public void FailCheck(){
 		if(!detector.CheckBrakes())  HandleBrakeFailure();
 		if(!detector.CheckEngine())  HandleEngineFailure();
@@ -233,47 +262,42 @@ public class TrainModel implements Runnable {
 		if(detector.eBrakeThrown()) HandleEBrake();
 	}
 	
+	/**<NEWLINE>
+	 * Handles the failure of a brake, essentially throws the emergency brake
+	 */
 	public void HandleBrakeFailure(){
+		SetLimits(speedLimit,accLimit,-2.73);
 		SetPointSpeed(0.0);
 	}
-	
+	/**<NEWLINE>
+	 * Handles engine failure, train is stopped
+	 */
 	public void HandleEngineFailure(){
 		SetPointSpeed(0.0);
 	}
-	
+	/**<NEWLINE>
+	 * Handles signal failure, train is stopped
+	 */
 	public void HandleSignalFailure(){
 		SetPointSpeed(0.0);
 	}
-	
+	/**<NEWLINE>
+	 * Throws the emergency brake and decelerates to a stop
+	 */
 	public void HandleEBrake(){
 		SetLimits(speedLimit,accLimit,-2.73);
 		SetPointSpeed(0.0);
 	}
-	
-    // potentially unnecessary. unused by me at the moment
-	public void UpdatePassengerData(){
-		if(nCars==0)System.out.println("Must have a car before you try to update the train's data from cars");
-	
-		passengerTotal=crewTotal=0;
-		for(int i=0;i<nCars;i++){
-			passengerTotal+= cars[i].GetPassengers();
-			crewTotal+= cars[i].GetCrew();
-			
-		}
-	}
-	
+	/**<NEWLINE>
+	 * Simulates a stop, puts a random amount of passengers on the train within the limits of the train itself.
+	 */
 	public void SimulateStop(){
-		//random number generator to decide how many get off / on each car
-		//without going over max, then calculate new mass and such.
 		
-		System.out.println("Total before: " + passengerTotal);
 		// passengers getting off
 		if(passengerTotal!=0.0){
 		passengerTotal-= Math.ceil(Math.abs(randomGen.nextInt())%passengerTotal);
 		}
-		System.out.println("Total after dec: " + passengerTotal);
-		
-		
+				
 		//passengers getting on
 		passengerTotal+= Math.ceil(Math.abs(randomGen.nextInt())%(maxPass-passengerTotal));
 		System.out.println("Total after: " + passengerTotal);
@@ -281,17 +305,20 @@ public class TrainModel implements Runnable {
 		
 	}
 	
+	/**<NEWLINE>
+	 * Updates the mass of the train according to the number of cars and the number of passengers/crew
+	 */
 	public void MassUpdate(){
-	//UpdatePassengerData();
-	
+
 	massTotal=37103.86*nCars;
-	// also should add the total mass of the train
 	massTotal+= ((passengerTotal+crewTotal)*kgPerPerson);
 		
 	}
-	
+	/**<NEWLINE>
+	 * Explicitly initializes variables to 0 and such
+	 */
 	public void InitialVars(){
-	// explicitly initializing as 0;
+
 	lightsOn=true;
 	kgPerSquareMeter=1000; //kilograms per square meter of length/width
 	kgPerPerson=200; //kilograms per person on the train
@@ -306,6 +333,10 @@ public class TrainModel implements Runnable {
 	public void run(){
 	}
 	
+	/**<NEWLINE>
+	 * used by train controller to check how long it would take to stop a train without incrementing the time
+	 * @return	total distance moved in meters
+	 */
 		public double moveNoDT(){
 		double force, metersMoved,angle;
 		force=0;
@@ -333,14 +364,16 @@ public class TrainModel implements Runnable {
 		
 		
 		metersMoved = currSpeed*DT;
-		//System.out.println("Meters moved:"+metersMoved);
-		//this might want to be elsewhere
-		
 		
 		return metersMoved;
 		
 		
 	}
+		
+		/**<NEWLINE>
+		 * Used in calculations by the train controller without incrementing time.
+		 * @return	total distance moved in meters
+		 */
 	public double keepMovingNoDT(){
 		double force, metersMoved,angle,accFromGrade;
 		force=accFromGrade=0;
@@ -359,12 +392,15 @@ public class TrainModel implements Runnable {
 		if(currSpeed>speedLimit)currSpeed=speedLimit;
 		
 		metersMoved = currSpeed*DT;
-		//System.out.println("Meters moved:"+metersMoved);
-		//this might want to be elsewhere
-		
 		
 		return metersMoved;
 	}
+	
+	/**<NEWLINE>
+	 * Same as SetPointSpeed just doesn't increment time.
+	 * @param set	Speed to be set
+	 * @return	total distance moved
+	 */
 	public double SetPointSpeedNoDT(double set){
 		double uk,ek,ekl,toPower,totalMoved;
 		uk=ek=ekl=toPower=totalMoved=0;
