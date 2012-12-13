@@ -369,7 +369,7 @@ public class TrackController extends JFrame implements Runnable {
 	     */
 	    public void getTrainList(){
 	    	
-	    	trainList = tc.trainList;
+	    	trainList = tc.GetTrainList();
 	    	
 	    	office.trainPanel.Update(trainList);
 	    	
