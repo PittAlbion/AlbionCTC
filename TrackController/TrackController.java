@@ -146,16 +146,16 @@ public class TrackController extends JFrame implements Runnable {
 	        int i;
 	        String suggestionDest = s[0].toString();
 	        String selector = s[1].toString();
-			System.out.println(selector);
+			//System.out.println(selector);
 			String line = selector.substring(0, 1);
-			System.out.println(line);
+			//System.out.println(line);
 			int block = Integer.parseInt(selector.substring(1, selector.length()));
 			
-	        for (i=2; i<(s.length - 1); i++){
+	        for (i=2; i<(s.length - 1); i+=2){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
-	                TrainController.SendCommand(block, s[i].toString(), Double.parseDouble(s[i+1].toString()));   // PassSuggestion. Some code to send the suggestion to the Train Controller
+	                TrainController.SendCommand(Integer.parseInt(selector), s[i].toString(), Double.parseDouble(s[i+1].toString()));   // PassSuggestion. Some code to send the suggestion to the Train Controller
 	            }else if (suggestionDest.equals("Track")){ //Track Controller Suggestion
-	                useSuggestion(line, block, s[i].toString(), s[i+1].toString());
+	                useSuggestion(line, block-1, s[i].toString(), s[i+1].toString());
 	            }
 	            else    // Invalid Suggestion Destination, do nothing.
 	                return;
@@ -196,7 +196,7 @@ public class TrackController extends JFrame implements Runnable {
 	    		else if (type.equals("maintenance")){
 	    			if (safe){
 	    				t.maintenance = Boolean.parseBoolean(value);
-	    				//System.out.println(t.maintenance);
+	    				//System.out.println("Block: " + t.block_number + " Val: " + t.maintenance);
 	    			}
 	    		}
 	            else{;}//Invalid suggestion
