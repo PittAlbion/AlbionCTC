@@ -13,6 +13,12 @@ public class trackBlock {
 	public double elevation;
 	public double cumulative_elevation;
 	public boolean maintenance;
+	public int maxSpeed;
+	public int swLeftOption;
+	public int swRightOption;
+	public int swCurrentOption;
+	public boolean brokenRail;
+	public boolean trackHeater;
 /*
 public trackBlock(String a, String b, int c, int d, double e, int f, String g, double h, double i){
 	
@@ -39,6 +45,8 @@ public trackBlock(String[] properties){
 	elevation = Double.parseDouble(properties[7]);
 	cumulative_elevation = Double.parseDouble(properties[8]);
 	maintenance = false;
+	maxSpeed = speed_limit;
+
 }
 /*
 public void edit_track_line(String temptrackline){
@@ -47,5 +55,32 @@ public void edit_track_line(String temptrackline){
 	
 }
 */
+public void edit_swLeft(int option){
+	
+	swLeftOption = option;
+}
 
+public void edit_swRight(int option){
+	
+	swRightOption = option;
+	
+	
+}
+
+public void edit_swCurrent(int option){
+	
+	swCurrentOption = option;
+	
+	
+}
+
+public void edit_brokenHeater(int blockNumber){
+	
+	
+}
+
+public void update_Brokenrail(int blockNumber){
+	
+	
+}
 }
