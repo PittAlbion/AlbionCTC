@@ -37,6 +37,7 @@ public class TrackController extends JFrame implements Runnable {
 		
 		public int id = 0;
 		public int type;
+		public int line;
 		private int count = 0;
 		public double speedLimit;
 		public double trackTemp;
@@ -74,13 +75,13 @@ public class TrackController extends JFrame implements Runnable {
 			//crossingList = trackModel.trackCrossingList;
 			for (int i = 0; i < greenList.size(); i++){
 				if (greenList.get(i).infrastructure.contains("SWITCH")){
-					t = new TrackController(count, 0);
+					t = new TrackController(count, 0, 0);
 					controlList.add(t);
 					myGUI.addToList("Green Line Switch " + Integer.toString(controlList.get(count).id));
 					count++;
 				}
 				else if (greenList.get(i).infrastructure.equals("RAILWAY CROSSING")){
-					t = new TrackController(count, 1);
+					t = new TrackController(count, 1, 0);
 					controlList.add(t);
 					myGUI.addToList("Green Line Crossing " + Integer.toString(controlList.get(count).id));
 					count++;
@@ -89,19 +90,88 @@ public class TrackController extends JFrame implements Runnable {
 			
 			for (int i = 0; i < redList.size(); i++){
 				if (redList.get(i).infrastructure.contains("SWITCH")){
-					t = new TrackController(count, 0);
+					t = new TrackController(count, 0, 1);
 					controlList.add(t);
 					myGUI.addToList("Red Line Switch " + Integer.toString(controlList.get(count).id));
 					count++;
 				}
 				else if (redList.get(i).infrastructure.equals("RAILWAY CROSSING")){
-					t = new TrackController(count, 1);
+					t = new TrackController(count, 1, 1);
 					controlList.add(t);
 					myGUI.addToList("Red Line Crossing " + Integer.toString(controlList.get(count).id));
 					count++;
 				}
 			}
 			
+			 //Green Switch
+			 //13
+			 trackBlock currentBlock1 = greenList.get(13);
+			 currentBlock1.edit_swLeft(12);
+			 currentBlock1.edit_swRight(1);
+			 currentBlock1.edit_swCurrent(12);
+			 //28
+			 trackBlock currentBlock2 = greenList.get(28);
+			 currentBlock2.edit_swLeft(29);
+			 currentBlock2.edit_swRight(150);
+			 currentBlock2.edit_swCurrent(29);
+			 //57
+			 trackBlock currentBlock3 = greenList.get(57);
+			 currentBlock3.edit_swLeft(0);
+			 currentBlock3.edit_swRight(58);
+			 currentBlock3.edit_swCurrent(0);
+			 //63
+			 trackBlock currentBlock4 = greenList.get(63);
+			 currentBlock4.edit_swLeft(62);
+			 currentBlock4.edit_swRight(0);
+			 currentBlock4.edit_swCurrent(62);
+			 //77
+			 trackBlock currentBlock5 = greenList.get(77);
+			 currentBlock5.edit_swLeft(101);
+			 currentBlock5.edit_swRight(76);
+			 currentBlock5.edit_swCurrent(101);
+			 //85
+			 trackBlock currentBlock6 = greenList.get(85);
+			 currentBlock6.edit_swLeft(86);
+			 currentBlock6.edit_swRight(100);
+			 currentBlock6.edit_swCurrent(86);
+			 
+			//Red Switches
+			 //9
+			 trackBlock currentBlock7 = redList.get(9);
+			 currentBlock7.edit_swLeft(0);
+			 currentBlock7.edit_swRight(10);
+			 currentBlock7.edit_swCurrent(0);
+			 //16
+			 trackBlock currentBlock8 = redList.get(16);
+			 currentBlock8.edit_swLeft(1);
+			 currentBlock8.edit_swRight(15);
+			 currentBlock8.edit_swCurrent(1);
+			 //27
+			 trackBlock currentBlock9 = redList.get(27);
+			 currentBlock9.edit_swLeft(28);
+			 currentBlock9.edit_swRight(76);
+			 currentBlock9.edit_swCurrent(28);
+			 //33
+			 trackBlock currentBlock10 = redList.get(33);
+			 currentBlock10.edit_swLeft(72);
+			 currentBlock10.edit_swRight(32);
+			 currentBlock10.edit_swCurrent(72);
+			 //38
+			 trackBlock currentBlock11 = redList.get(38);
+			 currentBlock11.edit_swLeft(37);
+			 currentBlock11.edit_swRight(71);
+			 currentBlock11.edit_swCurrent(37);
+			 //43
+			 trackBlock currentBlock12 = redList.get(43);
+			 currentBlock12.edit_swLeft(67);
+			 currentBlock12.edit_swRight(42);
+			 currentBlock12.edit_swCurrent(67);
+			 //52
+			 trackBlock currentBlock13 = redList.get(52);
+			 currentBlock13.edit_swLeft(53);
+			 currentBlock13.edit_swRight(64);
+			 currentBlock13.edit_swCurrent(53);
+			//myGUI.updateOutputPanel(tr);
 			tc = new TrainController();
 			tm = new trackModel();
 			
@@ -119,10 +189,11 @@ public class TrackController extends JFrame implements Runnable {
 		 * @param type	Type of Track Controller (Switch/Crossing)
 		 * @see TrackController()
 		 */
-		public TrackController(int id, int type){
+		public TrackController(int id, int type, int line){
 			
 			this.id = id;
 			this.type = type;
+			this.line = line;
 			this.state = 0;
 			this.occupied = true;
 			this.heater = true;
@@ -157,7 +228,9 @@ public class TrackController extends JFrame implements Runnable {
 			
 	        for (i=2; i<(s.length - 1); i+=2){
 	            if (suggestionDest.equals("Train")){ //Train Controller Suggestion
-	                TrainController.SendCommand(Integer.parseInt(selector), s[i].toString(), Double.parseDouble(s[i+1].toString()));   // PassSuggestion. Some code to send the suggestion to the Train Controller
+	               boolean ok = TrainController.SendCommand(Integer.parseInt(selector), s[i].toString(), Double.parseDouble(s[i+1].toString()));   // PassSuggestion. Some code to send the suggestion to the Train Controller
+	               if (ok)
+	            	   office.trainPanel.Update(trainList);
 	            }else if (suggestionDest.equals("Track")){ //Track Controller Suggestion
 	                useSuggestion(line, block-1, s[i].toString(), s[i+1].toString());
 	            }
@@ -180,8 +253,7 @@ public class TrackController extends JFrame implements Runnable {
 		
 	    		trackBlock t = null;
 	    		boolean safe = true;
-	    		
-	    		System.out.println(lineSelect);
+	    		//System.out.println(lineSelect);
 	    		if (lineSelect.equals("G")){
 	    			t = greenList.get(trackSelect);
 	    		}
@@ -191,16 +263,22 @@ public class TrackController extends JFrame implements Runnable {
 	    		else { ; }
 	            
 	    		if(type.equals("Speed")){
+	    			int val = Integer.parseInt(value);
 	                //safe = checkStatus(); //Do something safe involving the speed suggestion
 	                if (safe){ //change speed
-	                	t.speed_limit = Integer.parseInt(value);
+	                	if (val > 0 && val <= t.maxSpeed ){
+	                		System.out.println("Valid Speed Suggestion!");
+	                		t.speed_limit = val;
+	                	}
+	                	else
+	                		System.out.println("Invalid Speed Suggestion, not changing");
 	                	//System.out.println("Made it here");
 	                }
 	            }
 	    		else if (type.equals("maintenance")){
 	    			if (safe){
 	    				t.maintenance = Boolean.parseBoolean(value);
-	    				//System.out.println("Block: " + t.block_number + " Val: " + t.maintenance);
+	    				System.out.println("Block: " + t.block_number + " Val: " + t.maintenance);
 	    			}
 	    		}
 	            else{;}//Invalid suggestion
@@ -283,11 +361,8 @@ public class TrackController extends JFrame implements Runnable {
 	     * @param newConnect	Destination for the new switch connection.
 	     * @return boolean
 	     */
-	    @SuppressWarnings("unused")
-		private boolean switchTrackSegment(String lineSelect, int trackSegment, trackBlock newConnect){
-	    	//Determine if the switch can safely be activated
-	    	//Based on the arguments given, switch the track segment into the appropriate position.
-	    	//Send back a confirmation or failure signal
+		public boolean switchTrackSegment(){
+	    	
 	    	return false;
 	    }
 	    

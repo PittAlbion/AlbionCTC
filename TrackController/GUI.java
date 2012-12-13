@@ -1,5 +1,7 @@
 package TrackController;
 
+
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -28,6 +30,9 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+
+import TrackController.AboutDialog;
+import TrackController.TrackController;
 /**
  * @author Calvin Souders
  */
@@ -52,6 +57,8 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton deactivate;
 	private JButton switcher;
 	private JComboBox<String> controllerList;
+	private JTextField SwitchPos;
+	private JTextField SwitchOpt;
 
 	/**
 	 * Launch the application.
@@ -266,6 +273,20 @@ public class GUI extends JFrame implements ActionListener {
 		state.setHorizontalAlignment(SwingConstants.CENTER);
 		state.setEditable(false);
 		state.setColumns(10);
+		
+		SwitchPos = new JTextField();
+		SwitchPos.setHorizontalAlignment(SwingConstants.CENTER);
+		SwitchPos.setEditable(false);
+		SwitchPos.setColumns(10);
+		
+		SwitchOpt = new JTextField();
+		SwitchOpt.setHorizontalAlignment(SwingConstants.CENTER);
+		SwitchOpt.setEditable(false);
+		SwitchOpt.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Switch Position");
+		
+		JLabel lblNewLabel_2 = new JLabel("Switch Option");
 		GroupLayout gl_outputPanel = new GroupLayout(outputPanel);
 		gl_outputPanel.setHorizontalGroup(
 			gl_outputPanel.createParallelGroup(Alignment.TRAILING)
@@ -273,80 +294,95 @@ public class GUI extends JFrame implements ActionListener {
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addGap(38)
-							.addComponent(lblState))
+							.addComponent(state, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(state, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGap(66)
+							.addComponent(lblState)))
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addGap(18)
+							.addGap(38)
 							.addComponent(occupancy, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addGap(27)
+							.addGap(57)
 							.addComponent(lblOccupied)))
-					.addGap(29)
-					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
+					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addComponent(direction, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-							.addGap(10))
-						.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
+							.addGap(28))
+						.addGroup(gl_outputPanel.createSequentialGroup()
 							.addComponent(lblDirection)
-							.addGap(31)))
-					.addGap(26))
+							.addGap(48))))
 				.addGroup(gl_outputPanel.createSequentialGroup()
-					.addContainerGap(76, Short.MAX_VALUE)
+					.addContainerGap(90, Short.MAX_VALUE)
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addComponent(lblTrackTemperature)
-							.addPreferredGap(ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-							.addComponent(lblThermostat)
-							.addGap(19))
-						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addComponent(trackTemp, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(32)
-							.addComponent(thermostat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_outputPanel.createSequentialGroup()
-							.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblTrackSpeedLimit)
-								.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-							.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(heater, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(Alignment.TRAILING, gl_outputPanel.createSequentialGroup()
-									.addComponent(lblHeaterStatus)
-									.addGap(11)))))
+						.addComponent(lblTrackTemperature)
+						.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_outputPanel.createSequentialGroup()
+								.addComponent(trackTemp, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(67)
+								.addComponent(thermostat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_outputPanel.createSequentialGroup()
+								.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING)
+									.addComponent(lblTrackSpeedLimit)
+									.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblNewLabel)
+										.addComponent(SwitchPos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGap(67)
+								.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_outputPanel.createSequentialGroup()
+										.addGap(10)
+										.addComponent(lblHeaterStatus))
+									.addComponent(SwitchOpt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(heater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_outputPanel.createSequentialGroup()
+										.addGap(10)
+										.addComponent(lblThermostat))))))
 					.addGap(80))
+				.addGroup(gl_outputPanel.createSequentialGroup()
+					.addContainerGap(255, Short.MAX_VALUE)
+					.addComponent(lblNewLabel_2)
+					.addGap(88))
 		);
 		gl_outputPanel.setVerticalGroup(
 			gl_outputPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_outputPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblDirection)
 						.addComponent(lblState)
-						.addComponent(lblOccupied))
+						.addComponent(lblOccupied)
+						.addComponent(lblDirection))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(direction, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(state, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(occupancy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
+						.addComponent(occupancy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(direction, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblHeaterStatus)
-						.addComponent(lblTrackSpeedLimit))
-					.addGap(7)
+						.addComponent(lblNewLabel_2)
+						.addComponent(lblNewLabel))
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(heater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(SwitchOpt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(SwitchPos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblTrackSpeedLimit)
+						.addComponent(lblHeaterStatus))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(speedLimit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(heater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTrackTemperature)
 						.addComponent(lblThermostat))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_outputPanel.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_outputPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(thermostat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(trackTemp, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(47, Short.MAX_VALUE))
+					.addGap(38))
 		);
 		outputPanel.setLayout(gl_outputPanel);
 		
@@ -359,6 +395,8 @@ public class GUI extends JFrame implements ActionListener {
 		genTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Block Size", 0},
+				{"Block Number", 0},
+				
 				{"Grade", 0},
 				{"Elevation", 0},
 				{null, null},
@@ -379,7 +417,7 @@ public class GUI extends JFrame implements ActionListener {
 		advTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Type", 0},
-				{"Mode", 0},
+				{null, null},
 				{null, null},
 				{null, null},
 				{null, null},
@@ -407,6 +445,10 @@ public class GUI extends JFrame implements ActionListener {
 			TrackController t = TrackController.controlList.get(controllerList.getSelectedIndex());
 			updateOutputPanel(t);
 		}
+		else if(e.getSource().equals(switcher)){
+			TrackController t = TrackController.tr;
+			t.switchTrackSegment();
+		}
 	}
 	
 	/**
@@ -414,18 +456,45 @@ public class GUI extends JFrame implements ActionListener {
 	 * @param t	Selected Track Controller
 	 */
 	public void updateOutputPanel(TrackController t){
+		if (t.line == 0){
+			genTable.setValueAt(t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).block_length, 0, 1);
+			genTable.setValueAt(t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).block_number, 1, 1);
+			genTable.setValueAt(t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).block_grade, 2, 1);
+			genTable.setValueAt(t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).elevation, 3, 1);
+			setSpeedLimit(t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).speed_limit);
+		}
+		else{
+			genTable.setValueAt(t.redList.get(t.myGUI.controllerList.getSelectedIndex()).block_length, 0, 1);
+			genTable.setValueAt(t.redList.get(t.myGUI.controllerList.getSelectedIndex()).block_number, 1, 1);
+			genTable.setValueAt(t.redList.get(t.myGUI.controllerList.getSelectedIndex()).block_grade, 2, 1);
+			genTable.setValueAt(t.redList.get(t.myGUI.controllerList.getSelectedIndex()).elevation, 3, 1);
+			setSpeedLimit(t.redList.get(t.myGUI.controllerList.getSelectedIndex()).speed_limit);
+		}
+			
 		if (t.type == 0){
-			genTable.setValueAt(t.greenList.get(0).block_length, 0, 1);
 			advTable.setValueAt("Switch", 0, 1);
-			advTable.setValueAt("Off", 1, 1);
+			if (t.line == 0){
+				SwitchPos.setText("Block " + t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).swCurrentOption);
+				if (t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).swCurrentOption == t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).swLeftOption)
+					SwitchOpt.setText("Block " + t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).swRightOption);
+				else
+					SwitchOpt.setText("Block " + t.greenList.get(t.myGUI.controllerList.getSelectedIndex()).swLeftOption);
+			}
+			else{
+				SwitchPos.setText("Block " + t.redList.get(t.myGUI.controllerList.getSelectedIndex()).swCurrentOption);
+				if (t.redList.get(t.myGUI.controllerList.getSelectedIndex()).swCurrentOption == t.redList.get(t.myGUI.controllerList.getSelectedIndex()).swLeftOption)
+					SwitchOpt.setText("Block " + t.redList.get(t.myGUI.controllerList.getSelectedIndex()).swRightOption);
+				else
+					SwitchOpt.setText("Block " + t.redList.get(t.myGUI.controllerList.getSelectedIndex()).swLeftOption);
+			}
 			switcher.setEnabled(true);
 			activate.setEnabled(false);
 			deactivate.setEnabled(false);
 		}
 		else if (t.type == 1){
-			genTable.setValueAt(t.greenList.get(0).block_length, 0, 1);
 			advTable.setValueAt("Crossing", 0, 1);
-			advTable.setValueAt("Off", 1, 1);
+			SwitchPos.setText(null);
+			SwitchOpt.setText(null);
 			switcher.setEnabled(false);
 			activate.setEnabled(true);
 			deactivate.setEnabled(false);
@@ -433,7 +502,6 @@ public class GUI extends JFrame implements ActionListener {
 			
 			
 		setOccupancy(t.occupied);
-		setSpeedLimit(t.speedLimit);
 		setHeater(t.heater);
 		setState(t.state);
 		setDirection(t.direction);
